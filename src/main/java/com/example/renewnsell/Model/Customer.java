@@ -2,10 +2,13 @@ package com.example.renewnsell.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -18,6 +21,9 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotEmpty(message = "gender must not be empty")
+    @Column(columnDefinition = "varchar(6) not null")
+    private String gender;
 
 
 
@@ -27,4 +33,13 @@ public class Customer {
     @MapsId
     @JsonIgnore
     private User user;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<OrderProduct> orders;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Set<FixProduct> fixProducts;
 }

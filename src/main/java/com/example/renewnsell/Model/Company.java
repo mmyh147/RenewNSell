@@ -2,10 +2,13 @@ package com.example.renewnsell.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -18,6 +21,15 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotEmpty(message = "commercial License must not be empty")
+    @Column(columnDefinition = "varchar(20) not null")
+    private String commercialLicense;
+    @NotEmpty(message = "commercial License must not be empty")
+    @Column(columnDefinition = "varchar(20) not null")
+    private String industry;
+    @NotEmpty(message = "commercial License must not be empty")
+    @Column(columnDefinition = "varchar(20) not null")
+    private String logoPath;
 
 
 
@@ -26,4 +38,15 @@ public class Company {
     @MapsId
     @JsonIgnore
     private User user;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private Set<Product> products;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private Set<Review> reviews;
+
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private Set<OrderProduct> orders;
+
+
 }

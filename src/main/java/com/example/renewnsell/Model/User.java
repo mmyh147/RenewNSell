@@ -4,6 +4,7 @@ package com.example.renewnsell.Model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,15 +30,24 @@ public class User implements UserDetails {
     @NotEmpty(message = "username must not be empty")
     @Column(columnDefinition = "varchar(20) unique not null")
     private String username;
+
     @NotEmpty(message = "password must not be empty")
     private String password;
+
     @NotEmpty(message = "name must not be empty")
     @Column(columnDefinition = "varchar(15) not null")
     private String name;
+
+    @NotEmpty(message = "phone must not be empty")
+    @Pattern(regexp = "\\d{10}", message = "Phone number must be 10 digits")
+    @Column(columnDefinition = "varchar(10) unique not null")
+    private String phone;
+
     @NotEmpty(message = "email must not be empty")
     @Email
     @Column(columnDefinition = "varchar(30) unique not null")
     private String email;
+
     @NotEmpty(message = "role must not be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String role;
