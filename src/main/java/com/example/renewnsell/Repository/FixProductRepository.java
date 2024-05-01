@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FixProductRepository extends JpaRepository<FixProduct, Integer> {
+    FixProduct findFixProductById(Integer id);
+    FixProduct findFixProductsByCustomer_Id(Integer id);
 }

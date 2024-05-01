@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderRepository extends JpaRepository<OrderProduct, Integer> {
+    OrderProduct findAllByCustomer_Id(Integer id);
 }
