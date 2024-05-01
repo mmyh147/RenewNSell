@@ -32,6 +32,7 @@ public class User implements UserDetails {
     private String username;
 
     @NotEmpty(message = "password must not be empty")
+    @Column(columnDefinition = "varchar(25) not null")
     private String password;
 
     @NotEmpty(message = "name must not be empty")
@@ -52,11 +53,11 @@ public class User implements UserDetails {
     @Column(columnDefinition = "varchar(20) not null")
     private String role;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Company company;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private Customer customer;
 

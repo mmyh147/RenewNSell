@@ -13,6 +13,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
 
     public void delete(String username){
         User user = userRepository.findUserByUsername(username);
@@ -23,7 +27,23 @@ public class UserService {
 
     }
 
-    public List<User> getAll() {
-        return userRepository.findAll();
+
+    public User getUserByUsername(String username){
+        User user = userRepository.findUserByUsername(username);
+        if (user == null){
+            throw new ApiException("User not found with username : " + username);
+        }
+        return user;
     }
+
+    public User getUserById(Integer id){
+        User user = userRepository.findUserById(id);
+        if (user == null){
+            throw new ApiException("User not found with ID : " + id);
+        }
+        return user;
+    }
+
+
+
 }

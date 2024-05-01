@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
@@ -21,6 +23,12 @@ public class CompanyService {
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+
+    public List<Company> getAll() {
+        return companyRepository.findAll();
+    }
+
+
     public void register(CompanyDTO request){
 
         if (userRepository.findUserByUsername(request.getUsername()) != null) {
@@ -35,7 +43,7 @@ public class CompanyService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhoneNumber());
 
-        user.setRole("CUSTOMER");
+        user.setRole("COMPANY");
         userRepository.save(user);
 
         Company company = new Company();
@@ -48,4 +56,30 @@ public class CompanyService {
         companyRepository.save(company);
 
     }
+
+    public void update(Integer companyId, CompanyDTO updatedCompanyDTO){
+
+
+        User user = userRepository.findUserById(companyId);
+
+        if (user.getCompany() == null){
+            throw new ApiException("company not found");
+        }
+
+        user.setName(updatedCompanyDTO.getName());
+        user.setEmail(updatedCompanyDTO.getEmail());
+        user.setUsername(updatedCompanyDTO.getUsername());
+        user.setPassword(updatedCompanyDTO.getPassword());
+        user.getCompany().setCommercialLicense(updatedCompanyDTO.getCommercialLicense());
+        user.getCompany().setIndustry(updatedCompanyDTO.getIndustry());
+        user.getCompany().setLogoPath(updatedCompanyDTO.getLogoPath());
+
+
+        userRepository.save(user);
+        companyRepository.save(user.getCompany());
+
+    }
+
+
+
 }

@@ -24,10 +24,10 @@ public class Company {
     @NotEmpty(message = "commercial License must not be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String commercialLicense;
-    @NotEmpty(message = "commercial License must not be empty")
+    @NotEmpty(message = "industry License must not be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String industry;
-    @NotEmpty(message = "commercial License must not be empty")
+    @NotEmpty(message = "logoPath License must not be empty")
     @Column(columnDefinition = "varchar(20) not null")
     private String logoPath;
 
