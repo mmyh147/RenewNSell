@@ -18,9 +18,11 @@ public class Product {
     private Integer id;
 
 
-
-
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private OrderProduct orderProduct;
 }
