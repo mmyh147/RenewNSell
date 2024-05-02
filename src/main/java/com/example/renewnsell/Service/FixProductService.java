@@ -11,6 +11,7 @@ import com.example.renewnsell.Repository.FixProductRepository;
 import com.example.renewnsell.Repository.OrderRepository;
 import com.example.renewnsell.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -25,6 +26,8 @@ public class FixProductService {
     private final CustomerRepository customerRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    @Autowired
+    private final OrderService orderService;
     //-----------------------------------Ghaliah----------------------------------
 
     public List<FixProduct> getAll() {
@@ -34,18 +37,19 @@ public class FixProductService {
     }
 
     //-----------------------------------Ghaliah----------------------------------
-    public void add(Integer customerID, FixProductDTO fixProductDTO){
-        Customer customer=customerRepository.findCustomerById(customerID);
-        FixProduct fixProduct=new FixProduct();
-       fixProduct.setOrderProduct(null);
-       fixProduct.setCategory(fixProductDTO.getCategory());
-       fixProduct.setCustomer(customer);
-       fixProduct.setDescription(fixProductDTO.getDescription());
-       fixProduct.setStatus("WAITING");
-       fixProductRepository.save(fixProduct);
+    public void add(Integer customerID, FixProductDTO fixProductDTO) {
+        Customer customer = customerRepository.findCustomersById(customerID);
+        FixProduct fixProduct = new FixProduct();
+        fixProduct.setOrderProduct(null);
+        fixProduct.setCategory(fixProductDTO.getCategory());
+        fixProduct.setCustomer(customer);
+        fixProduct.setDescription(fixProductDTO.getDescription());
+        fixProduct.setStatus("WAITING");
+        fixProductRepository.save(fixProduct);
     }
+
     public void addFixProduct(Integer customerID, FixProductDTO fixProductDTO) {
-        Customer customer = customerRepository.findCustomerById(customerID);
+        Customer customer = customerRepository.findCustomersById(customerID);
         if (customer == null) {
             throw new ApiException("Please Register to Request Fix Product");
         } else {
@@ -93,7 +97,7 @@ public class FixProductService {
         fixProduct.setStatus("ACCEPTED");
         orderRepository.save(orderProduct);
         fixProductRepository.save(fixProduct);
-        changeStatus(fixProductId);
+        orderService.changeStatus(fixProductId);
     }
 
 
@@ -101,74 +105,29 @@ public class FixProductService {
         OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);
         FixProduct fixProduct = fixProductRepository.findFixProductsByOrderProduct(orderProduct);
         //
-        if (orderProduct==null)
-        {throw new ApiException("you don't order");}
-        else if (orderProduct.getCustomer().getId()!=customerId)
+        if (orderProduct == null) {
+            throw new ApiException("you don't order");
+        } else if (orderProduct.getCustomer().getId() != customerId)
             throw new ApiException("this order not unauthorized for you");
         //
 
         if (!fixProduct.getStatus().equalsIgnoreCase("WAITING")) {
-            throw new ApiException("NOT WAITING");}
-            orderProduct.setStatus("REJECT");
-            fixProduct.setStatus("REJECT");
-            orderRepository.save(orderProduct);
-            fixProductRepository.save(fixProduct);
-            changeStatus(fixProductId);
+            throw new ApiException("NOT WAITING");
+        }
+        orderProduct.setStatus("REJECT");
+        fixProduct.setStatus("REJECT");
+        orderRepository.save(orderProduct);
+        fixProductRepository.save(fixProduct);
+        orderService.changeStatus(fixProductId);
 
     }
 
     //-----------------------------------Ghaliah----------------------------------
 
-    public void changeStatus(Integer fixProductId) {
-        OrderProduct order = orderRepository.findOrderProductById(fixProductId);
-        if (order == null) {
-            throw new ApiException("Order Not Found ");
-        }
-        //"PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY"
-        switch (order.getStatus()) {
-            case "ACCEPTED":
-                order.setStatus("PENDING");
-                orderRepository.save(order);
-                break;
-            case "PENDING":
-                //call method Accept
-                order.setStatus("ORDER_CONFIRMED");
-                orderRepository.save(order);
-                break;
-            case "ORDER_CONFIRMED":
-                order.setStatus("PREPARING");
-                orderRepository.save(order);
-                break;
-            case "PREPARING":
-                order.setStatus("SHIPPED");
-                orderRepository.save(order);
-                break;
 
-            case "SHIPPED":
-                order.setStatus("OUT_OF_DELIVERY");
-                orderRepository.save(order);
-                break;
-            case "OUT_OF_DELIVERY":
-                order.setStatus("DELIVERED");
-                orderRepository.save(order);
-                break;
-            case "REJECT":
-                FixProduct product = fixProductRepository.findFixProductsByOrderProduct(order);
-                order.setStatus("REJECTED");
-                orderRepository.save(order);
-                break;
-        }
-    }
     //-----------------------------------Ghaliah----------------------------------
 
-    public String getStatusOfFixProduct(Integer customerId, Integer fixProductId) {
-        OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);
-        if (orderProduct == null)
-        {throw new ApiException("you don't order");}
-       else if (orderProduct.getCustomer().getId()!=customerId)
-            throw new ApiException("this order not unauthorized for you");
-        return orderProduct.getStatus();
-    }
+
 
     public FixProduct getFixProductOne(Integer customerId, Integer fixProductId) {
         OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);

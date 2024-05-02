@@ -59,6 +59,16 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/review/delete/").hasAnyAuthority("ADMIN","CUSTOMER")
                 .requestMatchers("api/v1/company/add").permitAll()
                 .requestMatchers("api/v1/customer/add").permitAll()
+                .requestMatchers("api/v1/order/buy-order").hasAuthority("CUSTOMER")
+
+                .requestMatchers("api/v1/product/add").hasAuthority("COMPANY")
+//
+//
+//                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()
+//                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()
+//                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()
+//                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()
+//
                 .anyRequest().permitAll()
                 .and()
                 .logout().logoutUrl("/api/v1/user/logout")
