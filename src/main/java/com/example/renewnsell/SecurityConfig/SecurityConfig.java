@@ -46,6 +46,9 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/request-fix-product/change-status-of-fix-product/{fixProductId}").hasAuthority("EMPLOYEE")
                 .requestMatchers("api/v1/request-fix-product/response-request-fix-product/{fixProductId}").hasAuthority("EMPLOYEE")
                 .requestMatchers("api/v1/request-fix-product/accept-price-fix-product/{fixProductId}").hasAuthority("CUSTOMER")
+                .requestMatchers("api/v1/product/add").hasAuthority("COMPANY")
+//
+//
 //                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()
 //                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()
 //                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()

@@ -7,10 +7,7 @@ import com.example.renewnsell.Service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,6 +16,13 @@ public class CompanyController {
 
 
     private final CompanyService companyService;
+
+
+    @GetMapping("/get-all")
+    public ResponseEntity getAll(){
+
+        return ResponseEntity.ok(companyService.getAll());
+    }
 
     @PostMapping("/add")
     public ResponseEntity addProfile(@RequestBody @Valid CompanyDTO companyDTO){
