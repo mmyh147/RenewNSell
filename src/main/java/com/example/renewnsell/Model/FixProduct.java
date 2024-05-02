@@ -23,13 +23,13 @@ public class FixProduct {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     //-description:String
-@Column(columnDefinition = "description varchar(200) not null")
+//@Column(columnDefinition = "description varchar(200) not null")
     private String description;
 //PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY
-@Column(columnDefinition = "status varchar(200) not null check(status='PREPARING' or status='SHIPPED' or status='DELIVERED' or  status='ORDER_CONFIRMED' or  status='OUT_OF_DELIVERY')")
+//@Column(columnDefinition = "status varchar(200) not null check(status='PENDING' or status='PREPARING' or status='SHIPPED' or status='DELIVERED' or  status='ORDER_CONFIRMED' or  status='OUT_OF_DELIVERY')")
     private String status;
     //"SHOES|BAG|HAT|DRESS
-    @Column(columnDefinition = "category varchar(20) not null check(category='SHOES' or category='BAG' or category='HAT' or  category='DRESS')")
+   // @Column(columnDefinition = "category varchar(20) not null check(category='SHOES' or category='BAG' or category='HAT' or  category='DRESS')")
     private String category;
 
 
@@ -41,5 +41,6 @@ public class FixProduct {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonIgnore
     private Customer customer;
 }

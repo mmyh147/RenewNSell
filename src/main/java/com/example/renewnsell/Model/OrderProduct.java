@@ -26,19 +26,20 @@ public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotNull(message = "Total Price can't be null")
+    //@NotNull(message = "Total Price can't be null")
     private double totalPrice;
-    @NotEmpty(message = "Status can't be null")
-    @Column(columnDefinition = " status varchar(50) not null")
+   // @NotEmpty(message = "Status can't be null")
+   // @Column(columnDefinition = " status varchar(50) not null")
+   //@Pattern(regexp = "PENDING|PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY")
     private String status;
-    @NotNull(message = "Tax can't be null")
-    @Column(columnDefinition = "tax int not null")
+//    @NotNull(message = "Tax can't be null")
+//    @Column(columnDefinition = "tax int not null")
     private Integer tax;
-    @NotNull(message = "Date can't be null")
-    @Column(columnDefinition = "date datetime not null")
+//    @NotNull(message = "Date can't be null")
+//    @Column(columnDefinition = "date datetime not null")
     private LocalDate date;
-    @NotNull(message = "Total Items can't be null")
-    @Column(columnDefinition = "totalItems int not null")
+//    @NotNull(message = "Total Items can't be null")
+//    @Column(columnDefinition = "totalItems int not null")
     private Integer totalItems;
 
 
