@@ -56,18 +56,8 @@ public ResponseEntity rejectPriceFixProduct(@AuthenticationPrincipal User user,@
 }
     //changeStatus
 
-    @PostMapping("/change-status-of-fix-product/{fixProductId}")
-    public ResponseEntity changeStatus(@PathVariable Integer fixProductId ){
-        logger.info("accept-price-fix-product/{fixProductId}");
-        fixProductService.changeStatus(fixProductId);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Change status Successfully"));
-    }
 //getStatusOfFixProduct
-    @GetMapping("/get-status-of-fix-product/{fixProductId}")
-    public ResponseEntity getStatusOfFixProduct(@AuthenticationPrincipal User user,@PathVariable Integer fixProductId){
-        logger.info("get-status-of-fix-product/{fixProductId}");
-        return ResponseEntity.status(HttpStatus.OK).body(fixProductService.getStatusOfFixProduct(user.getId(),fixProductId));
-    }
+
 
     //getFixProductOne
 

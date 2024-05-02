@@ -27,4 +27,20 @@ private final UserRepository userRepository;
         Company company = companyRepository.findCompanyById(user.getId());
         product.setCompany(company);
         productRepository.save(product);      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //============================================
 }

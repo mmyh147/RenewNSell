@@ -34,7 +34,7 @@ public class OrderProduct {
     private String status;
 //    @NotNull(message = "Tax can't be null")
 //    @Column(columnDefinition = "tax int not null")
-    private Integer tax;
+    private Double tax;
 //    @NotNull(message = "Date can't be null")
 //    @Column(columnDefinition = "date datetime not null")
     private LocalDate date;
@@ -46,11 +46,12 @@ public class OrderProduct {
     //-------------------------------------------------
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonIgnore
     private Customer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "company_id")
-    private Company company;
+//    @ManyToOne
+//    @JoinColumn(name = "company_id")
+//    private Company company;
 
      @OneToMany(cascade = CascadeType.ALL,mappedBy = "orderProduct")
     private Set<Product>productSet;
