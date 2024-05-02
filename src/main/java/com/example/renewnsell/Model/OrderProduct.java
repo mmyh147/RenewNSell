@@ -18,6 +18,7 @@ public class OrderProduct {
     private Integer id;
 
 
+
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;

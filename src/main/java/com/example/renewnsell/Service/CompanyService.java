@@ -35,7 +35,7 @@ public class CompanyService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhoneNumber());
 
-        user.setRole("CUSTOMER");
+        user.setRole("COMPANY");
         userRepository.save(user);
 
         Company company = new Company();
@@ -48,4 +48,8 @@ public class CompanyService {
         companyRepository.save(company);
 
     }
+
+
+
+
 }
