@@ -26,7 +26,7 @@ public class CompanyController {
         return ResponseEntity.ok(companyService.getAll());
     }
     @PostMapping("/add")
-    public ResponseEntity addProfile(@RequestBody @Valid CompanyDTO companyDTO){
+    public ResponseEntity add(@RequestBody @Valid CompanyDTO companyDTO){
         companyService.register(companyDTO);
         return ResponseEntity.ok("Company added");
     }

@@ -1,5 +1,6 @@
 package com.example.renewnsell.DTO;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class CustomerDTO {
     @NotEmpty(message = "must not be empty")
     private String name;
 
+    @Email
     @NotEmpty(message = "must not be empty")
     private String email;
 
