@@ -71,4 +71,14 @@ public class CustomerService {
         customerRepository.save(user.getCustomer());
 
     }
+
+
+    public Customer getCustomerByID(Integer id){
+
+        Customer customer = customerRepository.findCustomerById(id);
+        if (customer == null){
+            throw new ApiException("Customer not found with ID : " + id);
+        }
+        return customer;
+    }
 }

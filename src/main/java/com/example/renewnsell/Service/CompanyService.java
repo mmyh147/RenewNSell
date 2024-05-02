@@ -80,6 +80,13 @@ public class CompanyService {
 
     }
 
+    public Company getCompanyById(Integer id){
 
+        Company company = companyRepository.findCompanyById(id);
+        if (company == null){
+            throw new ApiException("company not found with ID : " + id);
+        }
+        return company;
+    }
 
 }

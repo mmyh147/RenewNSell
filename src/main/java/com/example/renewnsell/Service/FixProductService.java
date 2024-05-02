@@ -35,7 +35,7 @@ public class FixProductService {
 
     //-----------------------------------Ghaliah----------------------------------
     public void add(Integer customerID, FixProductDTO fixProductDTO){
-        Customer customer=customerRepository.findCustomersById(customerID);
+        Customer customer=customerRepository.findCustomerById(customerID);
         FixProduct fixProduct=new FixProduct();
        fixProduct.setOrderProduct(null);
        fixProduct.setCategory(fixProductDTO.getCategory());
@@ -45,7 +45,7 @@ public class FixProductService {
        fixProductRepository.save(fixProduct);
     }
     public void addFixProduct(Integer customerID, FixProductDTO fixProductDTO) {
-        Customer customer = customerRepository.findCustomersById(customerID);
+        Customer customer = customerRepository.findCustomerById(customerID);
         if (customer == null) {
             throw new ApiException("Please Register to Request Fix Product");
         } else {
