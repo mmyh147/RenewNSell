@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
@@ -21,6 +23,11 @@ public class CompanyService {
 
     private final UserRepository userRepository;
     private final CompanyRepository companyRepository;
+
+
+    public List<Company> getAll() {
+        return companyRepository.findAll();
+    }
     public void register(CompanyDTO request){
 
         if (userRepository.findUserByUsername(request.getUsername()) != null) {
@@ -35,7 +42,7 @@ public class CompanyService {
         user.setEmail(request.getEmail());
         user.setPhone(request.getPhoneNumber());
 
-        user.setRole("CUSTOMER");
+        user.setRole("COMPANY");
         userRepository.save(user);
 
         Company company = new Company();

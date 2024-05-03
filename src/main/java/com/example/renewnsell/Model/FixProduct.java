@@ -43,4 +43,8 @@ public class FixProduct {
     @JoinColumn(name = "customer_id")
     @JsonIgnore
     private Customer customer;
+
+    @OneToOne(mappedBy = "fixProduct", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private ResponseFixProduct responseFixProduct;
 }

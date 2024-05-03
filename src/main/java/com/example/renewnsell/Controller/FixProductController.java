@@ -20,40 +20,51 @@ import org.springframework.web.bind.annotation.*;
 public class FixProductController {
 
     private final FixProductService fixProductService;
-    Logger logger= LoggerFactory.getLogger(FixProductController.class);
-@PostMapping("/request-fix-product")
-public ResponseEntity addFixProduct(@AuthenticationPrincipal User user,@RequestBody @Valid FixProductDTO fixProductDTO){
-    logger.info("request-fix-product");
-    fixProductService.addFixProduct(user.getId(),fixProductDTO);
-    return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Send request fix product Successfully"));
-}
+    Logger logger = LoggerFactory.getLogger(FixProductController.class);
+
+
     @GetMapping("/get-all-request-fix-product")
-    public ResponseEntity getAllFixProduct(){
+    public ResponseEntity getAllFixProduct() {
         logger.info("get-all-request-fix-product");
         return ResponseEntity.status(HttpStatus.OK).body(fixProductService.getAll());
     }
 
+    @PostMapping("/request-fix-product")
+    public ResponseEntity addFixProduct(@AuthenticationPrincipal User user, @RequestBody @Valid FixProductDTO fixProductDTO) {
+        logger.info("request-fix-product");
+        fixProductService.addFixProduct(user.getId(), fixProductDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Send request fix product Successfully"));
+    }
+@PutMapping("/update/{fixId}")
+    public ResponseEntity update(@AuthenticationPrincipal User user,@PathVariable Integer fixId, @RequestBody @Valid FixProductDTO fixProductDTO) {
+        logger.info("update request-fix-product");
+        fixProductService.update(user.getId(), fixId,fixProductDTO);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Send request fix product Successfully"));
+    }
+    @DeleteMapping("/delete-fix/{fixId}")
+    public ResponseEntity delete(@PathVariable Integer fixId) {
+        fixProductService.delete(fixId);
+        return ResponseEntity.status(200).body(new ApiResponse("delete successfully"));
+    }
+
+
     //response
-    @PostMapping("/response-request-fix-product/{fixProductId}/{price}")
-public ResponseEntity responseFixProductFromEmployee( @PathVariable Integer fixProductId,@PathVariable Double price, @RequestBody String description){
-        logger.info("response-request-fix-product/{fixProductId}/{price}");
-        fixProductService.response(fixProductId,price,description);
-        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Send to user Successfully"));
-}
-//acceptPriceFixProduct
+
+    //acceptPriceFixProduct
     @PostMapping("/accept-price-fix-product/{fixProductId}")
-    public ResponseEntity acceptPriceFixProduct(@AuthenticationPrincipal User user,@PathVariable Integer fixProductId ){
+    public ResponseEntity acceptPriceFixProduct(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
         logger.info("accept-price-fix-product/{fixProductId}");
-        fixProductService.acceptPriceFixProduct(user.getId(),fixProductId);
+        fixProductService.acceptPriceFixProduct(user.getId(), fixProductId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("accept Successfully"));
     }
-//rejectPriceFixProduct
-@PostMapping("/reject-price-fix-product/{fixProductId}")
-public ResponseEntity rejectPriceFixProduct(@AuthenticationPrincipal User user,@PathVariable Integer fixProductId ){
-    logger.info("reject-price-fix-product/{fixProductId}");
-    fixProductService.rejectPriceFixProduct(user.getId(),fixProductId);
-    return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Reject Successfully"));
-}
+
+    //rejectPriceFixProduct
+    @PostMapping("/reject-price-fix-product/{fixProductId}")
+    public ResponseEntity rejectPriceFixProduct(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
+        logger.info("reject-price-fix-product/{fixProductId}");
+        fixProductService.rejectPriceFixProduct(user.getId(), fixProductId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Reject Successfully"));
+    }
     //changeStatus
 
 //getStatusOfFixProduct
@@ -62,14 +73,9 @@ public ResponseEntity rejectPriceFixProduct(@AuthenticationPrincipal User user,@
     //getFixProductOne
 
     @GetMapping("/get-fix-product/{fixProductId}")
-    public ResponseEntity getFixProductOne(@AuthenticationPrincipal User user,@PathVariable Integer fixProductId){
+    public ResponseEntity getFixProductOne(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
         logger.info("get-fix-product/{fixProductId}");
-        return ResponseEntity.status(HttpStatus.OK).body(fixProductService.getFixProductOne(user.getId(),fixProductId));
+        return ResponseEntity.status(HttpStatus.OK).body(fixProductService.getFixProductOne(user.getId(), fixProductId));
     }
 
-    @DeleteMapping("/delete-order/{orderId}")
-    public ResponseEntity delete( @PathVariable Integer orderId){
-        fixProductService.delete(orderId);
-        return ResponseEntity.status(200).body(new ApiResponse("updated successfully"));
-    }
 }

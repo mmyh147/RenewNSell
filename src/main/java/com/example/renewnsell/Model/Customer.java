@@ -22,7 +22,7 @@ public class Customer {
     private Integer id;
 
     @NotEmpty(message = "gender must not be empty")
-    @Column(columnDefinition = "varchar(6) not null")
+   // @Column(columnDefinition = "varchar(6) not null")
     private String gender;
 
 

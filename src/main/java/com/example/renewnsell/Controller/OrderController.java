@@ -81,4 +81,11 @@ public class OrderController {
         logger.info("get-status-of-fix-product/{fixProductId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getStatusOfOrder(user.getId(),orderId));
     }
+
+    @GetMapping("/truck-order/{orderId}")
+    public ResponseEntity track(@PathVariable Integer orderId){
+        logger.info("get-status-of-fix-product/{fixProductId}");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.truck(orderId));
+    }
 }
+
