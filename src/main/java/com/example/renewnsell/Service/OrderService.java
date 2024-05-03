@@ -66,8 +66,8 @@ public class OrderService {
                 throw new ApiException("One of product Not found");
             Product product = productRepository.findProductById(productId.getProductId());
             product.setBuyWithFix(productId.isFix());//if customer wants fix product
-            if (product.getQuantity()==0){
-                throw new ApiException("product name: "+product+" sold out");
+            if (product.getQuantity() == 0) {
+                throw new ApiException("product name: " + product + " sold out");
             }
             product.setQuantity(product.getQuantity() - 1);//update Quantity}
             productRepository.save(product);//update
@@ -96,19 +96,24 @@ public class OrderService {
     public void cancelOrder(Integer customerId, Integer orderId) {
         if (check(orderId)) {
             OrderProduct orderProduct1 = orderRepository.findOrderProductById(orderId);
-            if (orderProduct1.getCustomer().getId()==customerId){
-            if (!orderProduct1.getStatus().equalsIgnoreCase("DELIVERED")) {
-                if (orderProduct1.getStatus().equalsIgnoreCase("REJECTED"))
+            if (orderProduct1.getCustomer().getId() == customerId) {
+                if (orderProduct1.getStatus().equalsIgnoreCase("REJECTED")) {
                     throw new ApiException("your order is Already Rejected");
-                if (orderProduct1.getStatus().equalsIgnoreCase("CANCELED"))
+                }
+                if (orderProduct1.getStatus().equalsIgnoreCase("CANCELED")) {
                     throw new ApiException("your order is Already Canceled");
-                else {
+                }
+
+                if (!orderProduct1.getStatus().equalsIgnoreCase("DELIVERED")) {
                     orderProduct1.setStatus("CANCELED");
                     orderRepository.save(orderProduct1);
-                }}
-            else {throw new ApiException("order not for you");}
+                } else {
+                    throw new ApiException("you can't cancel delivered order");
+                }
+
+            } else {
+                throw new ApiException("order not for you");
             }
-            throw new ApiException("you can't cancel delivered order");
         }
     }
 
@@ -161,15 +166,24 @@ public class OrderService {
             throw new ApiException("Empty List of order with status " + status);
         return orderRepository.findAllByStatus(status);
     }
-//==========================getStatusOfFixProduct
-public String getStatusOfOrder(Integer customerId, Integer orderId) {
-    OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
-    if (orderProduct == null)
-    {throw new ApiException("order don't found");}
-    else if (orderProduct.getCustomer().getId()!=customerId)
-        throw new ApiException("this order not unauthorized for you");
-    return orderProduct.getStatus();
-}
+
+    //==========================getStatusOfFixProduct
+    public String getStatusOfOrder(Integer customerId, Integer orderId) {
+        OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
+        if (orderProduct == null) {
+            throw new ApiException("order don't found");
+        } else if (orderProduct.getCustomer().getId() != customerId)
+            throw new ApiException("this order not unauthorized for you");
+        return orderProduct.getStatus();
+    }
+
+    public String truck(Integer orderId) {
+        OrderProduct order = orderRepository.findOrderProductById(orderId);
+        if (order == null) {
+            throw new ApiException("Order Not Found ");
+        }
+        return order.getStatus();
+    }
 
     //==========================================================================
     public Boolean check(Integer orderId) {

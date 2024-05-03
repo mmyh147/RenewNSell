@@ -4,6 +4,7 @@ import com.example.renewnsell.Api.ApiException;
 import com.example.renewnsell.Model.User;
 import com.example.renewnsell.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
