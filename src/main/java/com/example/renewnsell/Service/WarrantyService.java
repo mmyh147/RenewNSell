@@ -1,11 +1,13 @@
 package com.example.renewnsell.Service;
 
+import com.example.renewnsell.Api.ApiException;
 import com.example.renewnsell.Model.Warranty;
 import com.example.renewnsell.Repository.WarrantyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -19,9 +21,32 @@ public class WarrantyService {
 
     }
 
-    public boolean isWarrantyValid(Warranty warranty) {
+    public boolean isWarrantyValid(Integer warrantyId) {
+        Warranty warranty = warrantyRepository.findWarrantyById(warrantyId);
         LocalDate currentDate = LocalDate.now();
         return currentDate.isAfter(warranty.getStartDate()) && currentDate.isBefore(warranty.getEndDate());
     }
+
+    public long getDaysLeftForWarranty(Integer warrantyId) {
+        Warranty warranty = warrantyRepository.findWarrantyById(warrantyId);
+        LocalDate currentDate = LocalDate.now();
+        if (currentDate.isBefore(warranty.getStartDate())) {
+            throw new ApiException("Warranty has not started yet");
+        } else if (currentDate.isBefore(warranty.getEndDate())) {
+
+            return ChronoUnit.DAYS.between(currentDate, warranty.getEndDate());
+        } else {
+            throw new ApiException("Warranty Expired");
+        }
+    }
+
+    public void extendWarranty(Integer warrantyId, Integer daysToExtend) {
+        Warranty warranty = warrantyRepository.findWarrantyById(warrantyId);
+        LocalDate newEndDate = warranty.getEndDate().plusDays(daysToExtend);
+        warranty.setEndDate(newEndDate);
+        warrantyRepository.save(warranty);
+
+    }
+
 
 }

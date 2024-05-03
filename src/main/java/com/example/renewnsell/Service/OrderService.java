@@ -54,7 +54,7 @@ public class OrderService {
 
     ///Ghaliah
     public void buy(Integer userId, List<DTO_BUY> productIds) {
-        Customer customer = customerRepository.findCustomersById(userId);
+        Customer customer = customerRepository.findCustomerById(userId);
         OrderProduct orderProduct = new OrderProduct();
         orderProduct.setCustomer(customer);
         Double totalPrices = 0.0;
