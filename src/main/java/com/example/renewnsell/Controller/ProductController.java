@@ -47,7 +47,7 @@ public class ProductController {
 
 
 
-        @PutMapping("/update/{productId}")
+        @PutMapping("/update/{productId}") // السيكيورتي ماضبط
         public ResponseEntity updateProduct(@AuthenticationPrincipal User user, @PathVariable Integer productId, @RequestBody @Valid Product product) {
             productService.updateProduct(user.getId(), productId, product);
             return ResponseEntity.ok(new ApiResponse("Product updated successfully"));
@@ -55,21 +55,21 @@ public class ProductController {
 
 
 
-        @DeleteMapping("/delete/{productId}")
+        @DeleteMapping("/delete/{productId}")// السيكيورتي ماضبط
         public ResponseEntity deleteProduct(@AuthenticationPrincipal User user, @PathVariable Integer productId) {
             productService.deleteProduct(user.getId(), productId);
             return ResponseEntity.ok(new ApiResponse("Product deleted successfully"));
         }
 
 
-        @GetMapping("/get-product-title/{title}")
-        public ResponseEntity getProductByTitle( @PathVariable String title) {
-            Product product = productService.getProductByTitle(title);
+        @GetMapping("/get-product-name/{name}")
+        public ResponseEntity getProductByName( @PathVariable String name) {
+            Product product = productService.getProductByName(name);
             return ResponseEntity.ok(product);
         }
 
 
-        @GetMapping("/get-product-category/{name}")
+        @GetMapping("/get-product-cname/{name}")
         public ResponseEntity getProductByCompanyName(@PathVariable String name) {
             Set<Product> products = productService.getProductByCompanyName( name);
             return ResponseEntity.ok(products);
@@ -77,12 +77,17 @@ public class ProductController {
 
 
         @GetMapping("/get-product-defective/{percentOfDefective}")
-        public ResponseEntity getProductByPercentOfDefective(@AuthenticationPrincipal Company company, @PathVariable Double percentOfDefective) {
-            List<Product> products = productService.getProductByPercentOfDefective(company.getId(), percentOfDefective);
+        public ResponseEntity getProductByPercentOfDefective(@AuthenticationPrincipal User user, @PathVariable Double percentOfDefective) {
+            List<Product> products = productService.getProductByPercentOfDefective(user.getId(), percentOfDefective);
             return ResponseEntity.ok(products);
         }
 
 
+    @GetMapping("/get-product-category/{category}")
+    public ResponseEntity getProductByCategory(@PathVariable String category) {
+        List<Product> products = productService.getProductByCategory( category);
+        return ResponseEntity.ok(products);
+    }
 
 
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +44,10 @@ public class ReviewService {
     }
 
 
-    public Review updateReview(Integer reviewId, Integer customerId, Review updatedReview) {
+    public Review updateReview(Integer reviewId, Integer userId, Review updatedReview) {
         Review r = reviewRepository.findReviewById(reviewId);
 
-        if (!r.getCustomer().getId().equals(customerId)) {
+        if (!r.getCustomer().getId().equals(userId)) {
             throw new ApiException("Review does not belong to the specified customer");
         }
 
@@ -70,11 +71,11 @@ public class ReviewService {
 
 
 
-    //1
-    public Review getReviewById(Integer reviewId, Integer customerId) {
+    //1 للكاستمر
+    public Review getReviewById(Integer reviewId, Integer userId) {
         Review review = reviewRepository.findReviewById(reviewId);
 
-        if (!review.getCustomer().getId().equals(customerId)) {
+        if (!review.getCustomer().getId().equals(userId)) {
             throw new ApiException("Review does not belong to the specified customer");
         }
 
@@ -82,7 +83,7 @@ public class ReviewService {
     }
 
 
-    //2
+    //2 للشركه تشوف تقييماتهم
     public List<Review> getAllReviewsByCompanyId(Integer userId) {
         Company company = companyRepository.findCompanyById(userId);
         if (company == null)
@@ -94,15 +95,25 @@ public class ReviewService {
 
 
 
-    //3
-    public List<Review> getAllReviewsByCustomerId(Integer customerId) {
-        Customer customer = customerRepository.findCustomerById(customerId);
+    // للكاستمر يشوف تقييماته3
+    public List<Review> getAllReviewsByCustomerId(Integer userId) {
+        Customer customer = customerRepository.findCustomerById(userId);
         if (customer == null)
             throw new ApiException("customer not found");
 
-        return reviewRepository.findAllReviewsByCustomerId(customerId);
+        return reviewRepository.findAllReviewsByCustomerId(userId);
     }
 
+
+
+    //4
+    public Set<Review> getAllReviewsByCompanyName(String name) {
+        Company company = companyRepository.findCompanyByName(name);
+        if (company == null)
+            throw new ApiException("company not found");
+
+        return company.getReviews();
+    }
 
 
 

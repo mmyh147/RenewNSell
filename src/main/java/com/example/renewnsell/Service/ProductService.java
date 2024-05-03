@@ -29,27 +29,26 @@ public class ProductService {
         User user = userRepository.findUserById(userId);
         Company company = companyRepository.findCompanyById(user.getId());
         product.setCompany(company);
-         productRepository.save(product);
+        productRepository.save(product);
 
     }
 
 
     //1
     public Set<Product> getAllProductByCompanyId(Integer userId) {
-        User user=userRepository.findUserById(userId);
+        User user = userRepository.findUserById(userId);
 
         return user.getCompany().getProducts();
     }
 
 
-
-   //2
+    //2
     public Product getProductById(Integer productId, Integer userId) {
         Product product = productRepository.findProductById(productId);
-        if (product == null || !product.getCompany().getId().equals(userId))
+        if (product == null || !product.getCompany().getId().equals(userId)) {
             throw new ApiException("Product not found or does not belong to the specified Company");
-
-        return productRepository.findProductById(productId);
+        }
+        return product;
     }
 
 
@@ -89,8 +88,8 @@ public class ProductService {
 
 
 
-  //3 ,, search by customer
-    public Product getProductByTitle( String name ){
+  //3
+    public Product getProductByName( String name ){
         Product product = productRepository.findProductByName(name);
 
 
@@ -99,19 +98,21 @@ public class ProductService {
 
 
     //4
-    public Set<Product> getProductByCompanyName(String companyName) {
-        Company company = companyRepository.findCompanyByName(companyName);
+    public Set<Product> getProductByCompanyName(String name) {
+        Company company = companyRepository.findCompanyByName(name);
         if (company == null)throw new ApiException("Company not found");
 
-        return   company.getProducts();
+        return company.getProducts();
 
     }
 
 
 
+
+
     //5
-    public List<Product> getProductByPercentOfDefective(Integer companyId, Double percentOfDefective) {
-        Company company = companyRepository.findCompanyById(companyId);
+    public List<Product> getProductByPercentOfDefective(Integer userId, Double percentOfDefective) {
+        Company company = companyRepository.findCompanyById(userId);
         List<Product> products = productRepository.findProductByPercentOfDefective(percentOfDefective);
 
         List<Product> companyProducts = new ArrayList<>();
@@ -123,7 +124,20 @@ public class ProductService {
         }
 
         return companyProducts;
-    }}
+    }
+
+    //6
+
+    public List<Product> getProductByCategory( String category ){
+        List<Product> p = productRepository.findProductByCategory(category);
+
+
+        return p;
+    }
+
+
+
+}
 
 
 

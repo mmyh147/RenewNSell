@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -47,28 +48,33 @@ public class ReviewController {
 
 
 
-    @GetMapping("/get-all-cu")
-    public ResponseEntity getAllReviewsForCustomer(@AuthenticationPrincipal Customer customer) {
-        List<Review> reviews = reviewService.getAllReviewsByCustomerId(customer.getId());
+    @GetMapping("/get-all-cu") // السيكيورتي
+    public ResponseEntity getAllReviewsForCustomer(@AuthenticationPrincipal User user) {
+        List<Review> reviews = reviewService.getAllReviewsByCustomerId(user.getId());
         return ResponseEntity.ok(reviews);
     }
 
 
 
-    @PutMapping("/update/{reviewId}")
-    public ResponseEntity updateReview(@AuthenticationPrincipal Integer customerId, @PathVariable Integer reviewId, @RequestBody @Valid Review updatedReview) {
-        Review review = reviewService.updateReview(reviewId, customerId, updatedReview);
+    @PutMapping("/update/{reviewId}") // السيكيورتي
+    public ResponseEntity updateReview(@AuthenticationPrincipal User user, @PathVariable Integer reviewId, @RequestBody @Valid Review updatedReview) {
+        Review review = reviewService.updateReview(reviewId, user.getId(), updatedReview);
         return ResponseEntity.ok(review);
     }
 
 
 
-    @DeleteMapping("/delete/{reviewId}")
-    public ResponseEntity deleteReview(@AuthenticationPrincipal Integer customerId, @PathVariable Integer reviewId) {
-        reviewService.deleteReview(reviewId, customerId);
+    @DeleteMapping("/delete/{reviewId}")// السيكيورتي
+    public ResponseEntity deleteReview(@AuthenticationPrincipal User user, @PathVariable Integer reviewId) {
+        reviewService.deleteReview(reviewId, user.getId());
         return ResponseEntity.ok("Review deleted successfully");
 
-
-
     }
+
+    @GetMapping("/get-all-c/{name}")
+    public ResponseEntity getAllReviewsByCompanyName( @PathVariable String name) {
+        Set<Review> reviews = reviewService.getAllReviewsByCompanyName(name);
+        return ResponseEntity.ok(reviews);
+    }
+
 }
