@@ -63,14 +63,38 @@ public class OrderController {
         orderService.changeStatus(orderId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Change status Successfully"));
     }
-    ////+getAllCanceledOrder():List<Order>
-    ////+getAllRejectedOrder():List<Order>
+// i use this method getAllByStatus for all pattern
+    //@Pattern(regexp = "PENDING|PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY")
+
     @GetMapping("/get-all-canceled-order")
     public ResponseEntity getAllCanceledOrder(){
+        logger.info("get-all-canceled-order");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("CANCELED"));
 
-    } @GetMapping("/get-all-rejected-order")
+    }
+    @GetMapping("/get-all-shipped-order")
+    public ResponseEntity getAllSHIPPEDOrder(){
+        logger.info("get-all-shipped-order");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("SHIPPED"));
+
+    }
+
+    @GetMapping("/get-all-out-of-delivery-order")
+    public ResponseEntity getAllOUT_OF_DELIVERYOrder(){
+        logger.info("get-all-out-of-delivery-order");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("OUT_OF_DELIVERY"));
+
+    }
+//DELIVERED
+@GetMapping("/get-all-delivered-order")
+public ResponseEntity getAllDELIVEREDOrder(){
+    logger.info("get-all-delivered-order");
+    return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("DELIVERED"));
+
+}
+    @GetMapping("/get-all-rejected-order")
     public ResponseEntity getAllRejectedOrder(){
+        logger.info("get-all-rejected-order");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("REJECTED"));
 
     }
@@ -84,8 +108,29 @@ public class OrderController {
 
     @GetMapping("/truck-order/{orderId}")
     public ResponseEntity track(@PathVariable Integer orderId){
-        logger.info("get-status-of-fix-product/{fixProductId}");
+        logger.info("truck-order/{orderId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.truck(orderId));
     }
+
+    //findAllByCustomer_Id
+    @GetMapping("/get-all-customer-order/")
+    public ResponseEntity findAllByCustomer_Id(@AuthenticationPrincipal User user){
+        logger.info("get-all-customer-order");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.findAllByCustomer_Id(user.getId()));
+    }
+
+
+    //getAllOrderByProductId
+    @GetMapping("/get-all-order-by-product-id/{productId}")
+    public ResponseEntity getAllOrderByProductId(@AuthenticationPrincipal User user,@PathVariable Integer productId){
+        logger.info("/get-all-order-by-product-id/{productId}");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllOrderByProductId(productId));
+    }
+//findAllByCompanyId
+@GetMapping("/get-all-order-by-company-id")
+public ResponseEntity findAllByCompanyId(@AuthenticationPrincipal User user){
+    logger.info("/get-all-order-by-company-id");
+    return ResponseEntity.status(HttpStatus.OK).body(orderService.findAllByCompanyId(user.getId()));
+}
 }
 

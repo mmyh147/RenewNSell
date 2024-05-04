@@ -52,8 +52,9 @@ public void delete(Integer id){
     if (responseFixProduct == null) throw new ApiException("Not found");
 responseFixProductRepository.delete(responseFixProduct);
 }
+//================================= ALL CRUD DONE BY GHALIAH  ==============================
 
-//=======================
+    //=================================RESPONSE REQUEST FIX PRODUCT FROM EMPLOYEE DONE BY GHALIAH  ==============================
 public void response(Integer fixProductId,DTOResponseFixProduct responseFixProductPostMan) {
     OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);
     FixProduct fixProduct = fixProductRepository.findFixProductsByOrderProduct(orderProduct);

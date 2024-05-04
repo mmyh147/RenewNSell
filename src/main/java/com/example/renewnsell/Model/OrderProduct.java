@@ -49,14 +49,16 @@ public class OrderProduct {
     @JsonIgnore
     private Customer customer;
 
-//    @ManyToOne
-//    @JoinColumn(name = "company_id")
-//    private Company company;
+//
+//     @OneToMany(cascade = CascadeType.ALL,mappedBy = "orderProduct")
+//    private Set<Product>productSet;
 
-     @OneToMany(cascade = CascadeType.ALL,mappedBy = "orderProduct")
-    private Set<Product>productSet;
 
+    @ManyToMany(mappedBy = "orderProduct")
+    private Set<Product>products;
     @OneToOne(mappedBy = "orderProduct", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private FixProduct fixProduct;
+
+
 }

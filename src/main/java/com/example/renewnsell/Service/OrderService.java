@@ -8,8 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -51,8 +50,10 @@ public class OrderService {
         }
 
     }
+//================================= ALL CRUD DONE BY GHALIAH  ==============================
 
-    ///Ghaliah
+
+    //================================= [BUY] METHOD DONE BY GHALIAH  ==============================
     public void buy(Integer userId, List<DTO_BUY> productIds) {
         Customer customer = customerRepository.findCustomersById(userId);
         OrderProduct orderProduct = new OrderProduct();
@@ -60,6 +61,9 @@ public class OrderService {
         Double totalPrices = 0.0;
         /////////////////////////////////////////////
         List<Product> products = new ArrayList<>();
+        Set<Product> productSet = new HashSet<Product>(products);//Assign product set to order
+
+        orderRepository.save(orderProduct);//update //save order first then save updated product
         ///
         for (DTO_BUY productId : productIds) {
             if (productRepository.findProductById(productId.getProductId()) == null)
@@ -70,16 +74,19 @@ public class OrderService {
                 throw new ApiException("product name: " + product + " sold out");
             }
             product.setQuantity(product.getQuantity() - 1);//update Quantity}
+            product.getOrderProduct().add(orderProduct);//order assign to product
             productRepository.save(product);//update
             products.add(product);
         }
-        /// AssignToOder
-        for (Product productAssignToOrder : products) {
-            productAssignToOrder.setOrderProduct(orderProduct);
-            if (productAssignToOrder.getBuyWithFix()) {
-                totalPrices += productAssignToOrder.getPrice() + productAssignToOrder.getFixPrice();
+
+        orderProduct.setProducts(productSet);
+        orderRepository.save(orderProduct);//update
+
+        for (Product p : products){
+            if (p.getBuyWithFix()) {
+                totalPrices += p.getPrice() + p.getFixPrice();
             } else {
-                totalPrices += productAssignToOrder.getPrice();
+                totalPrices += p.getPrice();
             }
         }
         orderProduct.setTotalItems(products.size());
@@ -91,7 +98,7 @@ public class OrderService {
 
     }
 
-    //==========================================+cancelOrder(int):=======================
+//================================= [CANCEL ORDER] METHOD DONE BY GHALIAH  ==============================
 
     public void cancelOrder(Integer customerId, Integer orderId) {
         if (check(orderId)) {
@@ -117,7 +124,7 @@ public class OrderService {
         }
     }
 
-    //==================================changeStatus==========================
+    //================================= [CHANGE STATUS] METHOD DONE BY GHALIAH  ==============================
     public void changeStatus(Integer fixProductId) {
         OrderProduct order = orderRepository.findOrderProductById(fixProductId);
         if (order == null) {
@@ -160,22 +167,23 @@ public class OrderService {
 //=================================================
 
 
-    //=====================================//+getAllCanceledOrder():List<Order>
+    //================================= [GET ALL ORDER BY STATUS] METHOD DONE BY GHALIAH  ==============================
     public List<OrderProduct> getAllByStatus(String status) {
         if (orderRepository.findAllByStatus(status).isEmpty())
             throw new ApiException("Empty List of order with status " + status);
         return orderRepository.findAllByStatus(status);
     }
 
-    //==========================getStatusOfFixProduct
+    //================================= [GET STATUS OF ORDER ] METHOD DONE BY GHALIAH  ==============================
     public String getStatusOfOrder(Integer customerId, Integer orderId) {
         OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
         if (orderProduct == null) {
             throw new ApiException("order don't found");
-        } else if (orderProduct.getCustomer().getId() != customerId)
+        } else if (orderProduct.getCustomer().getId()!=customerId)
             throw new ApiException("this order not unauthorized for you");
         return orderProduct.getStatus();
     }
+    //================================= [TRUCK ORDER FOR EMPLOYEE METHOD ] METHOD DONE BY GHALIAH  ==============================
 
     public String truck(Integer orderId) {
         OrderProduct order = orderRepository.findOrderProductById(orderId);
@@ -184,8 +192,41 @@ public class OrderService {
         }
         return order.getStatus();
     }
+    //================================= [findAllByCustomer_Id  ] METHOD DONE BY GHALIAH  ==============================
 
-    //==========================================================================
+    public Set<OrderProduct> findAllByCustomer_Id(Integer customerId) {
+        Customer customer = customerRepository.findCustomersById(customerId);
+        if (customer.getOrders().isEmpty())
+            throw new ApiException("you dont have order");
+        return customer.getOrders();
+    }
+
+    //================================= [findAllByCompanyId  ] METHOD DONE BY GHALIAH  ==============================
+
+public List<OrderProduct> findAllByCompanyId(Integer companyId){
+      List<Product>products=productRepository.findAllByCompany_IdAndAndBuyWithFixOrBuyWithFix(companyId,true,false);
+        if (products.isEmpty())
+            throw new ApiException("no product bought yet so list is empty");
+        List<OrderProduct> orderProductList=new ArrayList<>();
+        for (Product product:products){
+            orderProductList.addAll(product.getOrderProduct());
+        }
+        return orderProductList;
+}
+
+
+    //================================= [+getOrdersByProductId:list<Order>  ] METHOD NOT-DONE   ==============================
+    public Set<OrderProduct> getAllOrderByProductId(Integer productId) {
+        Product product = productRepository.findProductById(productId);
+        if (product ==null)
+            throw new ApiException("product not found");
+        if (product.getOrderProduct().isEmpty())
+            throw new ApiException("Product dont have order yet");
+        return product.getOrderProduct();
+    }
+
+
+    //================================= [THIS METHOD USE IT TO REMOVE DUPLICATION CODE IN EACH METHOD WE SHOULD CHECK AVAILABILITY OF ORDER ] METHOD DONE BY GHALIAH  ==============================
     public Boolean check(Integer orderId) {
         OrderProduct orderProduct1 = orderRepository.findOrderProductById(orderId);
         if (orderProduct1 == null) {

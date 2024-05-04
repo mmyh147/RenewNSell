@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -63,8 +65,13 @@ public class Product {
     @JsonIgnore
     private Company company;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
+//    @ManyToOne
+//    @JoinColumn(name = "order_id")
+//    @JsonIgnore
+//    private OrderProduct orderProduct;
+    @ManyToMany
     @JsonIgnore
-    private OrderProduct orderProduct;
+    private Set<OrderProduct> orderProduct;
+
+
 }
