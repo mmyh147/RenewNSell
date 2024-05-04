@@ -7,6 +7,7 @@ import com.example.renewnsell.Model.User;
 import com.example.renewnsell.Service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +76,20 @@ public class ReviewController {
     public ResponseEntity getAllReviewsByCompanyName( @PathVariable String name) {
         Set<Review> reviews = reviewService.getAllReviewsByCompanyName(name);
         return ResponseEntity.ok(reviews);
+    }
+
+
+    @GetMapping("/average-rating/{name}")
+    public ResponseEntity getAverageRatingByCompanyName(@PathVariable String name) {
+        double averageRating = reviewService.getAverageRatingByCompanyName(name);
+        return ResponseEntity.ok(averageRating);
+    }
+
+
+    @GetMapping("/number-of-reviews/{name}")
+    public ResponseEntity getNumberOfReviewsByCompanyName(@PathVariable String name) {
+        int numberOfReviews = reviewService.getNumberOfReviewsByCompanyName(name);
+        return ResponseEntity.ok(numberOfReviews);
     }
 
 }

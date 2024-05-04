@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.OptionalDouble;
 import java.util.Set;
 
 @Service
@@ -116,6 +117,34 @@ public class ReviewService {
     }
 
 
+
+    //5
+    public double getAverageRatingByCompanyName(String name) {
+        Company company = companyRepository.findCompanyByName(name);
+        if (company == null)
+            throw new ApiException("Company not found");
+
+        Set<Review> reviews = company.getReviews();
+        if (reviews.isEmpty())
+            return 0.0; // Return 0 if there are no reviews for the company
+
+        OptionalDouble average = reviews.stream()
+                .mapToInt(Review::getRating)
+                .average();
+
+        return average.isPresent() ? average.getAsDouble() : 0.0;
+    }
+
+    //6
+
+    public int getNumberOfReviewsByCompanyName(String name) {
+        Company company = companyRepository.findCompanyByName(name);
+        if (company == null)
+            throw new ApiException("Company not found");
+
+        Set<Review> reviews = company.getReviews();
+        return reviews.size();
+    }
 
 
 }
