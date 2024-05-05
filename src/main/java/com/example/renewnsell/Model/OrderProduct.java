@@ -50,6 +50,7 @@ public class OrderProduct {
     private Customer customer;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "company_id")
     private Company company;
 

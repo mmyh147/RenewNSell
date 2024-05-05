@@ -24,7 +24,7 @@ public class WarrantyService {
     public boolean isWarrantyValid(Integer warrantyId) {
         Warranty warranty = warrantyRepository.findWarrantyById(warrantyId);
         LocalDate currentDate = LocalDate.now();
-        return currentDate.isAfter(warranty.getStartDate()) && currentDate.isBefore(warranty.getEndDate());
+        return !currentDate.isBefore(warranty.getStartDate()) && !currentDate.isAfter(warranty.getEndDate());
     }
 
     public long getDaysLeftForWarranty(Integer warrantyId) {
@@ -41,6 +41,9 @@ public class WarrantyService {
     }
 
     public void extendWarranty(Integer warrantyId, Integer daysToExtend) {
+        if (1 > daysToExtend){
+            throw new ApiException("please enter positive number");
+        }
         Warranty warranty = warrantyRepository.findWarrantyById(warrantyId);
         LocalDate newEndDate = warranty.getEndDate().plusDays(daysToExtend);
         warranty.setEndDate(newEndDate);

@@ -1,5 +1,6 @@
 package com.example.renewnsell.Controller;
 
+import com.example.renewnsell.Api.ApiResponse;
 import com.example.renewnsell.DTO.CompanyDTO;
 import com.example.renewnsell.Model.Warranty;
 import com.example.renewnsell.Service.WarrantyService;
@@ -26,5 +27,19 @@ public class WarrantyController {
     public ResponseEntity checkTheWarranty(@PathVariable Integer id){
 
         return ResponseEntity.ok(warrantyService.isWarrantyValid(id));
+    }
+
+
+    @PutMapping("/extend/{id}/{days}")
+    public ResponseEntity extend(@PathVariable Integer id, @PathVariable Integer days){
+
+        warrantyService.extendWarranty(id, days);
+        return ResponseEntity.ok(new ApiResponse("Warranty extended " + days + " days"));
+    }
+
+    @GetMapping("/days-left/{id}")
+    public ResponseEntity getHowManyDaysLeft(@PathVariable Integer id){
+
+        return ResponseEntity.ok(warrantyService.getDaysLeftForWarranty(id));
     }
 }

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -55,41 +57,60 @@ public class OrderService {
     ///Ghaliah
     public void buy(Integer userId, List<DTO_BUY> productIds) {
         Customer customer = customerRepository.findCustomerById(userId);
-        OrderProduct orderProduct = new OrderProduct();
-        orderProduct.setCustomer(customer);
-        Double totalPrices = 0.0;
-        /////////////////////////////////////////////
-        List<Product> products = new ArrayList<>();
-        ///
-        for (DTO_BUY productId : productIds) {
-            if (productRepository.findProductById(productId.getProductId()) == null)
-                throw new ApiException("One of product Not found");
-            Product product = productRepository.findProductById(productId.getProductId());
-            product.setBuyWithFix(productId.isFix());//if customer wants fix product
-            if (product.getQuantity() == 0) {
-                throw new ApiException("product name: " + product + " sold out");
-            }
-            product.setQuantity(product.getQuantity() - 1);//update Quantity}
-            productRepository.save(product);//update
-            products.add(product);
-        }
-        /// AssignToOder
-        for (Product productAssignToOrder : products) {
-            productAssignToOrder.setOrderProduct(orderProduct);
-            if (productAssignToOrder.getBuyWithFix()) {
-                totalPrices += productAssignToOrder.getPrice() + productAssignToOrder.getFixPrice();
-            } else {
-                totalPrices += productAssignToOrder.getPrice();
-            }
-        }
-        orderProduct.setTotalItems(products.size());
-        totalPrices -= totalPrices * 0.15;
-        orderProduct.setTotalPrice(totalPrices);
-        orderProduct.setTax(0.15);
-        orderProduct.setDate(LocalDate.now());
-        addOrder(orderProduct);
 
+        // Group products by company
+        Map<Company, List<Product>> productsByCompany = new HashMap<>();
+        for (DTO_BUY productId : productIds) {
+            Product product = productRepository.findProductById(productId.getProductId());
+            if (product == null) {
+                throw new ApiException("One of the products not found");
+            }
+            product.setBuyWithFix(productId.isFix());
+
+            // Check if the product is sold out
+            if (product.getQuantity() == 0) {
+                throw new ApiException("Product '" + product.getName() + "' is sold out");
+            }
+
+            // Update quantity and save product
+            product.setQuantity(product.getQuantity() - 1);
+            productRepository.save(product);
+
+            // Group product by company
+            productsByCompany
+                    .computeIfAbsent(product.getCompany(), k -> new ArrayList<>())
+                    .add(product);
+        }
+
+        // Create orders for each company
+        for (Map.Entry<Company, List<Product>> entry : productsByCompany.entrySet()) {
+            Company company = entry.getKey();
+            List<Product> productsForCompany = entry.getValue();
+
+            // Create order
+            OrderProduct orderProduct = new OrderProduct();
+            orderProduct.setCustomer(customer);
+            orderProduct.setCompany(company);
+            orderProduct.setTotalItems(productsForCompany.size());
+
+            // Calculate total price for the order
+            double totalPrice = 0.0;
+            for (Product product : productsForCompany) {
+                totalPrice += product.getPrice();
+                if (product.getBuyWithFix()) {
+                    totalPrice += product.getFixPrice();
+                }
+            }
+            totalPrice -= totalPrice * 0.15; // Apply discount
+            orderProduct.setTotalPrice(totalPrice);
+            orderProduct.setTax(0.15);
+            orderProduct.setDate(LocalDate.now());
+
+            // Save order to the database
+            addOrder(orderProduct);
+        }
     }
+
 
     //==========================================+cancelOrder(int):=======================
 
@@ -192,6 +213,68 @@ public class OrderService {
             throw new ApiException("Not Found Order");
         }
         return true;
+    }
+
+    // =============================== calculate total profit ========================
+
+    public Double getAllTimeProfitForAll(){
+
+        Double total = 0.0;
+        total = orderRepository.getTotalProfitForNonCancelledOrders();
+
+        return total;
+    }
+
+    public Double getAllTimeProfitForCompany(Integer companyId){
+
+        Double total = 0.0;
+        total = orderRepository.getTotalProfitForNonCancelledOrdersByCompanyId(companyId);
+
+        return total;
+    }
+
+    public Double getTodayProfitForAll(){
+
+        Double total = 0.0;
+        total = orderRepository.getTotalProfitForNonCancelledOrdersToday(LocalDate.now());
+
+        return total;
+    }
+
+    public Double getTodayProfitForCompany(Integer companyId){
+
+        Double total = 0.0;
+        total = orderRepository.getTodayProfitForNonCancelledOrdersByCompanyId(LocalDate.now(), companyId);
+
+        return total;
+    }
+
+    public Double getCurrentMonthProfitForCompany(Integer companyId){
+
+        Double total = 0.0;
+        total = orderRepository.getCurrentMonthProfitForNonCancelledOrdersByCompanyId(LocalDate.now(), companyId);
+
+        return total;
+    }
+
+    public Double getCurrentMonthProfitForAll(){
+
+        Double total = 0.0;
+        total = orderRepository.getCurrentMonthProfitForAllOrders();
+
+        return total;
+    }
+
+    public double getLastMonthProfitForNonCancelledOrdersByCompanyId(Integer companyId) {
+        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+
+        return orderRepository.getLastMonthProfitForNonCancelledOrdersByCompanyId(lastMonth, companyId);
+    }
+
+    public double getLastMonthProfitForNonCancelledOrders() {
+        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+
+        return orderRepository.getLastMonthProfitForNonCancelledOrders(lastMonth);
     }
 
 

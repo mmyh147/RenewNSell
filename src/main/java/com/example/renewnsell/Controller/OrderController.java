@@ -87,5 +87,35 @@ public class OrderController {
         logger.info("get-status-of-fix-product/{fixProductId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.truck(orderId));
     }
+
+    @GetMapping("/profit")
+    public ResponseEntity getAllProfit(){
+        logger.info("/profit");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllTimeProfitForAll());
+    }
+
+    @GetMapping("/company-profit/{company_id}")
+    public ResponseEntity getAllCompanyProfit(@PathVariable Integer company_id){
+        logger.info("/company-profit/{company_id}");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllTimeProfitForCompany(company_id));
+    }
+
+    @GetMapping("/company-profit-today/{company_id}")
+    public ResponseEntity getTodayCompanyProfit(@PathVariable Integer company_id){
+        logger.info("/company-profit/{company_id}");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getTodayProfitForCompany(company_id));
+    }
+
+    @GetMapping("/profit-today")
+    public ResponseEntity getTodayCompanyProfit(){
+        logger.info("/company-profit/{company_id}");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getTodayProfitForAll());
+    }
+
+    @GetMapping("/profit-current-month/{company_id}")
+    public ResponseEntity getCurrentMonthCompanyProfit(@PathVariable Integer company_id){
+        logger.info("/company-profit/{company_id}");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getCurrentMonthProfitForCompany(company_id));
+    }
 }
 
