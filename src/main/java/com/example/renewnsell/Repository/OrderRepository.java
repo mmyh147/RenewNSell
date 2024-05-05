@@ -2,6 +2,7 @@ package com.example.renewnsell.Repository;
 
 import com.example.renewnsell.Model.FixProduct;
 import com.example.renewnsell.Model.OrderProduct;
+import com.example.renewnsell.Model.Product;
 import jakarta.persistence.criteria.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,9 +13,8 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<OrderProduct, Integer> {
-    OrderProduct findAllByCustomer_Id(Integer id);
+
     OrderProduct findOrderProductById(Integer id);
-    OrderProduct findOrderProductByFixProduct(FixProduct product);
     List<OrderProduct> findAllByStatus(String status);
 
     @Query("SELECT COALESCE(SUM(op.totalPrice), 0) FROM OrderProduct op WHERE op.status <> 'CANCELED'")

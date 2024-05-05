@@ -43,7 +43,7 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/customer/add").permitAll()
                .requestMatchers("api/v1/auth/add-employee").permitAll()
                 .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()
-                .requestMatchers("api/v1/order/change-status-of-order/{orderId}").hasAuthority("EMPLOYEE")
+                .requestMatchers("api/v1/order/change-status-of-order/{orderId}").hasAnyAuthority("EMPLOYEE","ADMIN","COMPANY")
                 .requestMatchers("api/v1/response-fix-product/response-request-fix-product/{fixProductId}").hasAuthority("EMPLOYEE")
                 .requestMatchers("api/v1/request-fix-product/accept-price-fix-product/{fixProductId}").hasAuthority("CUSTOMER")
 
@@ -62,6 +62,7 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/order/buy-order").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/order/cancel-order/{orderId}").hasAnyAuthority("CUSTOMER","EMPLOYEE","ADMIN")
                 .requestMatchers("api/v1/product/add").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/order-company/get-all-total-price-orders-company").hasAuthority("COMPANY")
 //
 //
 //                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()

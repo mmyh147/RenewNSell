@@ -23,11 +23,17 @@ public class ProductService {
     private final CompanyRepository companyRepository;
 
     private final UserRepository userRepository;
+    private final OrderCompanyRepository orderCompanyRepository;
 
+    public List<Product> getAll(){
+        return productRepository.findAll();
+    }
 
     public void addProduct(Integer userId, Product product) {
         User user = userRepository.findUserById(userId);
         Company company = companyRepository.findCompanyById(user.getId());
+        OrderCompany orderCompany=new OrderCompany();
+        orderCompanyRepository.save(orderCompany);
         product.setCompany(company);
          productRepository.save(product);
 
@@ -41,6 +47,28 @@ public class ProductService {
         return user.getCompany().getProducts();
     }
 
+    public Boolean checkAvailabilityProduct(Integer productId) {
+        Product product = productRepository.findProductById(productId);
+        if (product == null)
+            throw new ApiException(" product not found");
+        if (product.getQuantity()>0)
+            return true;
+        return false;
+    }
+//    public List<Product> findAllByCompanyIdAndAndBuyWithFix(Integer companyId) {
+//        List<Product> productList = productRepository.findAllByCompany_IdAndAndBuyWithFixOrBuyWithFix(companyId, true, false);
+//        if (productList.isEmpty())
+//            throw new ApiException("sold productList is empty");
+//        List<OrderProduct> orderProductList = new ArrayList<>();
+//        for (Product product : productList) {
+//            if (product.getOrderProduct() != null) {
+//                orderProductList.add(product.getOrderProduct());
+//            }
+//        }
+//        if (orderProductList.isEmpty())
+//            throw new ApiException("Company Dont have Order yet");
+//        return productList;
+//    }
 
 
    //2

@@ -26,6 +26,7 @@ public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    // @Column(columnDefinition = " totalPrice double not null")
     //@NotNull(message = "Total Price can't be null")
     private double totalPrice;
    // @NotEmpty(message = "Status can't be null")
@@ -49,15 +50,18 @@ public class OrderProduct {
     @JsonIgnore
     private Customer customer;
 
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "company_id")
-    private Company company;
+//    @ManyToOne
+//    @JoinColumn(name = "company_id")
+//    private Company company;
 
      @OneToMany(cascade = CascadeType.ALL,mappedBy = "orderProduct")
     private Set<Product>productSet;
 
+    @ManyToMany(mappedBy = "orderProduct")
+    private Set<Product>products;
     @OneToOne(mappedBy = "orderProduct", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private FixProduct fixProduct;
+
+
 }

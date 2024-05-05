@@ -5,13 +5,11 @@ import com.example.renewnsell.DTO.DTO_BUY;
 import com.example.renewnsell.Model.*;
 import com.example.renewnsell.Repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +17,10 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
-
+    private final CompanyRepository companyRepository;
+    private final OrderCompanyRepository orderCompanyRepository;
+@Autowired
+private final OrderCompanyService orderCompanyService;
     public List<OrderProduct> getAll() {
         if (orderRepository.findAll().isEmpty())
             throw new ApiException("Order List is empty");
@@ -53,66 +54,80 @@ public class OrderService {
         }
 
     }
+//================================= ALL CRUD DONE BY GHALIAH  ==============================
 
-    ///Ghaliah
+
+    //================================= [BUY] METHOD DONE BY GHALIAH  ==============================
     public void buy(Integer userId, List<DTO_BUY> productIds) {
-        Customer customer = customerRepository.findCustomerById(userId);
+        Customer customer = customerRepository.findCustomersById(userId);
+        OrderProduct orderProduct = new OrderProduct();
+        OrderCompany orderCompany=new OrderCompany();
+        orderProduct.setCustomer(customer);
+        Double totalPrices = 0.0;
+        /////////////////////////////////////////////
+        List<Product> products = new ArrayList<>();
+        Set<Product> productSet = new HashSet<Product>(products);//Assign product set to order
 
-        // Group products by company
-        Map<Company, List<Product>> productsByCompany = new HashMap<>();
+        //=======
+        List<Product> productOrderCompany = new ArrayList<>();
+        Set<Product> orderCompanySet = new HashSet<Product>(productOrderCompany);//Assign product set to order
+
+        //=====
+
+        orderRepository.save(orderProduct);//update //save order first then save updated product
+        orderCompany.setProducts(orderCompanySet);
+        orderCompanyRepository.save(orderCompany);
+
+        ///
         for (DTO_BUY productId : productIds) {
+            if (productRepository.findProductById(productId.getProductId()) == null)
+                throw new ApiException("One of product Not found");
             Product product = productRepository.findProductById(productId.getProductId());
-            if (product == null) {
-                throw new ApiException("One of the products not found");
-            }
-            product.setBuyWithFix(productId.isFix());
-
-            // Check if the product is sold out
+            orderCompany.setBuyWithFix(productId.isFix());//if customer wants fix product
             if (product.getQuantity() == 0) {
-                throw new ApiException("Product '" + product.getName() + "' is sold out");
+                throw new ApiException("product name: " + product + " sold out");
             }
-
-            // Update quantity and save product
-            product.setQuantity(product.getQuantity() - 1);
-            productRepository.save(product);
-
-            // Group product by company
-            productsByCompany
-                    .computeIfAbsent(product.getCompany(), k -> new ArrayList<>())
-                    .add(product);
-        }
-
-        // Create orders for each company
-        for (Map.Entry<Company, List<Product>> entry : productsByCompany.entrySet()) {
-            Company company = entry.getKey();
-            List<Product> productsForCompany = entry.getValue();
-
-            // Create order
-            OrderProduct orderProduct = new OrderProduct();
-            orderProduct.setCustomer(customer);
-            orderProduct.setCompany(company);
-            orderProduct.setTotalItems(productsForCompany.size());
-
-            // Calculate total price for the order
-            double totalPrice = 0.0;
-            for (Product product : productsForCompany) {
-                totalPrice += product.getPrice();
-                if (product.getBuyWithFix()) {
-                    totalPrice += product.getFixPrice();
-                }
+            product.setQuantity(product.getQuantity() - 1);//update Quantity}
+            product.getOrderProduct().add(orderProduct);//orderWebsite assign to product
+            orderCompany.setCompany(product.getCompany());
+            product.getOrderCompany().add(orderCompany);//orderCompany assign to product
+            orderCompany.getProducts().add(product);
+            orderCompany.setDate(LocalDate.now());
+            orderCompany.setStatus("PENDING");
+            if(productId.isFix()){
+                orderCompany.setTotalPrice(product.getPrice()+product.getFixPrice());
             }
-            totalPrice -= totalPrice * 0.15; // Apply discount
-            orderProduct.setTotalPrice(totalPrice);
-            orderProduct.setTax(0.15);
-            orderProduct.setDate(LocalDate.now());
-
-            // Save order to the database
-            addOrder(orderProduct);
+            else{
+                orderCompany.setTotalPrice(product.getPrice());
+            }
+            productRepository.save(product);//update
+            orderCompanyRepository.save(orderCompany);
+            products.add(product);
         }
+        orderProduct.setProducts(productSet);
+
+        orderRepository.save(orderProduct);//update
+
+        for (DTO_BUY p : productIds){
+            if (p.isFix()) {
+                totalPrices +=productRepository.findProductById(p.getProductId()).getPrice()+productRepository.findProductById(p.getProductId()).getFixPrice();
+            } else {
+                totalPrices += productRepository.findProductById(p.getProductId()).getPrice();
+            }
+        }
+        orderProduct.setTotalItems(products.size());
+        totalPrices -= totalPrices * 0.15;
+        orderProduct.setTotalPrice(totalPrices);
+        orderProduct.setTax(0.15);
+        orderProduct.setDate(LocalDate.now());
+        addOrder(orderProduct);
+//======================CREATE ORDER FOR EACH COMPANY OF PRODUCT LIST =====================================
+
+
+
     }
 
-
-    //==========================================+cancelOrder(int):=======================
+//================================= [CANCEL ORDER] METHOD DONE BY GHALIAH  ==============================
 
     public void cancelOrder(Integer customerId, Integer orderId) {
         if (check(orderId)) {
@@ -138,7 +153,7 @@ public class OrderService {
         }
     }
 
-    //==================================changeStatus==========================
+    //================================= [CHANGE STATUS] METHOD DONE BY GHALIAH  ==============================
     public void changeStatus(Integer fixProductId) {
         OrderProduct order = orderRepository.findOrderProductById(fixProductId);
         if (order == null) {
@@ -181,22 +196,23 @@ public class OrderService {
 //=================================================
 
 
-    //=====================================//+getAllCanceledOrder():List<Order>
+    //================================= [GET ALL ORDER BY STATUS] METHOD DONE BY GHALIAH  ==============================
     public List<OrderProduct> getAllByStatus(String status) {
         if (orderRepository.findAllByStatus(status).isEmpty())
             throw new ApiException("Empty List of order with status " + status);
         return orderRepository.findAllByStatus(status);
     }
 
-    //==========================getStatusOfFixProduct
+    //================================= [GET STATUS OF ORDER ] METHOD DONE BY GHALIAH  ==============================
     public String getStatusOfOrder(Integer customerId, Integer orderId) {
         OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
         if (orderProduct == null) {
             throw new ApiException("order don't found");
-        } else if (orderProduct.getCustomer().getId() != customerId)
+        } else if (orderProduct.getCustomer().getId()!=customerId)
             throw new ApiException("this order not unauthorized for you");
         return orderProduct.getStatus();
     }
+    //================================= [TRUCK ORDER FOR EMPLOYEE METHOD ] METHOD DONE BY GHALIAH  ==============================
 
     public String truck(Integer orderId) {
         OrderProduct order = orderRepository.findOrderProductById(orderId);
@@ -205,8 +221,31 @@ public class OrderService {
         }
         return order.getStatus();
     }
+    //================================= [findAllByCustomer_Id  ] METHOD DONE BY GHALIAH  ==============================
 
-    //==========================================================================
+    public Set<OrderProduct> findAllByCustomer_Id(Integer customerId) {
+        Customer customer = customerRepository.findCustomersById(customerId);
+        if (customer.getOrders().isEmpty())
+            throw new ApiException("you dont have order");
+        return customer.getOrders();
+    }
+
+    //================================= [findAllByCompanyId  ] METHOD DONE BY GHALIAH  ==============================
+
+
+
+    //================================= [+getOrdersByProductId:list<Order>  ] METHOD NOT-DONE   ==============================
+    public Set<OrderProduct> getAllOrderByProductId(Integer productId) {
+        Product product = productRepository.findProductById(productId);
+        if (product ==null)
+            throw new ApiException("product not found");
+        if (product.getOrderProduct().isEmpty())
+            throw new ApiException("Product dont have order yet");
+        return product.getOrderProduct();
+    }
+
+
+    //================================= [THIS METHOD USE IT TO REMOVE DUPLICATION CODE IN EACH METHOD WE SHOULD CHECK AVAILABILITY OF ORDER ] METHOD DONE BY GHALIAH  ==============================
     public Boolean check(Integer orderId) {
         OrderProduct orderProduct1 = orderRepository.findOrderProductById(orderId);
         if (orderProduct1 == null) {

@@ -86,9 +86,10 @@ public class FixProductService {
         orderRepository.delete(orderProduct);
 
     }
+//================================= ALL CRUD DONE BY GHALIAH  ==============================
 
-    //-----------------------------------Ghaliah----------------------------------
 
+//================================= [ACCEPT PRICE FIX PRODUCT] DONE BY GHALIAH  ==============================
 
     public void acceptPriceFixProduct(Integer customerId, Integer fixProductId) {
         OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);
@@ -108,6 +109,7 @@ public class FixProductService {
         fixProductRepository.save(fixProduct);
         orderService.changeStatus(fixProductId);
     }
+//================================= [REJECT PRICE FIX PRODUCT] DONE BY GHALIAH  ==============================
 
 
     public void rejectPriceFixProduct(Integer customerId, Integer fixProductId) {
@@ -130,12 +132,7 @@ public class FixProductService {
         orderService.changeStatus(fixProductId);
 
     }
-
-    //-----------------------------------Ghaliah----------------------------------
-
-
-    //-----------------------------------Ghaliah----------------------------------
-
+    //================================= [GET FIX PRODUCT] DONE BY GHALIAH  ==============================
 
     public FixProduct getFixProductOne(Integer customerId, Integer fixProductId) {
         OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);
