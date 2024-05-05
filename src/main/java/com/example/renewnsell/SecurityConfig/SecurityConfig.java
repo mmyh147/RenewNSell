@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/order/buy-order").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/order/cancel-order/{orderId}").hasAnyAuthority("CUSTOMER","EMPLOYEE","ADMIN")
                 .requestMatchers("api/v1/product/add").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/order-company/get-all-total-price-orders-company").hasAuthority("COMPANY")
 //
 //
 //                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()

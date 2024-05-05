@@ -1,11 +1,9 @@
 package com.example.renewnsell.Service;
 
 import com.example.renewnsell.Api.ApiException;
-import com.example.renewnsell.Model.Company;
-import com.example.renewnsell.Model.OrderProduct;
-import com.example.renewnsell.Model.Product;
-import com.example.renewnsell.Model.User;
+import com.example.renewnsell.Model.*;
 import com.example.renewnsell.Repository.CompanyRepository;
+import com.example.renewnsell.Repository.OrderCompanyRepository;
 import com.example.renewnsell.Repository.ProductRepository;
 import com.example.renewnsell.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +18,7 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final CompanyRepository companyRepository;
     private final UserRepository userRepository;
+    private final OrderCompanyRepository orderCompanyRepository;
 
     public List<Product> getAll() {
         return productRepository.findAll();
@@ -28,6 +27,8 @@ public class ProductService {
     public void addProduct(Integer userId, Product product) {
         User user = userRepository.findUserById(userId);
         Company company = companyRepository.findCompanyById(user.getId());
+        OrderCompany orderCompany=new OrderCompany();
+        orderCompanyRepository.save(orderCompany);
         product.setCompany(company);
         productRepository.save(product);
     }

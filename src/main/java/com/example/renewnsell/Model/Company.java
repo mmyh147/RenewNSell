@@ -45,8 +45,8 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     private Set<Review> reviews;
 //
-//    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
-//    private Set<OrderProduct> orders;
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    private Set<OrderCompany> orders;
 
 
 }

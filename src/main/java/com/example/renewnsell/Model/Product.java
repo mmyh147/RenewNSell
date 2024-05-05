@@ -45,8 +45,10 @@ public class Product {
     private Integer quantity;
 
     //    @Column(columnDefinition = "boolean")
+    //    @Column(columnDefinition = "boolean not null")
+
     private Boolean isAppear;
-    private Boolean buyWithFix;
+
 
     //    @NotEmpty(message = " category must not be empty")
 //    @Column(columnDefinition = "varchar(10) not null")
@@ -65,10 +67,12 @@ public class Product {
     @JsonIgnore
     private Company company;
 
-//    @ManyToOne
-//    @JoinColumn(name = "order_id")
-//    @JsonIgnore
-//    private OrderProduct orderProduct;
+//orderCompany
+
+    @ManyToMany
+    @JsonIgnore
+    private Set<OrderCompany>orderCompany;
+
     @ManyToMany
     @JsonIgnore
     private Set<OrderProduct> orderProduct;

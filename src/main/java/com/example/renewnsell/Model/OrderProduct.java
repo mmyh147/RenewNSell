@@ -26,6 +26,7 @@ public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    // @Column(columnDefinition = " totalPrice double not null")
     //@NotNull(message = "Total Price can't be null")
     private double totalPrice;
    // @NotEmpty(message = "Status can't be null")

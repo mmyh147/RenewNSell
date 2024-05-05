@@ -126,11 +126,6 @@ public ResponseEntity getAllDELIVEREDOrder(){
         logger.info("/get-all-order-by-product-id/{productId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllOrderByProductId(productId));
     }
-//findAllByCompanyId
-@GetMapping("/get-all-order-by-company-id")
-public ResponseEntity findAllByCompanyId(@AuthenticationPrincipal User user){
-    logger.info("/get-all-order-by-company-id");
-    return ResponseEntity.status(HttpStatus.OK).body(orderService.findAllByCompanyId(user.getId()));
-}
+
 }
 

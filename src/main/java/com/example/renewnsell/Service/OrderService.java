@@ -5,6 +5,7 @@ import com.example.renewnsell.DTO.DTO_BUY;
 import com.example.renewnsell.Model.*;
 import com.example.renewnsell.Repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,7 +17,10 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
-
+    private final CompanyRepository companyRepository;
+    private final OrderCompanyRepository orderCompanyRepository;
+@Autowired
+private final OrderCompanyService orderCompanyService;
     public List<OrderProduct> getAll() {
         if (orderRepository.findAll().isEmpty())
             throw new ApiException("Order List is empty");
@@ -57,36 +61,58 @@ public class OrderService {
     public void buy(Integer userId, List<DTO_BUY> productIds) {
         Customer customer = customerRepository.findCustomersById(userId);
         OrderProduct orderProduct = new OrderProduct();
+        OrderCompany orderCompany=new OrderCompany();
         orderProduct.setCustomer(customer);
         Double totalPrices = 0.0;
         /////////////////////////////////////////////
         List<Product> products = new ArrayList<>();
         Set<Product> productSet = new HashSet<Product>(products);//Assign product set to order
 
+        //=======
+        List<Product> productOrderCompany = new ArrayList<>();
+        Set<Product> orderCompanySet = new HashSet<Product>(productOrderCompany);//Assign product set to order
+
+        //=====
+
         orderRepository.save(orderProduct);//update //save order first then save updated product
+        orderCompany.setProducts(orderCompanySet);
+        orderCompanyRepository.save(orderCompany);
+
         ///
         for (DTO_BUY productId : productIds) {
             if (productRepository.findProductById(productId.getProductId()) == null)
                 throw new ApiException("One of product Not found");
             Product product = productRepository.findProductById(productId.getProductId());
-            product.setBuyWithFix(productId.isFix());//if customer wants fix product
+            orderCompany.setBuyWithFix(productId.isFix());//if customer wants fix product
             if (product.getQuantity() == 0) {
                 throw new ApiException("product name: " + product + " sold out");
             }
             product.setQuantity(product.getQuantity() - 1);//update Quantity}
-            product.getOrderProduct().add(orderProduct);//order assign to product
+            product.getOrderProduct().add(orderProduct);//orderWebsite assign to product
+            orderCompany.setCompany(product.getCompany());
+            product.getOrderCompany().add(orderCompany);//orderCompany assign to product
+            orderCompany.getProducts().add(product);
+            orderCompany.setDate(LocalDate.now());
+            orderCompany.setStatus("PENDING");
+            if(productId.isFix()){
+                orderCompany.setTotalPrice(product.getPrice()+product.getFixPrice());
+            }
+            else{
+                orderCompany.setTotalPrice(product.getPrice());
+            }
             productRepository.save(product);//update
+            orderCompanyRepository.save(orderCompany);
             products.add(product);
         }
-
         orderProduct.setProducts(productSet);
+
         orderRepository.save(orderProduct);//update
 
-        for (Product p : products){
-            if (p.getBuyWithFix()) {
-                totalPrices += p.getPrice() + p.getFixPrice();
+        for (DTO_BUY p : productIds){
+            if (p.isFix()) {
+                totalPrices +=productRepository.findProductById(p.getProductId()).getPrice()+productRepository.findProductById(p.getProductId()).getFixPrice();
             } else {
-                totalPrices += p.getPrice();
+                totalPrices += productRepository.findProductById(p.getProductId()).getPrice();
             }
         }
         orderProduct.setTotalItems(products.size());
@@ -95,6 +121,9 @@ public class OrderService {
         orderProduct.setTax(0.15);
         orderProduct.setDate(LocalDate.now());
         addOrder(orderProduct);
+//======================CREATE ORDER FOR EACH COMPANY OF PRODUCT LIST =====================================
+
+
 
     }
 
@@ -203,16 +232,6 @@ public class OrderService {
 
     //================================= [findAllByCompanyId  ] METHOD DONE BY GHALIAH  ==============================
 
-public List<OrderProduct> findAllByCompanyId(Integer companyId){
-      List<Product>products=productRepository.findAllByCompany_IdAndAndBuyWithFixOrBuyWithFix(companyId,true,false);
-        if (products.isEmpty())
-            throw new ApiException("no product bought yet so list is empty");
-        List<OrderProduct> orderProductList=new ArrayList<>();
-        for (Product product:products){
-            orderProductList.addAll(product.getOrderProduct());
-        }
-        return orderProductList;
-}
 
 
     //================================= [+getOrdersByProductId:list<Order>  ] METHOD NOT-DONE   ==============================
