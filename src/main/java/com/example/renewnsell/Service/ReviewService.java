@@ -30,7 +30,7 @@ public class ReviewService {
 
     public Review addReview(Integer customerId, Integer userId, Review review) {
         Company company = companyRepository.findCompanyById(userId);
-        Customer customer = customerRepository.findCustomerById(customerId);
+        Customer customer = customerRepository.findCustomersById(customerId);
         if (company == null || customer == null)
             throw new ApiException("Company or Customer not found");
 
@@ -96,7 +96,7 @@ public class ReviewService {
 
     //3
     public List<Review> getAllReviewsByCustomerId(Integer customerId) {
-        Customer customer = customerRepository.findCustomerById(customerId);
+        Customer customer = customerRepository.findCustomersById(customerId);
         if (customer == null)
             throw new ApiException("customer not found");
 

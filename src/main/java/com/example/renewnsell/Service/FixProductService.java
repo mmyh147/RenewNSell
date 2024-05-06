@@ -32,7 +32,7 @@ public class FixProductService {
 
     //-----------------------------------Ghaliah----------------------------------
     public void add(Integer customerID, FixProductDTO fixProductDTO) {
-        Customer customer = customerRepository.findCustomerById(customerID);
+        Customer customer = customerRepository.findCustomersById(customerID);
         FixProduct fixProduct = new FixProduct();
         fixProduct.setOrderProduct(null);
         fixProduct.setCategory(fixProductDTO.getCategory());
@@ -43,7 +43,7 @@ public class FixProductService {
     }
 
     public void addFixProduct(Integer customerID, FixProductDTO fixProductDTO) {
-        Customer customer = customerRepository.findCustomerById(customerID);
+        Customer customer = customerRepository.findCustomersById(customerID);
         if (customer == null) {
             throw new ApiException("Please Register to Request Fix Product");
         } else {

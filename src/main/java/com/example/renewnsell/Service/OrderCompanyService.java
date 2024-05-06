@@ -227,9 +227,13 @@ public class OrderCompanyService {
     public Integer getTotalNumberOrdersForOneProduct(Integer companyId, Integer productId) {
         Product product = productRepository.findProductById(productId);
         if (check(companyId, productId)) {
-            if (product.getOrderProduct().isEmpty())
+            if (product.getOrderProduct().isEmpty()) {
                 throw new ApiException("No Order Company for this product: " + productId);
+            }
+        }
             return product.getOrderProduct().size();
+        }
+
 
     public Double getLastMonthProfitForCompany(Integer companyId) {
         LocalDate currentDate = LocalDate.now();
@@ -287,12 +291,14 @@ public class OrderCompanyService {
     }
 
 //    public Integer countProductsSoldLastMonthForCompany(Integer companyId) {
-//        return orderCompanyRepository.countProductsSoldLastMonthForCompany(companyId);
+//        return orderCompanyRepository.count(companyId);
 //    }
-        }
-        return product.getOrderProduct().size();
 
-    }
+
+//        }
+//        return product.getOrderProduct().size();
+//
+//    }
 
     //================================= [getTotalNumberOfOrdersCompany  ] METHOD DONE BY HAYA  ==============================
     public Integer getTotalNumberOfOrdersCompany(Integer companyId) {

@@ -75,7 +75,7 @@ public class CustomerService {
 
     public Customer getCustomerByID(Integer id){
 
-        Customer customer = customerRepository.findCustomerById(id);
+        Customer customer = customerRepository.findCustomersById(id);
         if (customer == null){
             throw new ApiException("Customer not found with ID : " + id);
         }

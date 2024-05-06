@@ -60,7 +60,7 @@ public class OrderService {
 
     //================================= [BUY] METHOD DONE BY GHALIAH  ==============================
     public void buy(Integer userId, List<DTO_BUY> productIds) {
-        Customer customer = customerRepository.findCustomerById(userId);
+        Customer customer = customerRepository.findCustomersById(userId);
         OrderProduct orderProduct = new OrderProduct();
         OrderCompany orderCompany = new OrderCompany();
         orderCompany.setOrderProduct(orderProduct);
@@ -281,7 +281,7 @@ public class OrderService {
     //================================= [findAllByCustomer_Id  ] METHOD DONE BY GHALIAH  ==============================
 
     public Set<OrderProduct> findAllByCustomer_Id(Integer customerId) {
-        Customer customer = customerRepository.findCustomerById(customerId);
+        Customer customer = customerRepository.findCustomersById(customerId);
         if (customer.getOrders().isEmpty())
             throw new ApiException("you dont have order");
         return customer.getOrders();
