@@ -43,4 +43,16 @@ public class CustomerService {
         customerRepository.save(customer);
 
     }
+
+    public Integer totalCustomers(){
+        return customerRepository.findAll().size();
+    }
+
+    public Integer totalFemalesCustomers(){
+        return customerRepository.findAllByGender("FEMALE").size();
+    }
+
+    public Integer totalMaleCustomers(){
+        return customerRepository.findAllByGender("MALE").size();
+    }
 }

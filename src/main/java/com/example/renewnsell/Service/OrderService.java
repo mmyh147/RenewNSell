@@ -17,15 +17,16 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final ProductRepository productRepository;
-    private final CompanyRepository companyRepository;
     private final OrderCompanyRepository orderCompanyRepository;
-@Autowired
-private final OrderCompanyService orderCompanyService;
+    @Autowired
+    private final OrderCompanyService orderCompanyService;
+
     public List<OrderProduct> getAll() {
         if (orderRepository.findAll().isEmpty())
             throw new ApiException("Order List is empty");
         else return orderRepository.findAll();
     }
+
 
     public void addOrder(OrderProduct orderProduct) {
         orderProduct.setStatus("PENDING");
@@ -61,7 +62,10 @@ private final OrderCompanyService orderCompanyService;
     public void buy(Integer userId, List<DTO_BUY> productIds) {
         Customer customer = customerRepository.findCustomersById(userId);
         OrderProduct orderProduct = new OrderProduct();
-        OrderCompany orderCompany=new OrderCompany();
+        OrderCompany orderCompany = new OrderCompany();
+        orderCompany.setOrderProduct(orderProduct);
+        orderCompany.setStatus("PENDING");
+        orderCompany.setDate(LocalDate.now());
         orderProduct.setCustomer(customer);
         Double totalPrices = 0.0;
         /////////////////////////////////////////////
@@ -94,10 +98,9 @@ private final OrderCompanyService orderCompanyService;
             orderCompany.getProducts().add(product);
             orderCompany.setDate(LocalDate.now());
             orderCompany.setStatus("PENDING");
-            if(productId.isFix()){
-                orderCompany.setTotalPrice(product.getPrice()+product.getFixPrice());
-            }
-            else{
+            if (productId.isFix()) {
+                orderCompany.setTotalPrice(product.getPrice() + product.getFixPrice());
+            } else {
                 orderCompany.setTotalPrice(product.getPrice());
             }
             productRepository.save(product);//update
@@ -108,21 +111,20 @@ private final OrderCompanyService orderCompanyService;
 
         orderRepository.save(orderProduct);//update
 
-        for (DTO_BUY p : productIds){
+        for (DTO_BUY p : productIds) {
             if (p.isFix()) {
-                totalPrices +=productRepository.findProductById(p.getProductId()).getPrice()+productRepository.findProductById(p.getProductId()).getFixPrice();
+                totalPrices += productRepository.findProductById(p.getProductId()).getPrice() + productRepository.findProductById(p.getProductId()).getFixPrice();
             } else {
                 totalPrices += productRepository.findProductById(p.getProductId()).getPrice();
             }
         }
         orderProduct.setTotalItems(products.size());
-        totalPrices -= totalPrices * 0.15;
+        totalPrices += totalPrices * 0.15;
         orderProduct.setTotalPrice(totalPrices);
         orderProduct.setTax(0.15);
         orderProduct.setDate(LocalDate.now());
         addOrder(orderProduct);
 //======================CREATE ORDER FOR EACH COMPANY OF PRODUCT LIST =====================================
-
 
 
     }
@@ -142,6 +144,10 @@ private final OrderCompanyService orderCompanyService;
 
                 if (!orderProduct1.getStatus().equalsIgnoreCase("DELIVERED")) {
                     orderProduct1.setStatus("CANCELED");
+                    for (OrderCompany orderCompany : orderProduct1.getOrderCompanySet()) {
+                        orderCompany.setStatus("CANCELED");// tell all companies in this Product order the customer cancel his/her order
+                        orderCompanyRepository.save(orderCompany);
+                    }
                     orderRepository.save(orderProduct1);
                 } else {
                     throw new ApiException("you can't cancel delivered order");
@@ -159,7 +165,15 @@ private final OrderCompanyService orderCompanyService;
         if (order == null) {
             throw new ApiException("Order Not Found ");
         }
-        //"PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY"
+        if (order.getStatus().equalsIgnoreCase("REJECT"))
+            throw new ApiException("you can't change rejected order");
+
+        if (order.getStatus().equalsIgnoreCase("CANCELED"))
+            throw new ApiException("you can't change canceled order");
+        if (order.getStatus().equalsIgnoreCase("DELIVERED"))
+            throw new ApiException("order is DELIVERED order");
+
+        //"PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_FOR_DELIVERY"
         switch (order.getStatus()) {
             case "ACCEPTED":
                 order.setStatus("PENDING");
@@ -170,26 +184,69 @@ private final OrderCompanyService orderCompanyService;
                 orderRepository.save(order);
                 break;
             case "PENDING":
-                order.setStatus("ORDER_CONFIRMED");
-                orderRepository.save(order);
+                for (OrderCompany orderCompany : order.getOrderCompanySet()) {
+                    if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
+                        order.setStatus("ORDER_CONFIRMED");
+                        orderRepository.save(order);
+                    } else throw new ApiException("some of product of some company not  still PENDING");
+                }
+
                 break;
             case "ORDER_CONFIRMED":
-                order.setStatus("PREPARING");
-                orderRepository.save(order);
+                for (OrderCompany orderCompany : order.getOrderCompanySet()) {
+                    if (!orderCompany.getStatus().equalsIgnoreCase("PREPARING")) {
+                        if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
+                            order.setStatus("PREPARING");
+                            orderRepository.save(order);
+                        } else {
+                            throw new ApiException("some of product of some company not  still PENDING");
+                        }
+                    } else throw new ApiException("some of product of some company not  still PREPARING");
+                }
+
                 break;
             case "PREPARING":
-                order.setStatus("SHIPPED");
-                orderRepository.save(order);
+                for (OrderCompany orderCompany : order.getOrderCompanySet()) {
+                    if (!orderCompany.getStatus().equalsIgnoreCase("PREPARING")) {
+                        if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
+
+                            order.setStatus("SHIPPED");
+                            orderRepository.save(order);
+                        } else {
+                            throw new ApiException("some of product of some company not  still PENDING");
+                        }
+
+                    } else throw new ApiException("some of product of some company not  still SHIPPED");
+                }
+
                 break;
 
             case "SHIPPED":
-                order.setStatus("OUT_OF_DELIVERY");
-                orderRepository.save(order);
+                for (OrderCompany orderCompany : order.getOrderCompanySet()) {
+                    if (!orderCompany.getStatus().equalsIgnoreCase("SHIPPED")) {
+                        if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
+
+                            order.setStatus("OUT_FOR_DELIVERY");
+                            orderRepository.save(order);
+                        } else {
+                            throw new ApiException("some of product of some company not  still PENDING");
+                        }
+                    } else throw new ApiException("some of product of some company not  still OUT_FOR_DELIVERY");
+                }
+
+
                 break;
-            case "OUT_OF_DELIVERY":
-                order.setStatus("DELIVERED");
-                orderRepository.save(order);
+            case "OUT_FOR_DELIVERY":
+                for (OrderCompany orderCompany : order.getOrderCompanySet()) {
+                    if (orderCompany.getStatus().equalsIgnoreCase("DELIVERED")) {
+                            order.setStatus("DELIVERED");
+                            orderRepository.save(order);
+
+                    } else throw new ApiException("some of product of some company not  still DELIVERED");
+                }
+
                 break;
+
 
         }
     }
@@ -208,8 +265,8 @@ private final OrderCompanyService orderCompanyService;
         OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
         if (orderProduct == null) {
             throw new ApiException("order don't found");
-        } else if (orderProduct.getCustomer().getId()!=customerId)
-            throw new ApiException("this order not unauthorized for you");
+        } else if (orderProduct.getCustomer().getId() != customerId)
+            throw new ApiException("this order unauthorized for you");
         return orderProduct.getStatus();
     }
     //================================= [TRUCK ORDER FOR EMPLOYEE METHOD ] METHOD DONE BY GHALIAH  ==============================
@@ -233,17 +290,21 @@ private final OrderCompanyService orderCompanyService;
     //================================= [findAllByCompanyId  ] METHOD DONE BY GHALIAH  ==============================
 
 
-
     //================================= [+getOrdersByProductId:list<Order>  ] METHOD NOT-DONE   ==============================
     public Set<OrderProduct> getAllOrderByProductId(Integer productId) {
         Product product = productRepository.findProductById(productId);
-        if (product ==null)
+        if (product == null)
             throw new ApiException("product not found");
         if (product.getOrderProduct().isEmpty())
             throw new ApiException("Product dont have order yet");
         return product.getOrderProduct();
     }
+    //================================= [totalOrders  ] METHOD DONE BY HAYA  ==============================
+//+getTotalNumberOfOrders():Int
 
+    public Integer totalOrders() {
+        return getAll().size();
+    }
 
     //================================= [THIS METHOD USE IT TO REMOVE DUPLICATION CODE IN EACH METHOD WE SHOULD CHECK AVAILABILITY OF ORDER ] METHOD DONE BY GHALIAH  ==============================
     public Boolean check(Integer orderId) {

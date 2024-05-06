@@ -29,7 +29,7 @@ public class FixProductController {
         return ResponseEntity.status(HttpStatus.OK).body(fixProductService.getAll());
     }
 
-    @PostMapping("/request-fix-product")
+    @PostMapping("/request-fix-product")//as add
     public ResponseEntity addFixProduct(@AuthenticationPrincipal User user, @RequestBody @Valid FixProductDTO fixProductDTO) {
         logger.info("request-fix-product");
         fixProductService.addFixProduct(user.getId(), fixProductDTO);
@@ -48,9 +48,7 @@ public class FixProductController {
     }
 
 
-    //response
-
-    //acceptPriceFixProduct
+    //================================ 1-First Endpoint in FixProduct ==========================================
     @PostMapping("/accept-price-fix-product/{fixProductId}")
     public ResponseEntity acceptPriceFixProduct(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
         logger.info("accept-price-fix-product/{fixProductId}");
@@ -58,24 +56,21 @@ public class FixProductController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("accept Successfully"));
     }
 
-    //rejectPriceFixProduct
+    //================================ 2-Second Endpoint in FixProduct ==========================================
     @PostMapping("/reject-price-fix-product/{fixProductId}")
     public ResponseEntity rejectPriceFixProduct(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
         logger.info("reject-price-fix-product/{fixProductId}");
         fixProductService.rejectPriceFixProduct(user.getId(), fixProductId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Reject Successfully"));
     }
-    //changeStatus
-
-//getStatusOfFixProduct
 
 
-    //getFixProductOne
+    //================================ 3-Third Endpoint in FixProduct ==========================================
 
     @GetMapping("/get-fix-product/{fixProductId}")
     public ResponseEntity getFixProductOne(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
         logger.info("get-fix-product/{fixProductId}");
         return ResponseEntity.status(HttpStatus.OK).body(fixProductService.getFixProductOne(user.getId(), fixProductId));
     }
-
+    //================================ Total Endpoints in FixProduct is 3 ==========================================
 }
