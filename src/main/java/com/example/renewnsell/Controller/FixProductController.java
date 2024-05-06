@@ -72,5 +72,13 @@ public class FixProductController {
         logger.info("get-fix-product/{fixProductId}");
         return ResponseEntity.status(HttpStatus.OK).body(fixProductService.getFixProductOne(user.getId(), fixProductId));
     }
-    //================================ Total Endpoints in FixProduct is 3 ==========================================
+    //================================ 4-Fourth Endpoint in FixProduct ==========================================
+
+    @PostMapping("/change-status-of-order/{orderId}")
+    public ResponseEntity changeStatusOrder(@PathVariable Integer orderId ){
+        logger.info("change-status-of-order/{orderId}");
+        fixProductService.changeStatus(orderId);
+        return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Change status Successfully"));
+    }
+    //================================ Total Endpoints in FixProduct is 4 ==========================================
 }

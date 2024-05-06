@@ -67,7 +67,8 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/order-company/get-total-profit-of-one-product-with-fix/{productId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get-total-number-of-order-for-one-product/{productId}").hasAuthority("COMPANY")
 //=====================================================OrderController===========================
-                .requestMatchers("api/v1/order/get-all").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/order/get-total-orders").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/order/get-all-orders").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order/buy-order").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/order/update-order/{orderId}").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order/delete-order/{orderId}").hasAuthority("ADMIN")

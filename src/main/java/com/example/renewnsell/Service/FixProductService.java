@@ -79,10 +79,11 @@ public class FixProductService {
 
     }
 
-    public void delete( Integer fixProductId){
-        OrderProduct orderProduct=orderRepository.findOrderProductById(fixProductId);
-        if (orderProduct == null)
-        {throw new ApiException("you don't order");}
+    public void delete(Integer fixProductId) {
+        OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);
+        if (orderProduct == null) {
+            throw new ApiException("you don't order");
+        }
         orderRepository.delete(orderProduct);
 
     }
@@ -107,7 +108,7 @@ public class FixProductService {
         fixProduct.setStatus("ACCEPTED");
         orderRepository.save(orderProduct);
         fixProductRepository.save(fixProduct);
-        orderService.changeStatus(fixProductId);
+        changeStatus(fixProductId);
     }
 //================================= [REJECT PRICE FIX PRODUCT] DONE BY GHALIAH  ==============================
 
@@ -129,7 +130,7 @@ public class FixProductService {
         fixProduct.setStatus("REJECT");
         orderRepository.save(orderProduct);
         fixProductRepository.save(fixProduct);
-        orderService.changeStatus(fixProductId);
+        changeStatus(fixProductId);
 
     }
     //================================= [GET FIX PRODUCT] DONE BY GHALIAH  ==============================
@@ -145,6 +146,49 @@ public class FixProductService {
     }
 
 
+    public void changeStatus(Integer fixProductId) {
+        OrderProduct order = orderRepository.findOrderProductById(fixProductId);
+        if (order == null) {
+            throw new ApiException("Order Not Found ");
+        }
+        if (order.getStatus().equalsIgnoreCase("REJECT"))
+            throw new ApiException("you can't change rejected order");
+
+        if (order.getStatus().equalsIgnoreCase("DELIVERED"))
+            throw new ApiException("order is DELIVERED order");
+
+        switch (order.getStatus()) {
+            case "ACCEPTED":
+                order.setStatus("PENDING");
+                orderRepository.save(order);
+                break;
+
+            case "PENDING":
+                order.setStatus("ORDER_CONFIRMED");
+                orderRepository.save(order);
+                break;
+            case "ORDER_CONFIRMED":
+                order.setStatus("PREPARING");
+                orderRepository.save(order);
+
+                break;
+            case "PREPARING":
+                order.setStatus("SHIPPED");
+                orderRepository.save(order);
+                break;
+
+            case "SHIPPED":
+                order.setStatus("OUT_FOR_DELIVERY");
+                orderRepository.save(order);
+                break;
+            case "OUT_FOR_DELIVERY":
+                order.setStatus("DELIVERED");
+                orderRepository.save(order);
+                break;
+
+
+        }
+    }
 
 
 }

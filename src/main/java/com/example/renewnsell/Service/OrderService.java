@@ -160,8 +160,8 @@ public class OrderService {
     }
 
     //================================= [CHANGE STATUS] METHOD DONE BY GHALIAH  ==============================
-    public void changeStatus(Integer fixProductId) {
-        OrderProduct order = orderRepository.findOrderProductById(fixProductId);
+    public void changeStatus(Integer orderId) {
+        OrderProduct order = orderRepository.findOrderProductById(orderId);
         if (order == null) {
             throw new ApiException("Order Not Found ");
         }
@@ -261,7 +261,7 @@ public class OrderService {
     }
 
     //================================= [GET STATUS OF ORDER ] METHOD DONE BY GHALIAH  ==============================
-    public String getStatusOfOrder(Integer customerId, Integer orderId) {
+    public String truck(Integer customerId, Integer orderId) {
         OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
         if (orderProduct == null) {
             throw new ApiException("order don't found");
@@ -271,13 +271,7 @@ public class OrderService {
     }
     //================================= [TRUCK ORDER FOR EMPLOYEE METHOD ] METHOD DONE BY GHALIAH  ==============================
 
-    public String truck(Integer orderId) {
-        OrderProduct order = orderRepository.findOrderProductById(orderId);
-        if (order == null) {
-            throw new ApiException("Order Not Found ");
-        }
-        return order.getStatus();
-    }
+
     //================================= [findAllByCustomer_Id  ] METHOD DONE BY GHALIAH  ==============================
 
     public Set<OrderProduct> findAllByCustomer_Id(Integer customerId) {
