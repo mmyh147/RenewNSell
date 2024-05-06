@@ -167,12 +167,10 @@ public class OrderService {
         }
         if (order.getStatus().equalsIgnoreCase("REJECT"))
             throw new ApiException("you can't change rejected order");
-
         if (order.getStatus().equalsIgnoreCase("CANCELED"))
             throw new ApiException("you can't change canceled order");
         if (order.getStatus().equalsIgnoreCase("DELIVERED"))
-            throw new ApiException("order is DELIVERED order");
-
+            throw new ApiException("order already is delivered");
         //"PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_FOR_DELIVERY"
         switch (order.getStatus()) {
             case "ACCEPTED":
@@ -190,7 +188,6 @@ public class OrderService {
                         orderRepository.save(order);
                     } else throw new ApiException("some of product of some company not  still PENDING");
                 }
-
                 break;
             case "ORDER_CONFIRMED":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
@@ -203,29 +200,23 @@ public class OrderService {
                         }
                     } else throw new ApiException("some of product of some company not  still PREPARING");
                 }
-
                 break;
             case "PREPARING":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
                     if (!orderCompany.getStatus().equalsIgnoreCase("PREPARING")) {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
-
                             order.setStatus("SHIPPED");
                             orderRepository.save(order);
                         } else {
                             throw new ApiException("some of product of some company not  still PENDING");
                         }
-
                     } else throw new ApiException("some of product of some company not  still SHIPPED");
                 }
-
                 break;
-
             case "SHIPPED":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
                     if (!orderCompany.getStatus().equalsIgnoreCase("SHIPPED")) {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
-
                             order.setStatus("OUT_FOR_DELIVERY");
                             orderRepository.save(order);
                         } else {
@@ -233,18 +224,14 @@ public class OrderService {
                         }
                     } else throw new ApiException("some of product of some company not  still OUT_FOR_DELIVERY");
                 }
-
-
                 break;
             case "OUT_FOR_DELIVERY":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
                     if (orderCompany.getStatus().equalsIgnoreCase("DELIVERED")) {
-                            order.setStatus("DELIVERED");
-                            orderRepository.save(order);
-
+                        order.setStatus("DELIVERED");
+                        orderRepository.save(order);
                     } else throw new ApiException("some of product of some company not  still DELIVERED");
                 }
-
                 break;
 
 

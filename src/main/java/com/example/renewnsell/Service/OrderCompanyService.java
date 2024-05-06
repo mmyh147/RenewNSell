@@ -73,7 +73,7 @@ public class OrderCompanyService {
         if (order.getStatus().equalsIgnoreCase("CANCELED"))
             throw new ApiException("you can't change canceled order");
         if (order.getStatus().equalsIgnoreCase("DELIVERED"))
-            throw new ApiException("order is DELIVERED ");
+            throw new ApiException("order already is delivered ");
         switch (order.getStatus()) {
             case "PENDING":
                 order.setStatus("ORDER_CONFIRMED");

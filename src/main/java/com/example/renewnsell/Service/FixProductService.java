@@ -155,7 +155,7 @@ public class FixProductService {
             throw new ApiException("you can't change rejected order");
 
         if (order.getStatus().equalsIgnoreCase("DELIVERED"))
-            throw new ApiException("order is DELIVERED order");
+            throw new ApiException("order already is delivered ");
 
         switch (order.getStatus()) {
             case "ACCEPTED":
