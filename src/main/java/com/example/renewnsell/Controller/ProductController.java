@@ -26,11 +26,17 @@ private final ProductService productService;
     public ResponseEntity checkAvailabilityProduct(@AuthenticationPrincipal User user, @PathVariable Integer productId) {
         return ResponseEntity.ok(productService.checkAvailabilityProduct(productId));
     }
+//totalProductForCompany//getProductForCompany
 
-//    @GetMapping("/get-all-company-order/")
-//    public ResponseEntity findAllByCompanyIdAndAndBuyWithFix(@AuthenticationPrincipal User user){
-//        return ResponseEntity.status(HttpStatus.OK).body(productService.findAllByCompanyIdAndAndBuyWithFix(user.getId()));
-//    }
+    @GetMapping("/get-total-product-for-company/")
+    public ResponseEntity totalProductForCompany(@AuthenticationPrincipal User user){
+        return ResponseEntity.status(HttpStatus.OK).body(productService.totalProductForCompany(user.getId()));
+    }
+
+    @GetMapping("/get-all-product-for-company/")
+    public ResponseEntity allProductForCompany(@AuthenticationPrincipal User user){
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductForCompany(user.getId()));
+    }
 
 
 

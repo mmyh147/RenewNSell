@@ -24,12 +24,13 @@ public class OrderCompany {
     private double totalPrice;
     // @NotEmpty(message = "Status can't be null")
     // @Column(columnDefinition = "  varchar(50) not null")
-    //@Pattern(regexp = "PENDING|PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY")
+    //@Pattern(regexp = "PENDING|PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_FOR_DELIVERY")
     private String status;
     // @Column(columnDefinition = "  boolean not null")
     private Boolean buyWithFix;
     //@NotNull(message = "Date can't be null")
     //@Column(columnDefinition = " datetime not null")
+
     private LocalDate date;
 
 
@@ -40,4 +41,10 @@ public class OrderCompany {
     @JoinColumn(name = "order_id")
     @JsonIgnore
     private Company company;
+
+
+    @ManyToOne
+    @JoinColumn(name = "orderProduct_id")
+    @JsonIgnore
+    private OrderProduct orderProduct;
 }

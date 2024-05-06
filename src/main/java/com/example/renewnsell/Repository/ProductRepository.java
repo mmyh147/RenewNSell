@@ -13,6 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 
     Product findProductById(Integer id);
+    List<Product> findProductsByCompanyIdAndPercentOfDefective(Integer companyId,Double precent);
 
     Product findProductByName(String name);
 

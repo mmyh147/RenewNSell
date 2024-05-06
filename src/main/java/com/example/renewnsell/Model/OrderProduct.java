@@ -31,7 +31,7 @@ public class OrderProduct {
     private double totalPrice;
    // @NotEmpty(message = "Status can't be null")
    // @Column(columnDefinition = " status varchar(50) not null")
-   //@Pattern(regexp = "PENDING|PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY")
+   //@Pattern(regexp = "PENDING|PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_FOR_DELIVERY")
     private String status;
 //    @NotNull(message = "Tax can't be null")
 //    @Column(columnDefinition = "tax int not null")
@@ -50,9 +50,8 @@ public class OrderProduct {
     @JsonIgnore
     private Customer customer;
 
-//    @ManyToOne
-//    @JoinColumn(name = "company_id")
-//    private Company company;
+    @OneToMany(mappedBy = "orderProduct", cascade = CascadeType.ALL)
+    private Set<OrderCompany> orderCompanySet;
 
     @ManyToMany(mappedBy = "orderProduct")
     private Set<Product>products;

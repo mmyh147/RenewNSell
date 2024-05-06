@@ -2,8 +2,7 @@ package com.example.renewnsell.Controller;
 
 import com.example.renewnsell.Api.ApiResponse;
 import com.example.renewnsell.DTO.DTOResponseFixProduct;
-import com.example.renewnsell.DTO.FixProductDTO;
-import com.example.renewnsell.Model.User;
+
 import com.example.renewnsell.Service.ResponseFixProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

@@ -1,10 +1,7 @@
 package com.example.renewnsell.Service;
 
 import com.example.renewnsell.Api.ApiException;
-import com.example.renewnsell.Model.Company;
-import com.example.renewnsell.Model.OrderCompany;
-import com.example.renewnsell.Model.Product;
-import com.example.renewnsell.Model.User;
+import com.example.renewnsell.Model.*;
 import com.example.renewnsell.Repository.CompanyRepository;
 import com.example.renewnsell.Repository.OrderCompanyRepository;
 import com.example.renewnsell.Repository.ProductRepository;
@@ -21,9 +18,7 @@ import java.util.Set;
 public class ProductService {
 
     private final ProductRepository productRepository;
-
     private final CompanyRepository companyRepository;
-
     private final UserRepository userRepository;
     private final OrderCompanyRepository orderCompanyRepository;
 
@@ -34,10 +29,19 @@ public class ProductService {
     public void addProduct(Integer userId, Product product) {
         User user = userRepository.findUserById(userId);
         Company company = companyRepository.findCompanyById(user.getId());
-        OrderCompany orderCompany=new OrderCompany();
-        orderCompanyRepository.save(orderCompany);
         product.setCompany(company);
-         productRepository.save(product);
+        productRepository.save(product);
+    }
+//totalProductForCompany//getProductForCompany
+    public Integer totalProductForCompany(Integer id){
+        Company company = companyRepository.findCompanyById(id);
+        return company.getProducts().size();
+
+    }
+
+    public Set<Product> getProductForCompany(Integer id){
+        Company company = companyRepository.findCompanyById(id);
+        return company.getProducts();
 
     }
 
@@ -57,21 +61,16 @@ public class ProductService {
             return true;
         return false;
     }
-//    public List<Product> findAllByCompanyIdAndAndBuyWithFix(Integer companyId) {
-//        List<Product> productList = productRepository.findAllByCompany_IdAndAndBuyWithFixOrBuyWithFix(companyId, true, false);
-//        if (productList.isEmpty())
-//            throw new ApiException("sold productList is empty");
-//        List<OrderProduct> orderProductList = new ArrayList<>();
-//        for (Product product : productList) {
-//            if (product.getOrderProduct() != null) {
-//                orderProductList.add(product.getOrderProduct());
-//            }
-//        }
-//        if (orderProductList.isEmpty())
-//            throw new ApiException("Company Dont have Order yet");
-//        return productList;
-//    }
 
+    public boolean check(Integer companyId,Integer productId) {
+        Product product = productRepository.findProductById(productId);
+        if (product == null) {
+            throw new ApiException("Product not found");
+        }
+        if (product.getCompany().getId() != companyId)
+            throw new ApiException("this product unauthorized for you");
+        return true;
+    }
 
    //2
     public Product getProductById(Integer productId, Integer userId) {

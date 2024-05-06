@@ -29,13 +29,14 @@ public class OrderController {
         logger.info("get-all");
        return ResponseEntity.status(200).body(orderService.getAll());
     }
+
+    //================================ 1-First Endpoint in OrderProduct ==========================================
     @PostMapping("/buy-order")
     public ResponseEntity buy(@AuthenticationPrincipal User user, @RequestBody List<DTO_BUY> productIds){
         logger.info("buy-order");
         orderService.buy(user.getId(),productIds);
         return ResponseEntity.status(200).body(new ApiResponse("Buy successfully"));
     }
-
     @PutMapping("/update-order/{orderId}")
     public ResponseEntity update(@AuthenticationPrincipal User company, @RequestBody @Valid OrderProduct orderProduct){
         logger.info("update-order/{orderId}");
@@ -49,6 +50,7 @@ public class OrderController {
         orderService.delete(orderId);
         return ResponseEntity.status(200).body(new ApiResponse("deleted successfully"));
     }
+    //================================ 2-Second Endpoint in OrderProduct ==========================================
 
     @PostMapping("/cancel-order/{orderId}")
     public ResponseEntity cancel(@AuthenticationPrincipal User customer, @PathVariable Integer orderId){
@@ -56,68 +58,39 @@ public class OrderController {
         orderService.cancelOrder(customer.getId(),orderId);
         return ResponseEntity.status(200).body(new ApiResponse("canceled ordered successfully"));
     }
-
+    //================================ 3-Third Endpoint in OrderProduct ==========================================
     @PostMapping("/change-status-of-order/{orderId}")
     public ResponseEntity changeStatusOrder(@PathVariable Integer orderId ){
         logger.info("change-status-of-order/{orderId}");
         orderService.changeStatus(orderId);
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Change status Successfully"));
     }
-// i use this method getAllByStatus for all pattern
-    //@Pattern(regexp = "PENDING|PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY")
+    //================================ 4-Fourth Endpoint in OrderProduct ==========================================
 
-    @GetMapping("/get-all-canceled-order")
-    public ResponseEntity getAllCanceledOrder(){
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("CANCELED"));
-
-    }
-    @GetMapping("/get-all-shipped-order")
-    public ResponseEntity getAllSHIPPEDOrder(){
+    @GetMapping("/get-all-by-status/{status}")
+    public ResponseEntity getAllSHIPPEDOrder(@PathVariable String status){
         logger.info("get-all-shipped-order");
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("SHIPPED"));
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus(status));
 
     }
-
-    @GetMapping("/get-all-out-of-delivery-order")
-    public ResponseEntity getAllOUT_OF_DELIVERYOrder(){
-        logger.info("get-all-out-of-delivery-order");
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("OUT_OF_DELIVERY"));
-
-    }
-//DELIVERED
-@GetMapping("/get-all-delivered-order")
-public ResponseEntity getAllDELIVEREDOrder(){
-    logger.info("get-all-delivered-order");
-    return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("DELIVERED"));
-
-}
-    @GetMapping("/get-all-rejected-order")
-    public ResponseEntity getAllRejectedOrder(){
-        logger.info("get-all-rejected-order");
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllByStatus("REJECTED"));
-
-    }
+    //================================ 5-Fifth Endpoint in OrderProduct ==========================================
 
 
-    @GetMapping("/get-status-of-order/{orderId}")
-    public ResponseEntity getStatusOfFixProduct(@AuthenticationPrincipal User user,@PathVariable Integer orderId){
-        logger.info("get-status-of-fix-product/{fixProductId}");
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.getStatusOfOrder(user.getId(),orderId));
-    }
 
     @GetMapping("/truck-order/{orderId}")
     public ResponseEntity track(@PathVariable Integer orderId){
         logger.info("truck-order/{orderId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.truck(orderId));
     }
+    //================================ 6-Fifth Endpoint in OrderProduct ==========================================
 
-    //findAllByCustomer_Id
-    @GetMapping("/get-all-customer-order/")
+
+    @GetMapping("/get-all-customer-order")
     public ResponseEntity findAllByCustomer_Id(@AuthenticationPrincipal User user){
         logger.info("get-all-customer-order");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findAllByCustomer_Id(user.getId()));
     }
-
+    //================================ 7-Seventh Endpoint in OrderProduct ==========================================
 
     //getAllOrderByProductId
     @GetMapping("/get-all-order-by-product-id/{productId}")
@@ -125,36 +98,17 @@ public ResponseEntity getAllDELIVEREDOrder(){
         logger.info("/get-all-order-by-product-id/{productId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllOrderByProductId(productId));
     }
+//getTotalNumberOfOrdersWebsite
+    //================================ 8-Eighth Endpoint in OrderProduct ==========================================
 
 
-//    @GetMapping("/profit")
-//    public ResponseEntity getAllProfit(){
-//        logger.info("/profit");
-//        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllTimeProfitForAll());
-//    }
-//
-//    @GetMapping("/company-profit/{company_id}")
-//    public ResponseEntity getAllCompanyProfit(@PathVariable Integer company_id){
-//        logger.info("/company-profit/{company_id}");
-//        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllTimeProfitForCompany(company_id));
-//    }
-//
-//    @GetMapping("/company-profit-today/{company_id}")
-//    public ResponseEntity getTodayCompanyProfit(@PathVariable Integer company_id){
-//        logger.info("/company-profit/{company_id}");
-//        return ResponseEntity.status(HttpStatus.OK).body(orderService.getTodayProfitForCompany(company_id));
-//    }
-//
-//    @GetMapping("/profit-today")
-//    public ResponseEntity getTodayCompanyProfit(){
-//        logger.info("/company-profit/{company_id}");
-//        return ResponseEntity.status(HttpStatus.OK).body(orderService.getTodayProfitForAll());
-//    }
-//
-//    @GetMapping("/profit-current-month/{company_id}")
-//    public ResponseEntity getCurrentMonthCompanyProfit(@PathVariable Integer company_id){
-//        logger.info("/company-profit/{company_id}");
-//        return ResponseEntity.status(HttpStatus.OK).body(orderService.getCurrentMonthProfitForCompany(company_id));
-//    }
+    @GetMapping("/get-total-orders")
+    public ResponseEntity totalOrders(){
+        logger.info("/get-total-orders");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.totalOrders());
+    }
+    //================================ Total Endpoints in OrderProduct is 8 ==========================================
+
+
 }
 

@@ -22,7 +22,6 @@ public class FixProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    //-description:String
 //@Column(columnDefinition = "description varchar(200) not null")
     private String description;
 //PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_OF_DELIVERY
