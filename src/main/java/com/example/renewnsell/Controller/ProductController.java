@@ -43,6 +43,11 @@ private final ProductService productService;
 
 
 
+        @GetMapping("get")
+        public ResponseEntity getAllProduct() {
+            return ResponseEntity.ok(productService.getAllProduct());
+        }
+
         @PostMapping("/add")
         public ResponseEntity addProduct(@AuthenticationPrincipal User user, @RequestBody @Valid Product product) {
             productService.addProduct(user.getId(), product);
@@ -66,7 +71,7 @@ private final ProductService productService;
 
 
 
-        @PutMapping("/update/{productId}")
+        @PutMapping("/update/{productId}") // السيكيورتي ماضبط
         public ResponseEntity updateProduct(@AuthenticationPrincipal User user, @PathVariable Integer productId, @RequestBody @Valid Product product) {
             productService.updateProduct(user.getId(), productId, product);
             return ResponseEntity.ok(new ApiResponse("Product updated successfully"));
@@ -74,21 +79,21 @@ private final ProductService productService;
 
 
 
-        @DeleteMapping("/delete/{productId}")
+        @DeleteMapping("/delete/{productId}")// السيكيورتي ماضبط
         public ResponseEntity deleteProduct(@AuthenticationPrincipal User user, @PathVariable Integer productId) {
             productService.deleteProduct(user.getId(), productId);
             return ResponseEntity.ok(new ApiResponse("Product deleted successfully"));
         }
 
 
-        @GetMapping("/get-product-title/{title}")
-        public ResponseEntity getProductByTitle( @PathVariable String title) {
-            Product product = productService.getProductByTitle(title);
+        @GetMapping("/get-product-name/{name}")
+        public ResponseEntity getProductByName( @PathVariable String name) {
+            Product product = productService.getProductByName(name);
             return ResponseEntity.ok(product);
         }
 
 
-        @GetMapping("/get-product-category/{name}")
+        @GetMapping("/get-product-cname/{name}")
         public ResponseEntity getProductByCompanyName(@PathVariable String name) {
             Set<Product> products = productService.getProductByCompanyName( name);
             return ResponseEntity.ok(products);
@@ -96,12 +101,17 @@ private final ProductService productService;
 
 
         @GetMapping("/get-product-defective/{percentOfDefective}")
-        public ResponseEntity getProductByPercentOfDefective(@AuthenticationPrincipal Company company, @PathVariable Double percentOfDefective) {
-            List<Product> products = productService.getProductByPercentOfDefective(company.getId(), percentOfDefective);
+        public ResponseEntity getProductByPercentOfDefective( @PathVariable Double percentOfDefective) {
+            List<Product> products = productService.getProductByPercentOfDefective(percentOfDefective);
             return ResponseEntity.ok(products);
         }
 
 
+    @GetMapping("/get-product-category/{category}")
+    public ResponseEntity getProductByCategory(@PathVariable String category) {
+        List<Product> products = productService.getProductByCategory( category);
+        return ResponseEntity.ok(products);
+    }
 
 
 }

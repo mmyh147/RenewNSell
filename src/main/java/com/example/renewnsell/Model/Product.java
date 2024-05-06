@@ -2,7 +2,8 @@ package com.example.renewnsell.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,46 +23,49 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //    @NotEmpty(message = " name must not be empty")
+//    @NotEmpty(message = " name must not be empty")
 //    @Column(columnDefinition = "varchar(10) not null")
     private String name;
-    //
+//
 //    @NotEmpty(message = " description must not be empty")
 //    @Column(columnDefinition = "varchar(50) not null")
     private String description;
 
-    //    @NotNull(message = "priceBefore must not be null")
+//    @NotNull(message = "priceBefore must not be null")
 //    @Column(columnDefinition = "double not null")
     private Double priceBefore;
 
-    //
+//
 //    @NotNull(message = "price must not be null")
 //    @Column(columnDefinition = "double not null")
     private Double price;
 
-    //    @NotNull(message = "must not be null")
-   // @Positive(message = "must not be positive")
+//    @NotNull(message = "must not be null")
 //    @Column(columnDefinition = "int not null")
     private Integer quantity;
 
-    //    @Column(columnDefinition = "boolean")
-    //    @Column(columnDefinition = "boolean not null")
-
+//    @NotNull(message = "cant be null")
+//    @Column(columnDefinition = "boolean")
     private Boolean isAppear;
 
 
-    //    @NotEmpty(message = " category must not be empty")
+//    @NotEmpty(message = " category must not be empty")
 //    @Column(columnDefinition = "varchar(10) not null")
     private String category;
 
 
-    //    @NotNull(message = "must not be null")
+//    @NotNull(message = "must not be null")
 //    @Column(columnDefinition = "double not null")
     private Double fixPrice;
 
-    //    @NotNull(message = "must not be null")
+//    @NotNull(message = "must not be null")
 //    @Column(columnDefinition = "double not null")
     private Double percentOfDefective;
+
+
+
+
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     @JsonIgnore

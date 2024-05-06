@@ -1,7 +1,9 @@
 package com.example.renewnsell.Service;
 
 import com.example.renewnsell.Api.ApiException;
-import com.example.renewnsell.Model.*;
+import com.example.renewnsell.Model.Company;
+import com.example.renewnsell.Model.Product;
+import com.example.renewnsell.Model.User;
 import com.example.renewnsell.Repository.CompanyRepository;
 import com.example.renewnsell.Repository.OrderCompanyRepository;
 import com.example.renewnsell.Repository.ProductRepository;
@@ -18,7 +20,9 @@ import java.util.Set;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
     private final CompanyRepository companyRepository;
+
     private final UserRepository userRepository;
     private final OrderCompanyRepository orderCompanyRepository;
 
@@ -32,6 +36,7 @@ public class ProductService {
         product.setCompany(company);
         productRepository.save(product);
     }
+
 //totalProductForCompany//getProductForCompany
     public Integer totalProductForCompany(Integer id){
         Company company = companyRepository.findCompanyById(id);
@@ -48,7 +53,7 @@ public class ProductService {
 
     //1
     public Set<Product> getAllProductByCompanyId(Integer userId) {
-        User user=userRepository.findUserById(userId);
+        User user = userRepository.findUserById(userId);
 
         return user.getCompany().getProducts();
     }
@@ -75,16 +80,17 @@ public class ProductService {
    //2
     public Product getProductById(Integer productId, Integer userId) {
         Product product = productRepository.findProductById(productId);
-        if (product == null || !product.getCompany().getId().equals(userId))
+        if (product == null || !product.getCompany().getId().equals(userId)) {
             throw new ApiException("Product not found or does not belong to the specified Company");
-
-        return productRepository.findProductById(productId);
+        }
+        return product;
     }
 
 
     public void updateProduct(Integer userId, Integer productId, Product product) {
         Product product1 = productRepository.findProductById(productId);
 
+        if(product1==null)throw new ApiException("Product not found or does not belong to the specified Company");
         if (product1.getCompany().getId()==userId) {
 
             product1.setName(product.getName());
@@ -105,7 +111,7 @@ public class ProductService {
     public void deleteProduct(Integer userId, Integer productId) {
         Product product = productRepository.findProductById(productId);
 
-        if (product.getId()==userId) {
+        if (product.getCompany().getId()==userId) {
 
             productRepository.delete(product);
         } else {
@@ -118,41 +124,60 @@ public class ProductService {
 
 
 
-  //3 ,, search by customer
-    public Product getProductByTitle( String name ){
+  //3
+    public Product getProductByName( String name ) {
         Product product = productRepository.findProductByName(name);
-
+        if (product == null) throw new ApiException("Product not found or does not belong to the specified Company");
 
         return product;
     }
 
 
     //4
-    public Set<Product> getProductByCompanyName(String companyName) {
-        Company company = companyRepository.findCompanyByName(companyName);
+    public Set<Product> getProductByCompanyName(String name) {
+        Company company = companyRepository.findCompanyByName(name);
         if (company == null)throw new ApiException("Company not found");
 
-        return   company.getProducts();
+        return company.getProducts();
 
     }
 
 
 
+
+
     //5
-    public List<Product> getProductByPercentOfDefective(Integer companyId, Double percentOfDefective) {
-        Company company = companyRepository.findCompanyById(companyId);
+    public List<Product> getProductByPercentOfDefective( Double percentOfDefective) {
         List<Product> products = productRepository.findProductByPercentOfDefective(percentOfDefective);
 
-        List<Product> companyProducts = new ArrayList<>();
 
-        for (Product product : products) {
-            if (product.getCompany().equals(company)) {
-                companyProducts.add(product);
-            }
-        }
+        if(products.isEmpty())throw new ApiException("No products found");
 
-        return companyProducts;
-    }}
+        return products;
+    }
+
+
+    //6
+
+    public List<Product> getProductByCategory( String category ){
+        List<Product> p = productRepository.findProductByCategory(category);
+
+        if(p.isEmpty())throw new ApiException("No products found");
+
+        return p;
+    }
+
+
+    //7
+    public List<Product> getAllProduct() {
+
+        if (productRepository.findAll().isEmpty())throw new ApiException("No products found");
+        return productRepository.findAll();
+    }
+
+
+
+}
 
 
 

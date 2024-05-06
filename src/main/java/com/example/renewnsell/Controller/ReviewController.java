@@ -1,5 +1,6 @@
 package com.example.renewnsell.Controller;
 
+import com.example.renewnsell.Api.ApiResponse;
 import com.example.renewnsell.Model.Company;
 import com.example.renewnsell.Model.Customer;
 import com.example.renewnsell.Model.Review;
@@ -7,11 +8,13 @@ import com.example.renewnsell.Model.User;
 import com.example.renewnsell.Service.ReviewService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +27,8 @@ public class ReviewController {
 
     @PostMapping("/add/{companyId}")
     public ResponseEntity addReview(@AuthenticationPrincipal User user,@PathVariable Integer companyId, @RequestBody @Valid Review review) {
-        Review createdReview = reviewService.addReview(user.getId(),companyId,review);
-        return ResponseEntity.ok(createdReview);
+        reviewService.addReview(user.getId(),companyId,review);
+        return ResponseEntity.ok(new ApiResponse("createdReview"));
     }
 
 
@@ -47,28 +50,52 @@ public class ReviewController {
 
 
 
-    @GetMapping("/get-all-cu")
-    public ResponseEntity getAllReviewsForCustomer(@AuthenticationPrincipal Customer customer) {
-        List<Review> reviews = reviewService.getAllReviewsByCustomerId(customer.getId());
+    @GetMapping("/get-all-cu") // السيكيورتي
+    public ResponseEntity getAllReviewsForCustomer(@AuthenticationPrincipal User user) {
+        List<Review> reviews = reviewService.getAllReviewsByCustomerId(user.getId());
         return ResponseEntity.ok(reviews);
     }
 
 
 
-    @PutMapping("/update/{reviewId}")
-    public ResponseEntity updateReview(@AuthenticationPrincipal Integer customerId, @PathVariable Integer reviewId, @RequestBody @Valid Review updatedReview) {
-        Review review = reviewService.updateReview(reviewId, customerId, updatedReview);
-        return ResponseEntity.ok(review);
+    @PutMapping("/update/{reviewId}") // السيكيورتي
+    public ResponseEntity updateReview(@AuthenticationPrincipal User user, @PathVariable Integer reviewId, @RequestBody @Valid Review updatedReview) {
+         reviewService.updateReview(reviewId, user.getId(), updatedReview);
+        return ResponseEntity.ok(new ApiResponse("review updated"));
     }
 
 
 
-    @DeleteMapping("/delete/{reviewId}")
-    public ResponseEntity deleteReview(@AuthenticationPrincipal Integer customerId, @PathVariable Integer reviewId) {
-        reviewService.deleteReview(reviewId, customerId);
-        return ResponseEntity.ok("Review deleted successfully");
-
-
+    @DeleteMapping("/delete/{reviewId}")// السيكيورتي
+    public ResponseEntity deleteReview(@AuthenticationPrincipal User user, @PathVariable Integer reviewId) {
+        reviewService.deleteReview(reviewId, user.getId());
+        return ResponseEntity.ok(new ApiResponse("Review deleted successfully"));
 
     }
+
+    @GetMapping("/get-all-c/{name}")
+    public ResponseEntity getAllReviewsByCompanyName( @PathVariable String name) {
+        Set<Review> reviews = reviewService.getAllReviewsByCompanyName(name);
+        return ResponseEntity.ok(reviews);
+    }
+
+
+    @GetMapping("/average-rating/{name}")
+    public ResponseEntity getAverageRatingByCompanyName(@PathVariable String name) {
+        double averageRating = reviewService.getAverageRatingByCompanyName(name);
+        return ResponseEntity.ok(averageRating);
+    }
+
+
+    @GetMapping("/number-of-reviews/{name}")
+    public ResponseEntity getNumberOfReviewsByCompanyName(@PathVariable String name) {
+        int numberOfReviews = reviewService.getNumberOfReviewsByCompanyName(name);
+        return ResponseEntity.ok(numberOfReviews);
+    }
+
+    @GetMapping("/best")
+    public List<Review> bestEvaluationCompany() {
+        return reviewService.bestEvaluationCompany();
+    }
+
 }
