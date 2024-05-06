@@ -1,5 +1,6 @@
 package com.example.renewnsell.Controller;
 
+import com.example.renewnsell.Api.ApiResponse;
 import com.example.renewnsell.Model.Company;
 import com.example.renewnsell.Model.Customer;
 import com.example.renewnsell.Model.Review;
@@ -26,8 +27,8 @@ public class ReviewController {
 
     @PostMapping("/add/{companyId}")
     public ResponseEntity addReview(@AuthenticationPrincipal User user,@PathVariable Integer companyId, @RequestBody @Valid Review review) {
-        Review createdReview = reviewService.addReview(user.getId(),companyId,review);
-        return ResponseEntity.ok(createdReview);
+        reviewService.addReview(user.getId(),companyId,review);
+        return ResponseEntity.ok(new ApiResponse("createdReview"));
     }
 
 
@@ -59,8 +60,8 @@ public class ReviewController {
 
     @PutMapping("/update/{reviewId}") // السيكيورتي
     public ResponseEntity updateReview(@AuthenticationPrincipal User user, @PathVariable Integer reviewId, @RequestBody @Valid Review updatedReview) {
-        Review review = reviewService.updateReview(reviewId, user.getId(), updatedReview);
-        return ResponseEntity.ok(review);
+         reviewService.updateReview(reviewId, user.getId(), updatedReview);
+        return ResponseEntity.ok(new ApiResponse("review updated"));
     }
 
 
@@ -68,7 +69,7 @@ public class ReviewController {
     @DeleteMapping("/delete/{reviewId}")// السيكيورتي
     public ResponseEntity deleteReview(@AuthenticationPrincipal User user, @PathVariable Integer reviewId) {
         reviewService.deleteReview(reviewId, user.getId());
-        return ResponseEntity.ok("Review deleted successfully");
+        return ResponseEntity.ok(new ApiResponse("Review deleted successfully"));
 
     }
 
@@ -90,6 +91,11 @@ public class ReviewController {
     public ResponseEntity getNumberOfReviewsByCompanyName(@PathVariable String name) {
         int numberOfReviews = reviewService.getNumberOfReviewsByCompanyName(name);
         return ResponseEntity.ok(numberOfReviews);
+    }
+
+    @GetMapping("/best")
+    public List<Review> bestEvaluationCompany() {
+        return reviewService.bestEvaluationCompany();
     }
 
 }

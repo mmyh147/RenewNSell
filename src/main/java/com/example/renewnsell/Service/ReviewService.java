@@ -47,6 +47,7 @@ public class ReviewService {
 
     public Review updateReview(Integer reviewId, Integer userId, Review updatedReview) {
         Review r = reviewRepository.findReviewById(reviewId);
+        if(r==null)throw new ApiException("not found");
 
         if (!r.getCustomer().getId().equals(userId)) {
             throw new ApiException("Review does not belong to the specified customer");
@@ -61,6 +62,7 @@ public class ReviewService {
 
     public void deleteReview(Integer reviewId, Integer customerId) {
         Review r = reviewRepository.findReviewById(reviewId);
+        if(r==null)throw new ApiException("not found");
 
         if (!r.getCustomer().getId().equals(customerId)) {
             throw new ApiException("Review does not belong to the specified customer");
@@ -75,6 +77,7 @@ public class ReviewService {
     //1 للكاستمر
     public Review getReviewById(Integer reviewId, Integer userId) {
         Review review = reviewRepository.findReviewById(reviewId);
+        if(review==null)throw new ApiException("not found");
 
         if (!review.getCustomer().getId().equals(userId)) {
             throw new ApiException("Review does not belong to the specified customer");
@@ -144,6 +147,13 @@ public class ReviewService {
 
         Set<Review> reviews = company.getReviews();
         return reviews.size();
+    }
+
+
+    //7
+    public List<Review> bestEvaluationCompany(){
+        List<Review> reviews=reviewRepository.searchTopByEvaluation();
+        return reviews;
     }
 
 

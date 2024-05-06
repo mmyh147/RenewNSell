@@ -24,6 +24,11 @@ public class ProductController {
 
 
 
+        @GetMapping("get")
+        public ResponseEntity getAllProduct() {
+            return ResponseEntity.ok(productService.getAllProduct());
+        }
+
         @PostMapping("/add")
         public ResponseEntity addProduct(@AuthenticationPrincipal User user, @RequestBody @Valid Product product) {
             productService.addProduct(user.getId(), product);
@@ -77,8 +82,8 @@ public class ProductController {
 
 
         @GetMapping("/get-product-defective/{percentOfDefective}")
-        public ResponseEntity getProductByPercentOfDefective(@AuthenticationPrincipal User user, @PathVariable Double percentOfDefective) {
-            List<Product> products = productService.getProductByPercentOfDefective(user.getId(), percentOfDefective);
+        public ResponseEntity getProductByPercentOfDefective( @PathVariable Double percentOfDefective) {
+            List<Product> products = productService.getProductByPercentOfDefective(percentOfDefective);
             return ResponseEntity.ok(products);
         }
 

@@ -41,6 +41,7 @@ public class Product {
 //    @Column(columnDefinition = "int not null")
     private Integer quantity;
 
+//    @NotNull(message = "cant be null")
 //    @Column(columnDefinition = "boolean")
     private Boolean isAppear;
 

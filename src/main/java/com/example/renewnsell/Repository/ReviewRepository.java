@@ -2,6 +2,7 @@ package com.example.renewnsell.Repository;
 
 import com.example.renewnsell.Model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     List<Review> findAllReviewsByCustomerId(int customer);
 
+    @Query("SELECT r FROM Review r JOIN r.company c ORDER BY SIZE(c.reviews) DESC")
+    List<Review> searchTopByEvaluation();
 }
