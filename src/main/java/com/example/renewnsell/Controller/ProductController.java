@@ -1,5 +1,7 @@
 package com.example.renewnsell.Controller;
 
+import com.example.renewnsell.Api.ApiResponse;
+import com.example.renewnsell.Model.Company;
 import com.example.renewnsell.Model.Product;
 import com.example.renewnsell.Model.User;
 import com.example.renewnsell.Service.ProductService;
@@ -7,10 +9,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,11 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductController {
 
 private final ProductService productService;
-    @PostMapping("/add")
-    public ResponseEntity addProduct(@AuthenticationPrincipal User user, @RequestBody @Valid Product product) {
-        productService.addProduct(user.getId(), product);
-        return ResponseEntity.ok(new ApiResponse("created Product"));
-    }
+
     //GHALIAH
     @GetMapping("get-availability-of-product/{productId}")
     public ResponseEntity checkAvailabilityProduct(@AuthenticationPrincipal User user, @PathVariable Integer productId) {
@@ -35,7 +33,6 @@ private final ProductService productService;
 //    }
 
 
-        private final ProductService productService;
 
 
 

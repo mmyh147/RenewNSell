@@ -54,9 +54,6 @@ public class OrderProduct {
 //    @JoinColumn(name = "company_id")
 //    private Company company;
 
-     @OneToMany(cascade = CascadeType.ALL,mappedBy = "orderProduct")
-    private Set<Product>productSet;
-
     @ManyToMany(mappedBy = "orderProduct")
     private Set<Product>products;
     @OneToOne(mappedBy = "orderProduct", cascade = CascadeType.ALL)

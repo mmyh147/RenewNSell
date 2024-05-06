@@ -2,9 +2,11 @@ package com.example.renewnsell.Service;
 
 import com.example.renewnsell.Api.ApiException;
 import com.example.renewnsell.Model.Company;
+import com.example.renewnsell.Model.OrderCompany;
 import com.example.renewnsell.Model.Product;
 import com.example.renewnsell.Model.User;
 import com.example.renewnsell.Repository.CompanyRepository;
+import com.example.renewnsell.Repository.OrderCompanyRepository;
 import com.example.renewnsell.Repository.ProductRepository;
 import com.example.renewnsell.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;

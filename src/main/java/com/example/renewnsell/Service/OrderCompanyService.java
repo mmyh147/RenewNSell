@@ -9,6 +9,8 @@ import com.example.renewnsell.Repository.OrderCompanyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Set;
 
@@ -104,17 +106,100 @@ public class OrderCompanyService {
     //=======================================
 
 
-    public Double getTodayProfitForCompany(Integer companyId){
-        Company company = companyRepository.findCompanyById(companyId);
-        Double total=0.0;
-        if (company.getOrders().isEmpty())
-            throw new ApiException("no product bought yet so list is empty");
-        for (OrderCompany orderCompany:company.getOrders()){
-            total+=orderCompany.getTotalPrice();
+    public Double getTotalProfitForCompany(Integer companyId){
+//        Company company = companyRepository.findCompanyById(companyId);
+//        Double total=0.0;
+//        if (company.getOrders().isEmpty())
+//            throw new ApiException("no product bought yet so list is empty");
+//        for (OrderCompany orderCompany:company.getOrders()){
+//            total+=orderCompany.getTotalPrice();
+//        }
+//        return total;
+        Double total = 0.0;
+        total = orderCompanyRepository.findTotalProfitForCompany(companyId);
+        if (total == null) {
+            throw new ApiException("No profit recorded for the company.");
         }
         return total;
     }
 
+
+    public Double getTodayProfitForCompany(Integer companyId) {
+        LocalDate today = LocalDate.now();
+        Double total = orderCompanyRepository.findTotalProfitForCompanyToday(companyId, today);
+        if (total == null) {
+            throw new ApiException("No profit recorded for today.");
+        }
+        return total;
+    }
+
+    public Double getCurrentMonthProfitForCompany(Integer companyId) {
+        LocalDate currentDate = LocalDate.now();
+        Double total = orderCompanyRepository.findTotalProfitForCompanyCurrentMonth(companyId, currentDate);
+        if (total == null) {
+            throw new ApiException("No profit recorded for the current month.");
+        }
+        return total;
+    }
+
+    public Double getLastMonthProfitForCompany(Integer companyId) {
+        LocalDate currentDate = LocalDate.now();
+        YearMonth lastMonthYearMonth = YearMonth.from(currentDate).minusMonths(1);
+        int lastMonthYear = lastMonthYearMonth.getYear();
+        int lastMonth = lastMonthYearMonth.getMonthValue();
+        Double total = orderCompanyRepository.findTotalProfitForCompanyLastMonth(companyId, lastMonthYear, lastMonth);
+        if (total == null) {
+            throw new ApiException("No profit recorded for the last month.");
+        }
+        return total;
+    }
+
+    public Double getTotalProfitForToday() {
+        LocalDate today = LocalDate.now();
+        Double result = orderCompanyRepository.findTotalProfitForToday(today);
+        if (result == null){
+            throw new ApiException("No record found for today");
+        }
+        return result;
+    }
+
+    public Double getTotalProfitForCurrentMonth() {
+        LocalDate currentDate = LocalDate.now();
+        Double result = orderCompanyRepository.findTotalProfitForCurrentMonth(currentDate);
+        if (result == null){
+            throw new ApiException("No record found for current month");
+        }
+        return result;
+    }
+
+    public Double getTotalProfitForLastMonth() {
+        LocalDate currentDate = LocalDate.now();
+        YearMonth lastMonthYearMonth = YearMonth.from(currentDate).minusMonths(1);
+        int lastMonthYear = lastMonthYearMonth.getYear();
+        int lastMonth = lastMonthYearMonth.getMonthValue();
+        Double result = orderCompanyRepository.findTotalProfitForLastMonth(lastMonthYear, lastMonth);
+        if (result == null){
+            throw new ApiException("No record found for last month");
+        }
+        return result;
+    }
+
+
+    public Integer getTotalProductsSoldForCompany(Integer companyId) {
+        return orderCompanyRepository.countAllProductsSoldForCompany(companyId);
+    }
+
+    public Integer countProductsSoldTodayForCompany(Integer companyId) {
+        return orderCompanyRepository.countProductsSoldTodayForCompany(companyId);
+    }
+
+    public Integer countProductsSoldCurrentMonthForCompany(Integer companyId) {
+        return orderCompanyRepository.countProductsSoldCurrentMonthForCompany(companyId);
+    }
+
+//    public Integer countProductsSoldLastMonthForCompany(Integer companyId) {
+//        return orderCompanyRepository.countProductsSoldLastMonthForCompany(companyId);
+//    }
 
 
 }

@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private String username;
 
     @NotEmpty(message = "password must not be empty")
-    @Column(columnDefinition = "varchar(25) not null")
+    @Column(columnDefinition = "varchar(255) not null")
     private String password;
 
     @NotEmpty(message = "name must not be empty")

@@ -28,6 +28,6 @@ public class CustomerDTO {
     private String phoneNumber;
 
     @NotEmpty(message = "gender not be empty")
-    @Pattern(regexp = "F|M", message = "Phone number must be 10 digits")
+    @Pattern(regexp = "FEMALE|MALE", message = "gender must be MALE or FEMALE")
     private String gender;
 }

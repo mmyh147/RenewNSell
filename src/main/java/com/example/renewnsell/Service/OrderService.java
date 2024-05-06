@@ -59,7 +59,7 @@ private final OrderCompanyService orderCompanyService;
 
     //================================= [BUY] METHOD DONE BY GHALIAH  ==============================
     public void buy(Integer userId, List<DTO_BUY> productIds) {
-        Customer customer = customerRepository.findCustomersById(userId);
+        Customer customer = customerRepository.findCustomerById(userId);
         OrderProduct orderProduct = new OrderProduct();
         OrderCompany orderCompany=new OrderCompany();
         orderProduct.setCustomer(customer);
@@ -224,7 +224,7 @@ private final OrderCompanyService orderCompanyService;
     //================================= [findAllByCustomer_Id  ] METHOD DONE BY GHALIAH  ==============================
 
     public Set<OrderProduct> findAllByCustomer_Id(Integer customerId) {
-        Customer customer = customerRepository.findCustomersById(customerId);
+        Customer customer = customerRepository.findCustomerById(customerId);
         if (customer.getOrders().isEmpty())
             throw new ApiException("you dont have order");
         return customer.getOrders();
@@ -256,65 +256,66 @@ private final OrderCompanyService orderCompanyService;
 
     // =============================== calculate total profit ========================
 
-    public Double getAllTimeProfitForAll(){
+//    public Double getAllTimeProfitForAll(){
+//
+//        Double total = 0.0;
+//        total = orderRepository.getTotalProfitForNonCancelledOrders();
+//
+//        return total;
+//    }
+//
+//    public Double getAllTimeProfitForCompany(Integer companyId){
+//
+//        Double total = 0.0;
+//        total = orderRepository.getTotalProfitForNonCancelledOrdersByCompanyId(companyId);
+//
+//        return total;
+//    }
+//
+//    public Double getTodayProfitForAll(){
+//
+//        Double total = 0.0;
+//        total = orderRepository.getTotalProfitForNonCancelledOrdersToday(LocalDate.now());
+//
+//        return total;
+//    }
+//
+//    public Double getTodayProfitForCompany(Integer companyId){
+//
+//        Double total = 0.0;
+//        total = orderRepository.getTodayProfitForNonCancelledOrdersByCompanyId(LocalDate.now(), companyId);
+//
+//        return total;
+//    }
+//
+//    public Double getCurrentMonthProfitForCompany(Integer companyId){
+//
+//        Double total = 0.0;
+//        total = orderRepository.getCurrentMonthProfitForNonCancelledOrdersByCompanyId(LocalDate.now(), companyId);
+//
+//        return total;
+//    }
+//
+//    public Double getCurrentMonthProfitForAll(){
+//
+//        Double total = 0.0;
+//        total = orderRepository.getCurrentMonthProfitForAllOrders();
+//
+//        return total;
+//    }
+//
+//    public double getLastMonthProfitForNonCancelledOrdersByCompanyId(Integer companyId) {
+//        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+//
+//        return orderRepository.getLastMonthProfitForNonCancelledOrdersByCompanyId(lastMonth, companyId);
+//    }
+//
+//    public double getLastMonthProfitForNonCancelledOrders() {
+//        LocalDate lastMonth = LocalDate.now().minusMonths(1);
+//
+//        return orderRepository.getLastMonthProfitForNonCancelledOrders(lastMonth);
+//    }
 
-        Double total = 0.0;
-        total = orderRepository.getTotalProfitForNonCancelledOrders();
-
-        return total;
-    }
-
-    public Double getAllTimeProfitForCompany(Integer companyId){
-
-        Double total = 0.0;
-        total = orderRepository.getTotalProfitForNonCancelledOrdersByCompanyId(companyId);
-
-        return total;
-    }
-
-    public Double getTodayProfitForAll(){
-
-        Double total = 0.0;
-        total = orderRepository.getTotalProfitForNonCancelledOrdersToday(LocalDate.now());
-
-        return total;
-    }
-
-    public Double getTodayProfitForCompany(Integer companyId){
-
-        Double total = 0.0;
-        total = orderRepository.getTodayProfitForNonCancelledOrdersByCompanyId(LocalDate.now(), companyId);
-
-        return total;
-    }
-
-    public Double getCurrentMonthProfitForCompany(Integer companyId){
-
-        Double total = 0.0;
-        total = orderRepository.getCurrentMonthProfitForNonCancelledOrdersByCompanyId(LocalDate.now(), companyId);
-
-        return total;
-    }
-
-    public Double getCurrentMonthProfitForAll(){
-
-        Double total = 0.0;
-        total = orderRepository.getCurrentMonthProfitForAllOrders();
-
-        return total;
-    }
-
-    public double getLastMonthProfitForNonCancelledOrdersByCompanyId(Integer companyId) {
-        LocalDate lastMonth = LocalDate.now().minusMonths(1);
-
-        return orderRepository.getLastMonthProfitForNonCancelledOrdersByCompanyId(lastMonth, companyId);
-    }
-
-    public double getLastMonthProfitForNonCancelledOrders() {
-        LocalDate lastMonth = LocalDate.now().minusMonths(1);
-
-        return orderRepository.getLastMonthProfitForNonCancelledOrders(lastMonth);
-    }
 
 
 }
