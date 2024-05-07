@@ -16,6 +16,8 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
     List<Review> findAllReviewsByCustomerId(int customer);
 
-    @Query("SELECT r FROM Review r JOIN r.company c ORDER BY SIZE(c.reviews) DESC")
-    List<Review> searchTopByEvaluation();
+
+//@Query("SELECT r from Review r ORDER BY r.rating DESC")
+    List<Review> findAllByRating(Integer rating);
+
 }

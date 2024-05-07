@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
 import java.util.Set;
@@ -18,6 +19,9 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class ReviewService {
 
+
+
+    //HAYA
 
 
 
@@ -74,7 +78,7 @@ public class ReviewService {
 
 
 
-    //1 للكاستمر
+    //1
     public Review getReviewById(Integer reviewId, Integer userId) {
         Review review = reviewRepository.findReviewById(reviewId);
         if(review==null)throw new ApiException("not found");
@@ -87,7 +91,7 @@ public class ReviewService {
     }
 
 
-    //2 للشركه تشوف تقييماتهم
+    //2
     public List<Review> getAllReviewsByCompanyId(Integer userId) {
         Company company = companyRepository.findCompanyById(userId);
         if (company == null)
@@ -99,7 +103,7 @@ public class ReviewService {
 
 
 
-    // للكاستمر يشوف تقييماته3
+    // 3
     public List<Review> getAllReviewsByCustomerId(Integer userId) {
         Customer customer = customerRepository.findCustomersById(userId);
         if (customer == null)
@@ -138,6 +142,7 @@ public class ReviewService {
         return average.isPresent() ? average.getAsDouble() : 0.0;
     }
 
+
     //6
 
     public int getNumberOfReviewsByCompanyName(String name) {
@@ -151,10 +156,38 @@ public class ReviewService {
 
 
     //7
-    public List<Review> bestEvaluationCompany(){
-        List<Review> reviews=reviewRepository.searchTopByEvaluation();
-        return reviews;
+    public List<Review> bestEvaluationCompany() {
+        List<Review> reviews = reviewRepository.findAll();
+        List<Review> newRList = new ArrayList<>();
+
+        if (reviews.isEmpty()) {
+            throw new ApiException("reviews not found");
+        } else {
+            newRList.add(reviews.get(0));
+
+
+            for (int i = 1; i < reviews.size(); i++) {
+                Review NowR = reviews.get(i);
+                boolean added = false; // انه مانضاف
+
+                for (int j = 0; j < newRList.size(); j++) {
+                    if (NowR.getRating() >= newRList.get(j).getRating()) {
+                        newRList.add(j, NowR);
+                        added = true;
+                        break;
+                    }
+                }
+
+                if (!added) {
+                    newRList.add(NowR);
+                }
+            }
+        }
+
+        return newRList;
     }
+
+
 
 
 }

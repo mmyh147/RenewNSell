@@ -91,6 +91,7 @@ public class OrderCompanyService {
                 order.setStatus("SHIPPED");
                 orderCompanyRepository.save(order);
                 break;
+
             case "SHIPPED":
                 order.setStatus("OUT_FOR_DELIVERY");
                 orderCompanyRepository.save(order);
@@ -104,6 +105,7 @@ public class OrderCompanyService {
     }
 
 
+
     public Set<OrderCompany> findAllByCompanyId(Integer companyId) {
         Company company = companyRepository.findCompanyById(companyId);
         if (company.getOrders().isEmpty())
@@ -112,9 +114,44 @@ public class OrderCompanyService {
     }
 
 
-    //=======================================MOHAMMED==================
+    //=======================================
 
 
+    public Double getTotalProfitForCompany(Integer companyId){
+//        Company company = companyRepository.findCompanyById(companyId);
+//        Double total=0.0;
+//        if (company.getOrders().isEmpty())
+//            throw new ApiException("no product bought yet so list is empty");
+//        for (OrderCompany orderCompany:company.getOrders()){
+//            total+=orderCompany.getTotalPrice();
+//        }
+//        return total;
+        Double total = 0.0;
+        total = orderCompanyRepository.findTotalProfitForCompany(companyId);
+        if (total == null) {
+            throw new ApiException("No profit recorded for the company.");
+        }
+        return total;
+    }
+
+
+    public Double getTodayProfitForCompany(Integer companyId) {
+        LocalDate today = LocalDate.now();
+        Double total = orderCompanyRepository.findTotalProfitForCompanyToday(companyId, today);
+        if (total == null) {
+            throw new ApiException("No profit recorded for today.");
+        }
+        return total;
+    }
+
+    public Double getCurrentMonthProfitForCompany(Integer companyId) {
+        LocalDate currentDate = LocalDate.now();
+        Double total = orderCompanyRepository.findTotalProfitForCompanyCurrentMonth(companyId, currentDate);
+        if (total == null) {
+            throw new ApiException("No profit recorded for the current month.");
+        }
+        return total;
+    }
     //================================= [getOrderProductByPercentOfDefective  ] METHOD DONE BY GHALIAH  ==============================
 
     //getOrderProductByPercentOfDefective
@@ -140,7 +177,7 @@ public class OrderCompanyService {
         if (check(companyId, productId)) {
             if (product.getOrderProduct().isEmpty())
                 throw new ApiException("No Order Company for this product: " + productId);
-           // for (OrderCompany orderCompany : product.getOrderCompany())
+            for (OrderCompany orderCompany : product.getOrderCompany())
                 totalProfitForOneOrdersProduct +=
                         getTotalProfitForOneProductWithFixPrice(companyId, productId) + getTotalProfitForOneProductWithOutFixPrice(companyId, productId);
 

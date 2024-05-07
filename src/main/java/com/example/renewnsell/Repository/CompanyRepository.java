@@ -14,5 +14,4 @@ public interface CompanyRepository extends JpaRepository<Company, Integer> {
 Company findCompanyByName(String name);
 
 
-   // Company (String companyName);
 }

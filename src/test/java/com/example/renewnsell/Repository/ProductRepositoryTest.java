@@ -1,8 +1,6 @@
 package com.example.renewnsell.Repository;
 
-import com.example.renewnsell.Model.Company;
-import com.example.renewnsell.Model.Product;
-import com.example.renewnsell.Model.User;
+import com.example.renewnsell.Model.*;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +21,8 @@ import java.util.Set;
 public class ProductRepositoryTest {
 
 
+    //HAYA
+
     @Autowired
     ProductRepository productRepository;
 
@@ -33,15 +33,21 @@ public class ProductRepositoryTest {
     Company company;
     Product product;
 
+    Set<OrderCompany> orderCompanies;
+
+    Set<OrderProduct> orderProducts;
+
+
     List<Product> productList=new ArrayList<>();
     Set<Product> products=new HashSet<>(productList);
 
     @BeforeEach
     void setUp() {
-        user = new User(null, "HayaAlajaleen", "112233", "haya", "0544323211", "haya@gmail.com", "Admin", company, null);
-        product1 = new Product(null, "SHOES", "shoes1", 44.32, 33.2, 4, true, "shoes", 1.0, 2.0, company);
-        product2 = new Product(null, "SHOES", "shoes2", 44.32, 33.2, 4, true, "shoes", 1.0, 2.0, company);
-        product3 = new Product(null, "SHOES", "shoes3", 44.32, 33.2, 4, true, "shoes", 1.0, 2.0, company);
+        user = new User(null,"HayaAlajaleen","112233","haya","0544323211","haya@gmail.com","Admin",company,null);
+        product1=new Product(null,"SHOES","SS",5.44,3.22,12,true,"SHOES",2.3,33.3,company,orderCompanies,orderProducts);
+        product2=new Product(null,"SHOES2","SS",5.44,3.22,12,true,"SHOES",2.3,33.3,company,orderCompanies,orderProducts);
+        product3=new Product(null,"SHOES3","SS",5.44,3.22,12,true,"SHOES",2.3,33.3,company,orderCompanies,orderProducts);
+        company=new Company(null,"38822992","fashion","dghsj.png",null,products,null,null);
     }
 
 
