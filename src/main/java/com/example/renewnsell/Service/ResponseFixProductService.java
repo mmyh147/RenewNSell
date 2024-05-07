@@ -31,12 +31,13 @@ private final OrderRepository orderRepository;
         ResponseFixProduct responseFixProduct1=new ResponseFixProduct();
         responseFixProduct1.setPrice(responseFixProduct.getPrice());
         responseFixProduct1.setDescription(responseFixProduct.getDescription());
-        FixProduct fixProduct=fixProductRepository.findFixProductById(fixProductId);
-        if (fixProduct==null)throw new ApiException("not found fixProduct");
-        fixProduct.setResponseFixProduct(responseFixProduct1);
-        responseFixProduct1.setFixProduct(fixProduct);
+        OrderProduct fixProduct=orderRepository.findOrderProductById(fixProductId);
+        if (fixProduct.getFixProduct()==null)throw new ApiException("not found fixProduct");
+        FixProduct fixProduct1=fixProduct.getFixProduct();
+        fixProduct1.setResponseFixProduct(responseFixProduct1);
+        responseFixProduct1.setFixProduct(fixProduct1);
         responseFixProductRepository.save(responseFixProduct1);
-        fixProductRepository.save(fixProduct);
+        fixProductRepository.save(fixProduct1);
     }
 
     public void update(Integer id, DTOResponseFixProduct responseFixProduct) {
@@ -57,17 +58,17 @@ responseFixProductRepository.delete(responseFixProduct);
     //=================================RESPONSE REQUEST FIX PRODUCT FROM EMPLOYEE DONE BY GHALIAH  ==============================
 public void response(Integer fixProductId,DTOResponseFixProduct responseFixProductPostMan) {
     OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);
-    FixProduct fixProduct = fixProductRepository.findFixProductsByOrderProduct(orderProduct);
-    ResponseFixProduct responseFixProduct=fixProduct.getResponseFixProduct();
-    if (fixProduct==null) {
+    if (orderProduct.getFixProduct()==null) {
         throw new ApiException("FixProduct not found");
     }
+    ResponseFixProduct responseFixProduct=orderProduct.getFixProduct().getResponseFixProduct();
+    FixProduct fixProduct=orderProduct.getFixProduct();
     responseFixProduct.setDescription(responseFixProductPostMan.getDescription());
     responseFixProduct.setPrice(responseFixProductPostMan.getPrice());
     orderProduct.setTotalItems(1);
     orderProduct.setTotalPrice(responseFixProductPostMan.getPrice());
     orderProduct.setFixProduct(fixProduct);
-    fixProduct.setResponseFixProduct(responseFixProduct);
+    responseFixProduct.setFixProduct(fixProduct);
     orderRepository.save(orderProduct);
     fixProductRepository.save(fixProduct);
     responseFixProductRepository.save(responseFixProduct);

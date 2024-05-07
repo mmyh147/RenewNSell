@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/customer")
 public class CustomerController {
 
-
     private final CustomerService customerService;
     Logger logger = LoggerFactory.getLogger(FixProductController.class);
 
@@ -63,6 +62,10 @@ public class CustomerController {
     @GetMapping("/get-customer-by-id/{id}")
     public ResponseEntity getCustomerById(@PathVariable Integer id){
         logger.info("get customer with ID : " + id);
+    @GetMapping("/total-customers-by-gender/{gender}")
+    public ResponseEntity totalFemalesCustomers(@AuthenticationPrincipal @PathVariable String gender) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.totalCustomersByGender(gender));
+    }
 
         return ResponseEntity.ok(customerService.getCustomerByID(id));
     }

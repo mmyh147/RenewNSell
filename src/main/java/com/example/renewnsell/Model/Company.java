@@ -31,9 +31,6 @@ public class Company {
     @Column(columnDefinition = "varchar(20) not null")
     private String logoPath;
 
-
-
-
     @OneToOne
     @MapsId
     @JsonIgnore

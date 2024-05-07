@@ -77,7 +77,7 @@ public class OrderCompanyService {
         if (order.getStatus().equalsIgnoreCase("CANCELED"))
             throw new ApiException("you can't change canceled order");
         if (order.getStatus().equalsIgnoreCase("DELIVERED"))
-            throw new ApiException("order is DELIVERED ");
+            throw new ApiException("order already is delivered ");
         switch (order.getStatus()) {
             case "PENDING":
                 order.setStatus("ORDER_CONFIRMED");
@@ -91,7 +91,6 @@ public class OrderCompanyService {
                 order.setStatus("SHIPPED");
                 orderCompanyRepository.save(order);
                 break;
-
             case "SHIPPED":
                 order.setStatus("OUT_FOR_DELIVERY");
                 orderCompanyRepository.save(order);
@@ -105,7 +104,6 @@ public class OrderCompanyService {
     }
 
 
-
     public Set<OrderCompany> findAllByCompanyId(Integer companyId) {
         Company company = companyRepository.findCompanyById(companyId);
         if (company.getOrders().isEmpty())
@@ -114,7 +112,7 @@ public class OrderCompanyService {
     }
 
 
-    //=======================================
+    //=======================================MOHAMMED==================
 
 
     //================================= [getOrderProductByPercentOfDefective  ] METHOD DONE BY GHALIAH  ==============================
@@ -142,7 +140,7 @@ public class OrderCompanyService {
         if (check(companyId, productId)) {
             if (product.getOrderProduct().isEmpty())
                 throw new ApiException("No Order Company for this product: " + productId);
-            for (OrderCompany orderCompany : product.getOrderCompany())
+           // for (OrderCompany orderCompany : product.getOrderCompany())
                 totalProfitForOneOrdersProduct +=
                         getTotalProfitForOneProductWithFixPrice(companyId, productId) + getTotalProfitForOneProductWithOutFixPrice(companyId, productId);
 
@@ -194,14 +192,14 @@ public class OrderCompanyService {
     public Integer getTotalNumberOrdersForOneProduct(Integer companyId, Integer productId) {
         Product product = productRepository.findProductById(productId);
         if (check(companyId, productId)) {
-            if (product.getOrderProduct().isEmpty()) {
+            if (product.getOrderProduct().isEmpty())
                 throw new ApiException("No Order Company for this product: " + productId);
-            }
-        }
             return product.getOrderProduct().size();
+
         }
+        return product.getOrderProduct().size();
 
-
+    }
 
     //================================= [getTotalNumberOfOrdersCompany  ] METHOD DONE BY HAYA  ==============================
     public Integer getTotalNumberOfOrdersCompany(Integer companyId) {
@@ -211,7 +209,25 @@ public class OrderCompanyService {
         return company.getOrders().size();
     }
 
+    public double getAverageProfitByCompanyName(Integer companyId) {
+            Company company = companyRepository.findCompanyById(companyId);
+            if (company.getOrders().isEmpty())
+                throw new ApiException("no product bought yet so list is empty");
 
+            double total = 0.0;
+            Set<OrderCompany> orders = company.getOrders();
+            if (orders.isEmpty())
+                throw new ApiException("there are no orders for the company");
+
+            Set<OrderCompany> list = company.getOrders();
+            for (OrderCompany orderCompany : list) {
+                if(orderCompany.getStatus().equalsIgnoreCase("DELIVERED"))
+                    total += orderCompany.getTotalPrice();
+
+            }
+
+            return total / company.getOrders().size();
+        }
 
     public Double getTotalProfitForCompany(Integer companyId){
 //        Company company = companyRepository.findCompanyById(companyId);

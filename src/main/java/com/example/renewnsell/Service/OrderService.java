@@ -61,6 +61,13 @@ public class OrderService {
 
     //================================= [BUY] METHOD DONE BY GHALIAH  ==============================
     public void buy(Integer userId, List<DTO_BUY> productIds) {
+        /*we have 3 relation with OrderProduct
+        * First relation is ManyToMany between Order product and Product
+        * Second relation is OneToMany between OrderProduct and OrderCompany // this relation I use to divide
+        * each product to its company as order , so The benefit is [ distribution ]
+        * Third relations is OneToMany between OrderProduct and Customer
+        * */
+
         Customer customer = customerRepository.findCustomersById(userId);
         OrderProduct orderProduct = new OrderProduct();
         OrderCompany orderCompany = new OrderCompany();
@@ -115,6 +122,7 @@ public class OrderService {
         for (DTO_BUY p : productIds) {
             if (p.isFix()) {
                 totalPrices += productRepository.findProductById(p.getProductId()).getPrice() + productRepository.findProductById(p.getProductId()).getFixPrice();
+
             } else {
                 totalPrices += productRepository.findProductById(p.getProductId()).getPrice();
             }
@@ -161,19 +169,17 @@ public class OrderService {
     }
 
     //================================= [CHANGE STATUS] METHOD DONE BY GHALIAH  ==============================
-    public void changeStatus(Integer fixProductId) {
-        OrderProduct order = orderRepository.findOrderProductById(fixProductId);
+    public void changeStatus(Integer orderId) {
+        OrderProduct order = orderRepository.findOrderProductById(orderId);
         if (order == null) {
             throw new ApiException("Order Not Found ");
         }
         if (order.getStatus().equalsIgnoreCase("REJECT"))
             throw new ApiException("you can't change rejected order");
-
         if (order.getStatus().equalsIgnoreCase("CANCELED"))
             throw new ApiException("you can't change canceled order");
         if (order.getStatus().equalsIgnoreCase("DELIVERED"))
-            throw new ApiException("order is DELIVERED order");
-
+            throw new ApiException("order already is delivered");
         //"PREPARING|SHIPPED|DELIVERED|ORDER_CONFIRMED|OUT_FOR_DELIVERY"
         switch (order.getStatus()) {
             case "ACCEPTED":
@@ -191,11 +197,10 @@ public class OrderService {
                         orderRepository.save(order);
                     } else throw new ApiException("some of product of some company not  still PENDING");
                 }
-
                 break;
             case "ORDER_CONFIRMED":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
-                    if (!orderCompany.getStatus().equalsIgnoreCase("PREPARING")) {
+                    if (!orderCompany.getStatus().equalsIgnoreCase("ORDER_CONFIRMED")) {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
                             order.setStatus("PREPARING");
                             orderRepository.save(order);
@@ -204,29 +209,23 @@ public class OrderService {
                         }
                     } else throw new ApiException("some of product of some company not  still PREPARING");
                 }
-
                 break;
             case "PREPARING":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
                     if (!orderCompany.getStatus().equalsIgnoreCase("PREPARING")) {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
-
                             order.setStatus("SHIPPED");
                             orderRepository.save(order);
                         } else {
                             throw new ApiException("some of product of some company not  still PENDING");
                         }
-
                     } else throw new ApiException("some of product of some company not  still SHIPPED");
                 }
-
                 break;
-
             case "SHIPPED":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
                     if (!orderCompany.getStatus().equalsIgnoreCase("SHIPPED")) {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
-
                             order.setStatus("OUT_FOR_DELIVERY");
                             orderRepository.save(order);
                         } else {
@@ -234,18 +233,14 @@ public class OrderService {
                         }
                     } else throw new ApiException("some of product of some company not  still OUT_FOR_DELIVERY");
                 }
-
-
                 break;
             case "OUT_FOR_DELIVERY":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
                     if (orderCompany.getStatus().equalsIgnoreCase("DELIVERED")) {
-                            order.setStatus("DELIVERED");
-                            orderRepository.save(order);
-
+                        order.setStatus("DELIVERED");
+                        orderRepository.save(order);
                     } else throw new ApiException("some of product of some company not  still DELIVERED");
                 }
-
                 break;
 
 
@@ -262,22 +257,22 @@ public class OrderService {
     }
 
     //================================= [GET STATUS OF ORDER ] METHOD DONE BY GHALIAH  ==============================
-    public String getStatusOfOrder(Integer customerId, Integer orderId) {
+    public String track(Integer customerId, Integer orderId) {
         OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
         if (orderProduct == null) {
             throw new ApiException("order don't found");
-        } else if (orderProduct.getCustomer().getId() != customerId)
+        } else if (orderProduct.getCustomer().getId()!= customerId)
             throw new ApiException("this order unauthorized for you");
         return orderProduct.getStatus();
     }
     //================================= [TRUCK ORDER FOR EMPLOYEE METHOD ] METHOD DONE BY GHALIAH  ==============================
-
-    public String truck(Integer orderId) {
-        OrderProduct order = orderRepository.findOrderProductById(orderId);
-        if (order == null) {
-            throw new ApiException("Order Not Found ");
+    public String track(Integer orderId) {
+        OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
+        if (orderProduct == null) {
+            throw new ApiException("order don't found");
         }
-        return order.getStatus();
+            return orderProduct.getStatus();
+
     }
     //================================= [findAllByCustomer_Id  ] METHOD DONE BY GHALIAH  ==============================
 

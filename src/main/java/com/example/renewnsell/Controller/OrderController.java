@@ -24,7 +24,7 @@ public class OrderController {
     private final OrderService orderService;
     Logger logger= LoggerFactory.getLogger(OrderController.class);
 
-    @GetMapping("/get-all")
+    @GetMapping("/get-all-orders")
     public ResponseEntity getAll(){
         logger.info("get-all");
        return ResponseEntity.status(200).body(orderService.getAll());
@@ -77,13 +77,18 @@ public class OrderController {
 
 
 
-    @GetMapping("/truck-order/{orderId}")
-    public ResponseEntity track(@PathVariable Integer orderId){
+    @GetMapping("/track-order/{orderId}")
+    public ResponseEntity track(@AuthenticationPrincipal User user,@PathVariable Integer orderId){
         logger.info("truck-order/{orderId}");
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.truck(orderId));
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.track(user.getId(),orderId));
     }
     //================================ 6-Fifth Endpoint in OrderProduct ==========================================
-
+//truckForEmployee
+    @GetMapping("/track-order-for-employee/{orderId}")
+    public ResponseEntity truckForEmployee(@PathVariable Integer orderId){
+        logger.info("truck-order/{orderId}");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.track(orderId));
+    }
 
     @GetMapping("/get-all-customer-order")
     public ResponseEntity findAllByCustomer_Id(@AuthenticationPrincipal User user){

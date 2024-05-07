@@ -40,22 +40,11 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests()
-//=====================================================UserController===========================
-                .requestMatchers("api/v1/user/get-all", "api/v1/user/delete/{username}",
-                        "api/v1/user/get-user-by-id/{id}", "api/v1/user/get-user-by-username/{username}").hasAuthority("ADMIN")
-                .requestMatchers("api/v1/user/delete-my-user", "api/v1/user/login", "api/v1/user/logout", "api/v1/user/get-my-info").authenticated()
 
 //=====================================================CompanyController===========================
-                .requestMatchers("api/v1/company/add").permitAll()
-                .requestMatchers("api/v1/company/update-my-user").authenticated()
-                .requestMatchers("api/v1/company/get-all", "api/v1/company/update/{id}", "api/v1/company/update/{id}").hasAuthority("ADMIN")
 //=====================================================CustomerController===========================
                 .requestMatchers("api/v1/customer/add").permitAll()
-                .requestMatchers("api/v1/customer/update-my-user").authenticated()
-                .requestMatchers("api/v1/customer/get-all", "api/v1/customer/update/{id}").hasAuthority("ADMIN")
-                .requestMatchers("api/v1/customer/update/{id}").hasAuthority("ADMIN")
-                .requestMatchers("api/v1/customer/get-customer-by-id/{id}").hasAuthority("ADMIN")
-
+                .requestMatchers("api/v1/company/add").permitAll()
 //=====================================================FixProductController===========================
                 .requestMatchers("api/v1/fix-product/get-all-request-fix-product").hasAnyAuthority("ADMIN","EMPLOYEE")
                 .requestMatchers("api/v1/fix-product/delete-fix/{fixProductId}").hasAuthority("ADMIN")
@@ -77,44 +66,18 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/order-company/get-total-profit-of-one-product-with-out-fix/{productId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get-total-profit-of-one-product-with-fix/{productId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get-total-number-of-order-for-one-product/{productId}").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/order-company/company-total-revenue","api/v1/order-company/company-today-revenue",
-                        "api/v1/order-company/company-current-month-revenue", "api/v1/order-company/company-all-sold-product",
-                        "api/v1/order-company/company-today-sold-product", "api/v1/order-company/company-current-month-sold-product",
-                        "api/v1/order-company/company-last-month-sold-product", "api/v1/order-company/company-last-month-revenue").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/order-company/get/average-profit").hasAuthority("COMPANY")
 //=====================================================OrderController===========================
-                .requestMatchers("api/v1/order/get-all").hasAuthority("ADMIN")
-                .requestMatchers("api/v1/order/change-status-of-order/{orderId}").hasAnyAuthority("EMPLOYEE","ADMIN","COMPANY")
-                .requestMatchers("api/v1/order/get-total-revenue","api/v1/order/get-today-revenue",
-                        "api/v1/order/get-current-month-revenue", "api/v1/order/get-last-month-revenue",
-                        "api/v1/order/get-last-month-revenue", "api/v1/order/count-all-sold-product",
-                        "api/v1/order/count-today-sold-product", "api/v1/order/count-current-month-sold-product",
-                        "api/v1/order/count-last-month-sold-product").hasAnyAuthority("EMPLOYEE", "ADMIN")
-
-                //==========================================================================
-
-                .requestMatchers("api/v1/auth/add-employee").permitAll()
-                .requestMatchers("api/v1/request-fix-product/request-fix-product").authenticated()
-                .requestMatchers("api/v1/response-fix-product/response-request-fix-product/{fixProductId}").hasAuthority("EMPLOYEE")
-                .requestMatchers("api/v1/request-fix-product/accept-price-fix-product/{fixProductId}").hasAuthority("CUSTOMER")
-                .requestMatchers("api/v1/product/add").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/delete/{productId}").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/update/{productId}","api/v1/review/get-all-c").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/get-all").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/get-product/{productId}").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/get-product-name/{name}/","api/v1/product/get-product-defective/{percentOfDefective}","api/v1/product/get-product-category/{category}","api/v1/product/get","api/v1/review/get-all-c/{name}","api/v1/review/average-rating/{name}","api/v1/review/number-of-reviews/{name}").permitAll()
-                .requestMatchers("api/v1/review/add").hasAuthority("CUSTOMER")
-                .requestMatchers("api/v1/review/get/{reviewId}","api/v1/review/get-all-cu","api/v1/review/update/{reviewId}").hasAuthority("CUSTOMER")
-                .requestMatchers("api/v1/review/delete/{reviewId}").hasAnyAuthority("ADMIN","CUSTOMER")
-
-                .requestMatchers("api/v1/company/add").permitAll()
-                .requestMatchers("api/v1/customer/add").permitAll()
+                .requestMatchers("api/v1/order/get-total-orders").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/order/get-all-orders").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order/buy-order").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/order/update-order/{orderId}").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order/delete-order/{orderId}").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order/cancel-order/{orderId}").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/order/change-status-of-order/{orderId}").hasAuthority("EMPLOYEE")
                 .requestMatchers("api/v1/order/get-all-by-status/{status}").hasAnyAuthority("ADMIN","EMPLOYEE")
-                .requestMatchers("api/v1/order/truck-order/{orderId}").hasAnyAuthority("EMPLOYEE","CUSTOMER")
+                .requestMatchers("api/v1/order/track-order-for-employee/{orderId}").hasAnyAuthority("ADMIN","EMPLOYEE")
+                .requestMatchers("api/v1/order/track-order/{orderId}").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/order/get-all-customer-order").hasAnyAuthority("CUSTOMER","EMPLOYEE")
                 .requestMatchers("api/v1/order/get-all-order-by-product-id/{productId}").hasAnyAuthority("ADMIN","EMPLOYEE")
                 .requestMatchers("api/v1/order/get-total-orders").hasAuthority("ADMIN")
@@ -125,6 +88,7 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/response-fix-product/update-response-request-fix-product/{fixproductId}").hasAuthority("EMPLOYEE")
                 .requestMatchers("api/v1/response-fix-product/delete-request-fix-product/{fixProductId}").hasAuthority("ADMIN")
 //=====================================================ReviewController===========================
+//=====================================================UserController===========================
 //=====================================================WarrantyController===========================
                 .anyRequest().authenticated()
                 .and()

@@ -71,6 +71,13 @@ public class CustomerService {
         customerRepository.save(user.getCustomer());
 
     }
+    public Integer totalCustomers(){
+        return customerRepository.findAll().size();
+    }
+
+    public Integer totalCustomersByGender(String gender){
+        return customerRepository.findAllByGender( gender).size();
+    }
 
     public void updateMyUser(User user, CustomerDTO updatedCustomer){
 
