@@ -103,7 +103,8 @@ public class SecurityConfig {
                         "api/v1/order/count-today-sold-product", "api/v1/order/count-current-month-sold-product",
                         "api/v1/order/count-last-month-sold-product").hasAnyAuthority("EMPLOYEE", "ADMIN")
 //=====================================================ProductController===========================
-                .requestMatchers("api/v1/product/get-product-name/{name}/","api/v1/product/get-product-defective/{percentOfDefective}","api/v1/product/get-product-category/{category}","api/v1/product/get","api/v1/review/get-all-c/{name}","api/v1/review/average-rating/{name}","api/v1/review/number-of-reviews/{name}").permitAll()
+                .requestMatchers("api/v1/product/get-product-name/{name}/","api/v1/product/get-product-defective/{percentOfDefective}","api/v1/product/get-product-category/{category}","api/v1/product/get").permitAll()
+                .requestMatchers("api/v1/product/get-product-cname/{name}").permitAll()
                 .requestMatchers("api/v1/product/add").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/product/delete/{productId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/product/update/{productId}","api/v1/review/get-all-c").hasAuthority("COMPANY")
