@@ -48,6 +48,7 @@ public class SecurityConfig {
 //=====================================================FixProductController===========================
                 .requestMatchers("api/v1/fix-product/get-all-request-fix-product").hasAnyAuthority("ADMIN","EMPLOYEE")
                 .requestMatchers("api/v1/fix-product/delete-fix/{fixProductId}").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/fix-product/update/{fixId}").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/fix-product/{fixProductId}").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/fix-product/request-fix-product").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/fix-product/accept-price-fix-product/{fixProductId}").hasAuthority("CUSTOMER")
