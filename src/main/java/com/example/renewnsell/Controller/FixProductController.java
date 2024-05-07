@@ -43,6 +43,7 @@ public class FixProductController {
     }
     @DeleteMapping("/delete-fix/{fixId}")
     public ResponseEntity delete(@PathVariable Integer fixId) {
+        logger.info("delete request-fix-product");
         fixProductService.delete(fixId);
         return ResponseEntity.status(200).body(new ApiResponse("delete successfully"));
     }

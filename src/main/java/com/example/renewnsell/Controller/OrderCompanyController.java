@@ -112,8 +112,9 @@ private final OrderCompanyService orderCompanyService;
         return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTotalNumberOrdersForOneProduct(user.getId(),productId));
     }
 //=======================
-    @GetMapping("/get/average-profit")
+    @GetMapping("/get-average-profit")
     public double getAverageProfitForCompany(@AuthenticationPrincipal User user ) {
+        logger.info("average-profit");
         return orderCompanyService.getAverageProfitByCompanyName(user.getId());
     }
     //================================ Total Endpoints in OrderCompany is 8 ==========================================

@@ -79,14 +79,14 @@ public class OrderController {
 
     @GetMapping("/track-order/{orderId}")
     public ResponseEntity track(@AuthenticationPrincipal User user,@PathVariable Integer orderId){
-        logger.info("truck-order/{orderId}");
+        logger.info("track-order/{orderId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.track(user.getId(),orderId));
     }
     //================================ 6-Fifth Endpoint in OrderProduct ==========================================
 //truckForEmployee
     @GetMapping("/track-order-for-employee/{orderId}")
     public ResponseEntity truckForEmployee(@PathVariable Integer orderId){
-        logger.info("truck-order/{orderId}");
+        logger.info("track-order/{orderId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.track(orderId));
     }
 
