@@ -40,13 +40,11 @@ public class Product {
     private Double price;
 
     //    @NotNull(message = "must not be null")
-   // @Positive(message = "must not be positive")
+    // @Positive(message = "must not be positive")
 //    @Column(columnDefinition = "int not null")
     private Integer quantity;
-
     //    @Column(columnDefinition = "boolean")
     //    @Column(columnDefinition = "boolean not null")
-
     private Boolean isAppear;
 
 
@@ -54,6 +52,11 @@ public class Product {
 //    @Column(columnDefinition = "varchar(10) not null")
     private String category;
 
+    //    @NotEmpty(message = " image must not be empty")
+//@Column(columnDefinition = "varchar(500) not null")
+    private String image;
+
+    private String place;
 
     //    @NotNull(message = "must not be null")
 //    @Column(columnDefinition = "double not null")
@@ -71,7 +74,7 @@ public class Product {
 
     @ManyToMany
     @JsonIgnore
-    private Set<OrderCompany>orderCompany;
+    private Set<OrderCompany> orderCompany;
 
     @ManyToMany
     @JsonIgnore
