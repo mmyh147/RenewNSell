@@ -63,13 +63,13 @@ public class UserController {
     }
     //================================= By Mohammed Alhajri ===================================
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity login(@AuthenticationPrincipal User user){
 
         return ResponseEntity.ok(new ApiResponse("welcome, " + user.getName()));
     }
     //================================= By Mohammed Alhajri ===================================
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public ResponseEntity logout(@AuthenticationPrincipal User user){
 
         return ResponseEntity.ok(new ApiResponse("bye!"));
