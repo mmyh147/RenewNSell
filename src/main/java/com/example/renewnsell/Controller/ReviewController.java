@@ -37,7 +37,7 @@ public class ReviewController {
     }
 
 
-
+    //Endpoint 49
     @GetMapping("/get/{reviewId}")
     public ResponseEntity getReviewById(@AuthenticationPrincipal User user, @PathVariable Integer reviewId) {
         Review review = reviewService.getReviewById(reviewId, user.getId());
@@ -47,7 +47,7 @@ public class ReviewController {
 
 
 
-
+    //Endpoint 50
     @GetMapping("/get-all-c")
     public ResponseEntity getAllReviewsForCompany(@AuthenticationPrincipal User user) {
         List<Review> reviews = reviewService.getAllReviewsByCompanyId(user.getId());
@@ -56,7 +56,7 @@ public class ReviewController {
     }
 
 
-
+    //Endpoint 51
     @GetMapping("/get-all-cu")
     public ResponseEntity getAllReviewsForCustomer(@AuthenticationPrincipal User user) {
         List<Review> reviews = reviewService.getAllReviewsByCustomerId(user.getId());
@@ -83,6 +83,7 @@ public class ReviewController {
 
     }
 
+    //Endpoint 52
     @GetMapping("/get-all-c/{name}")
     public ResponseEntity getAllReviewsByCompanyName( @PathVariable String name) {
         Set<Review> reviews = reviewService.getAllReviewsByCompanyName(name);
@@ -90,7 +91,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviews);
     }
 
-
+    //Endpoint 53
     @GetMapping("/average-rating/{name}")
     public ResponseEntity getAverageRatingByCompanyName(@PathVariable String name) {
         double averageRating = reviewService.getAverageRatingByCompanyName(name);
@@ -98,7 +99,7 @@ public class ReviewController {
         return ResponseEntity.ok(averageRating);
     }
 
-
+    //Endpoint 54
     @GetMapping("/number-of-reviews/{name}")
     public ResponseEntity getNumberOfReviewsByCompanyName(@PathVariable String name) {
         int numberOfReviews = reviewService.getNumberOfReviewsByCompanyName(name);
@@ -106,6 +107,7 @@ public class ReviewController {
         return ResponseEntity.ok(numberOfReviews);
     }
 
+    //Endpoint 55
     @GetMapping("/best")
     public List<Review> bestEvaluationCompany() {
         logger.info("bestEvaluationCompany");

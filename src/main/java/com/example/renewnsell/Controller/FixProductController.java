@@ -50,6 +50,7 @@ public class FixProductController {
 
 
     //================================ 1-First Endpoint in FixProduct ==========================================
+    //Endpoint 6
     @PostMapping("/accept-price-fix-product/{fixProductId}")
     public ResponseEntity acceptPriceFixProduct(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
         logger.info("accept-price-fix-product/{fixProductId}");
@@ -58,6 +59,7 @@ public class FixProductController {
     }
 
     //================================ 2-Second Endpoint in FixProduct ==========================================
+    //Endpoint 7
     @PostMapping("/reject-price-fix-product/{fixProductId}")
     public ResponseEntity rejectPriceFixProduct(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
         logger.info("reject-price-fix-product/{fixProductId}");
@@ -68,13 +70,14 @@ public class FixProductController {
 
     //================================ 3-Third Endpoint in FixProduct ==========================================
 
+    //Endpoint 8
     @GetMapping("/get-fix-product/{fixProductId}")
     public ResponseEntity getFixProductOne(@AuthenticationPrincipal User user, @PathVariable Integer fixProductId) {
         logger.info("get-fix-product/{fixProductId}");
         return ResponseEntity.status(HttpStatus.OK).body(fixProductService.getFixProductOne(user.getId(), fixProductId));
     }
     //================================ 4-Fourth Endpoint in FixProduct ==========================================
-
+//Endpoint 9
     @PostMapping("/change-status-of-order/{orderId}")
     public ResponseEntity changeStatusOrder(@PathVariable Integer orderId ){
         logger.info("change-status-of-order/{orderId}");

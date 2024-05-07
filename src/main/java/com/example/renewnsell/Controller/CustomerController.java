@@ -50,7 +50,8 @@ public class CustomerController {
         customerService.update(id, customerDTO);
         return ResponseEntity.ok(new ApiResponse("Customer updated"));
     }
-
+    //================================= By Mohammed Alhajri ===================================
+    //Endpoint 3
     @PutMapping("/update-my-user")
     public ResponseEntity updateMyUser(@AuthenticationPrincipal User user, @RequestBody @Valid CustomerDTO customerDTO){
         logger.info("update customer with ID : " + user.getId());
@@ -60,6 +61,7 @@ public class CustomerController {
     }
     //================================= By Mohammed Alhajri ===================================
 
+    //Endpoint 4
     @GetMapping("/get-customer-by-id/{id}")
     public ResponseEntity getCustomerById(@PathVariable Integer id){
         logger.info("get customer with ID : " + id);
@@ -69,6 +71,7 @@ public class CustomerController {
     }
 
     //================================= By Ghaliah ===================================
+    //Endpoint 5
     @GetMapping("/total-customers-by-gender/{gender}")
     public ResponseEntity totalFemalesCustomers(@AuthenticationPrincipal @PathVariable String gender) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.totalCustomersByGender(gender));

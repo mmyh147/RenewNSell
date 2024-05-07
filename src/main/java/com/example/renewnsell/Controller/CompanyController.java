@@ -48,6 +48,8 @@ public class CompanyController {
         return ResponseEntity.ok(new ApiResponse("company updated"));
     }
 
+    //================================= By Mohammed Alhajri ===================================
+    //Endpoint 1
     @PutMapping("/update-my-user")
     public ResponseEntity updateMyUser(@AuthenticationPrincipal User user, @RequestBody @Valid CompanyDTO companyDTO){
         logger.info("update company");
@@ -56,7 +58,7 @@ public class CompanyController {
     }
 
     //================================= By Mohammed Alhajri ===================================
-
+//Endpoint 2
     @GetMapping("/get-company-by-id/{id}")
     public ResponseEntity getCompanyById(@PathVariable Integer id){
         logger.info("request company with ID : " + id);

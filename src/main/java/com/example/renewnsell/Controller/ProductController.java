@@ -25,7 +25,7 @@ public class ProductController {
 private final ProductService productService;
     Logger logger = LoggerFactory.getLogger(OrderCompanyController.class);
 
-
+    //Endpoint 42
     //GHALIAH
     @GetMapping("get-availability-of-product/{productId}")
     public ResponseEntity checkAvailabilityProduct(@AuthenticationPrincipal User user, @PathVariable Integer productId) {
@@ -33,12 +33,12 @@ private final ProductService productService;
     }
 //totalProductForCompany//getProductForCompany
 
-
+    //Endpoint 43
     @GetMapping("/get-total-product-for-company/")
     public ResponseEntity totalProductForCompany(@AuthenticationPrincipal User user){
         return ResponseEntity.status(HttpStatus.OK).body(productService.totalProductForCompany(user.getId()));
     }
-
+    //Endpoint 44
     @GetMapping("/get-all-product-for-company/")
     public ResponseEntity allProductForCompany(@AuthenticationPrincipal User user){
         return ResponseEntity.status(HttpStatus.OK).body(productService.getProductForCompany(user.getId()));
@@ -75,7 +75,7 @@ private final ProductService productService;
         }
 
 
-
+    //Endpoint 45
         @GetMapping("/get-product/{productId}")
         public ResponseEntity getProductById(@AuthenticationPrincipal User user, @PathVariable Integer productId) {
             Product product = productService.getProductById(productId, user.getId());
@@ -101,7 +101,7 @@ private final ProductService productService;
             return ResponseEntity.ok(new ApiResponse("Product deleted successfully"));
         }
 
-
+    //Endpoint 45
         @GetMapping("/get-product-name/{name}")
         public ResponseEntity getProductByName( @PathVariable String name) {
             Product product = productService.getProductByName(name);
@@ -109,7 +109,7 @@ private final ProductService productService;
             return ResponseEntity.ok(product);
         }
 
-
+    //Endpoint 46
         @GetMapping("/get-product-cname/{name}")
         public ResponseEntity getProductByCompanyName(@PathVariable String name) {
             Set<Product> products = productService.getProductByCompanyName( name);
@@ -117,7 +117,7 @@ private final ProductService productService;
             return ResponseEntity.ok(products);
         }
 
-
+    //Endpoint 47
         @GetMapping("/get-product-defective/{percentOfDefective}")
         public ResponseEntity getProductByPercentOfDefective( @PathVariable Double percentOfDefective) {
             List<Product> products = productService.getProductByPercentOfDefective(percentOfDefective);
@@ -125,7 +125,7 @@ private final ProductService productService;
             return ResponseEntity.ok(products);
         }
 
-
+    //Endpoint 48
     @GetMapping("/get-product-category/{category}")
     public ResponseEntity getProductByCategory(@PathVariable String category) {
         List<Product> products = productService.getProductByCategory( category);

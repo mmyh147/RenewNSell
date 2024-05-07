@@ -36,6 +36,7 @@ public class UserController {
     }
     //================================= By Mohammed Alhajri ===================================
 
+    //Endpoint 56
     @DeleteMapping("/delete-my-user")
     public ResponseEntity deleteMyUser(@AuthenticationPrincipal User user){
         userService.delete(user.getUsername());
@@ -43,32 +44,34 @@ public class UserController {
     }
     //================================= By Mohammed Alhajri ===================================
 
+    //Endpoint 57
     @GetMapping("/get-user-by-username/{username}")
     public ResponseEntity getByUsername(@PathVariable String username){
 
         return ResponseEntity.ok(userService.getUserByUsername(username));
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 58
     @GetMapping("/get-user-by-id/{id}")
     public ResponseEntity getUserById(@PathVariable Integer id){
 
         return ResponseEntity.ok(userService.getUserById(id));
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 59
     @GetMapping("/get-my-info")
     public ResponseEntity getMyInfo(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(userService.getMyInfo(user.getId()));
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 60
     @PostMapping("/login")
     public ResponseEntity login(@AuthenticationPrincipal User user){
 
         return ResponseEntity.ok(new ApiResponse("welcome, " + user.getName()));
     }
     //================================= By Mohammed Alhajri ===================================
+    //Endpoint 61
     @PostMapping("/logout")
     public ResponseEntity logout(@AuthenticationPrincipal User user){
 

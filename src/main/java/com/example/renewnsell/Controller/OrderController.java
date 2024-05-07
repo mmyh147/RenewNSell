@@ -51,7 +51,7 @@ public class OrderController {
         return ResponseEntity.status(200).body(new ApiResponse("deleted successfully"));
     }
     //================================ 2-Second Endpoint in OrderProduct ==========================================
-
+    //Endpoint 26
     @PostMapping("/cancel-order/{orderId}")
     public ResponseEntity cancel(@AuthenticationPrincipal User customer, @PathVariable Integer orderId){
         logger.info("cancel-order/{orderId}");
@@ -59,6 +59,7 @@ public class OrderController {
         return ResponseEntity.status(200).body(new ApiResponse("canceled ordered successfully"));
     }
     //================================ 3-Third Endpoint in OrderProduct ==========================================
+    //Endpoint 27
     @PostMapping("/change-status-of-order/{orderId}")
     public ResponseEntity changeStatusOrder(@PathVariable Integer orderId ){
         logger.info("change-status-of-order/{orderId}");
@@ -66,7 +67,7 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse("Change status Successfully"));
     }
     //================================ 4-Fourth Endpoint in OrderProduct ==========================================
-
+    //Endpoint 28
     @GetMapping("/get-all-by-status/{status}")
     public ResponseEntity getAllSHIPPEDOrder(@PathVariable String status){
         logger.info("get-all-shipped-order");
@@ -76,27 +77,27 @@ public class OrderController {
     //================================ 5-Fifth Endpoint in OrderProduct ==========================================
 
 
-
+    //Endpoint 29
     @GetMapping("/track-order/{orderId}")
     public ResponseEntity track(@AuthenticationPrincipal User user,@PathVariable Integer orderId){
         logger.info("track-order/{orderId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.track(user.getId(),orderId));
     }
     //================================ 6-Fifth Endpoint in OrderProduct ==========================================
-//truckForEmployee
+    //Endpoint 30
     @GetMapping("/track-order-for-employee/{orderId}")
     public ResponseEntity truckForEmployee(@PathVariable Integer orderId){
         logger.info("track-order/{orderId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.track(orderId));
     }
-
+    //Endpoint 31
     @GetMapping("/get-all-customer-order")
     public ResponseEntity findAllByCustomer_Id(@AuthenticationPrincipal User user){
         logger.info("get-all-customer-order");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.findAllByCustomer_Id(user.getId()));
     }
     //================================ 7-Seventh Endpoint in OrderProduct ==========================================
-
+    //Endpoint 32
     //getAllOrderByProductId
     @GetMapping("/get-all-order-by-product-id/{productId}")
     public ResponseEntity getAllOrderByProductId(@AuthenticationPrincipal User user,@PathVariable Integer productId){
@@ -106,7 +107,7 @@ public class OrderController {
 //getTotalNumberOfOrdersWebsite
     //================================ 8-Eighth Endpoint in OrderProduct ==========================================
 
-
+    //Endpoint 33
     @GetMapping("/get-total-orders")
     public ResponseEntity totalOrders(){
         logger.info("/get-total-orders");
@@ -116,41 +117,42 @@ public class OrderController {
 
 
     //================================= By Mohammed Alhajri ===================================
+    //Endpoint 34
     @GetMapping("/get-total-revenue")
     public ResponseEntity totalRevenue(){
         logger.info("Request total revenue");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllRevenueForWebsite());
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 35
     @GetMapping("/get-today-revenue")
     public ResponseEntity todayRevenue(){
         logger.info("Request today revenue");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getTodayRevenueForWebsite());
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 36
     @GetMapping("/get-current-month-revenue")
     public ResponseEntity currentMonthRevenue(){
         logger.info("Request current month revenue");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getCurrentMonthRevenueForWebsite());
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 37
     @GetMapping("/get-last-month-revenue")
     public ResponseEntity lastMonthRevenue(){
         logger.info("Request current month revenue");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.getLastMonthRevenueForWebsite());
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 38
     @GetMapping("/count-all-sold-product")
     public ResponseEntity countAllSoldProduct(){
         logger.info("Request count of sold product");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.countAllProductSoldForWebsite());
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 39
     @GetMapping("/count-today-sold-product")
     public ResponseEntity countTodaySoldProduct(){
         logger.info("Request count of today sold product");
@@ -158,13 +160,14 @@ public class OrderController {
     }
     //================================= By Mohammed Alhajri ===================================
 
+    //Endpoint 40
     @GetMapping("/count-current-month-sold-product")
     public ResponseEntity countCurrentMonthSoldProduct(){
         logger.info("Request count of current month sold product");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.countCurrentMonthProductSoldForWebsite());
     }
     //================================= By Mohammed Alhajri ===================================
-
+    //Endpoint 41
     @GetMapping("/count-last-month-sold-product")
     public ResponseEntity countLastMonthSoldProduct(){
         logger.info("Request count of last month sold product");

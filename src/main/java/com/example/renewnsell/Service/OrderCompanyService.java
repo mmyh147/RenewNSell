@@ -117,41 +117,9 @@ public class OrderCompanyService {
     //=======================================
 
 
-    public Double getTotalProfitForCompany(Integer companyId){
-//        Company company = companyRepository.findCompanyById(companyId);
-//        Double total=0.0;
-//        if (company.getOrders().isEmpty())
-//            throw new ApiException("no product bought yet so list is empty");
-//        for (OrderCompany orderCompany:company.getOrders()){
-//            total+=orderCompany.getTotalPrice();
-//        }
-//        return total;
-        Double total = 0.0;
-        total = orderCompanyRepository.findTotalProfitForCompany(companyId);
-        if (total == null) {
-            throw new ApiException("No profit recorded for the company.");
-        }
-        return total;
-    }
 
 
-    public Double getTodayProfitForCompany(Integer companyId) {
-        LocalDate today = LocalDate.now();
-        Double total = orderCompanyRepository.findTotalProfitForCompanyToday(companyId, today);
-        if (total == null) {
-            throw new ApiException("No profit recorded for today.");
-        }
-        return total;
-    }
 
-    public Double getCurrentMonthProfitForCompany(Integer companyId) {
-        LocalDate currentDate = LocalDate.now();
-        Double total = orderCompanyRepository.findTotalProfitForCompanyCurrentMonth(companyId, currentDate);
-        if (total == null) {
-            throw new ApiException("No profit recorded for the current month.");
-        }
-        return total;
-    }
     //================================= [getOrderProductByPercentOfDefective  ] METHOD DONE BY GHALIAH  ==============================
 
     //getOrderProductByPercentOfDefective
