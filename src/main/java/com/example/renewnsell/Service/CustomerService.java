@@ -48,11 +48,8 @@ public class CustomerService {
         return customerRepository.findAll().size();
     }
 
-    public Integer totalFemalesCustomers(){
-        return customerRepository.findAllByGender("FEMALE").size();
+    public Integer totalCustomersByGender(String gender){
+        return customerRepository.findAllByGender( gender).size();
     }
 
-    public Integer totalMaleCustomers(){
-        return customerRepository.findAllByGender("MALE").size();
-    }
 }

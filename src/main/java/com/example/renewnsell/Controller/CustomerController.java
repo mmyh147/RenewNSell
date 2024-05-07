@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,13 +27,9 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.totalCustomers());
     }
 
-    @GetMapping("/total-females-customers")
-    public ResponseEntity totalFemalesCustomers() {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.totalFemalesCustomers());
-    }
-    @GetMapping("/total-males-customers")
-    public ResponseEntity totalMalesCustomers() {
-        return ResponseEntity.status(HttpStatus.OK).body(customerService.totalMaleCustomers());
+    @GetMapping("/total-customers-by-gender/{gender}")
+    public ResponseEntity totalFemalesCustomers(@AuthenticationPrincipal @PathVariable String gender) {
+        return ResponseEntity.status(HttpStatus.OK).body(customerService.totalCustomersByGender(gender));
     }
 
 

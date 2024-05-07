@@ -20,8 +20,7 @@ public class FixProductService {
     private final CustomerRepository customerRepository;
     private final ResponseFixProductRepository responseFixProductRepository;
     private final OrderRepository orderRepository;
-    @Autowired
-    private final OrderService orderService;
+
     //-----------------------------------Ghaliah----------------------------------
 
     public List<FixProduct> getAll() {

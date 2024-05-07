@@ -60,6 +60,13 @@ public class OrderService {
 
     //================================= [BUY] METHOD DONE BY GHALIAH  ==============================
     public void buy(Integer userId, List<DTO_BUY> productIds) {
+        /*we have 3 relation with OrderProduct
+        * First relation is ManyToMany between Order product and Product
+        * Second relation is OneToMany between OrderProduct and OrderCompany // this relation I use to divide
+        * each product to its company as order , so The benefit is [ distribution ]
+        * Third relations is OneToMany between OrderProduct and Customer
+        * */
+
         Customer customer = customerRepository.findCustomersById(userId);
         OrderProduct orderProduct = new OrderProduct();
         OrderCompany orderCompany = new OrderCompany();
@@ -114,6 +121,7 @@ public class OrderService {
         for (DTO_BUY p : productIds) {
             if (p.isFix()) {
                 totalPrices += productRepository.findProductById(p.getProductId()).getPrice() + productRepository.findProductById(p.getProductId()).getFixPrice();
+
             } else {
                 totalPrices += productRepository.findProductById(p.getProductId()).getPrice();
             }
@@ -248,17 +256,23 @@ public class OrderService {
     }
 
     //================================= [GET STATUS OF ORDER ] METHOD DONE BY GHALIAH  ==============================
-    public String truck(Integer customerId, Integer orderId) {
+    public String track(Integer customerId, Integer orderId) {
         OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
         if (orderProduct == null) {
             throw new ApiException("order don't found");
-        } else if (orderProduct.getCustomer().getId() != customerId)
+        } else if (orderProduct.getCustomer().getId()!= customerId)
             throw new ApiException("this order unauthorized for you");
         return orderProduct.getStatus();
     }
     //================================= [TRUCK ORDER FOR EMPLOYEE METHOD ] METHOD DONE BY GHALIAH  ==============================
+    public String track(Integer orderId) {
+        OrderProduct orderProduct = orderRepository.findOrderProductById(orderId);
+        if (orderProduct == null) {
+            throw new ApiException("order don't found");
+        }
+            return orderProduct.getStatus();
 
-
+    }
     //================================= [findAllByCustomer_Id  ] METHOD DONE BY GHALIAH  ==============================
 
     public Set<OrderProduct> findAllByCustomer_Id(Integer customerId) {
