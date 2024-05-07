@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -62,12 +63,15 @@ public class CustomerController {
     @GetMapping("/get-customer-by-id/{id}")
     public ResponseEntity getCustomerById(@PathVariable Integer id){
         logger.info("get customer with ID : " + id);
+
+
+        return ResponseEntity.ok(customerService.getCustomerByID(id));
+    }
+
+    //================================= By Ghaliah ===================================
     @GetMapping("/total-customers-by-gender/{gender}")
     public ResponseEntity totalFemalesCustomers(@AuthenticationPrincipal @PathVariable String gender) {
         return ResponseEntity.status(HttpStatus.OK).body(customerService.totalCustomersByGender(gender));
-    }
-
-        return ResponseEntity.ok(customerService.getCustomerByID(id));
     }
 
 }

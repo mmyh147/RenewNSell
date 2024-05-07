@@ -41,10 +41,20 @@ public class SecurityConfig {
                 .authenticationProvider(daoAuthenticationProvider())
                 .authorizeHttpRequests()
 
+//=====================================================UserController===========================
+                .requestMatchers("api/v1/user/get-all", "api/v1/user/delete/{username}",
+                        "api/v1/user/get-user-by-id/{id}", "api/v1/user/get-user-by-username/{username}").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/user/delete-my-user", "api/v1/user/login", "api/v1/user/logout", "api/v1/user/get-my-info").authenticated()
 //=====================================================CompanyController===========================
+                .requestMatchers("api/v1/company/add").permitAll()
+                .requestMatchers("api/v1/company/update-my-user").authenticated()
+                .requestMatchers("api/v1/company/get-all", "api/v1/company/update/{id}", "api/v1/company/update/{id}").hasAuthority("ADMIN")
 //=====================================================CustomerController===========================
                 .requestMatchers("api/v1/customer/add").permitAll()
-                .requestMatchers("api/v1/company/add").permitAll()
+                .requestMatchers("api/v1/customer/update-my-user").authenticated()
+                .requestMatchers("api/v1/customer/get-all", "api/v1/customer/update/{id}").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/customer/update/{id}").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/customer/get-customer-by-id/{id}").hasAuthority("ADMIN")
 //=====================================================FixProductController===========================
                 .requestMatchers("api/v1/fix-product/get-all-request-fix-product").hasAnyAuthority("ADMIN","EMPLOYEE")
                 .requestMatchers("api/v1/fix-product/delete-fix/{fixProductId}").hasAuthority("ADMIN")
@@ -67,6 +77,10 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/order-company/get-total-profit-of-one-product-with-fix/{productId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get-total-number-of-order-for-one-product/{productId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get/average-profit").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/order-company/company-total-revenue","api/v1/order-company/company-today-revenue",
+                        "api/v1/order-company/company-current-month-revenue", "api/v1/order-company/company-all-sold-product",
+                        "api/v1/order-company/company-today-sold-product", "api/v1/order-company/company-current-month-sold-product",
+                        "api/v1/order-company/company-last-month-sold-product", "api/v1/order-company/company-last-month-revenue").hasAuthority("COMPANY")
 //=====================================================OrderController===========================
                 .requestMatchers("api/v1/order/get-total-orders").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order/get-all-orders").hasAuthority("ADMIN")
@@ -81,6 +95,11 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/order/get-all-customer-order").hasAnyAuthority("CUSTOMER","EMPLOYEE")
                 .requestMatchers("api/v1/order/get-all-order-by-product-id/{productId}").hasAnyAuthority("ADMIN","EMPLOYEE")
                 .requestMatchers("api/v1/order/get-total-orders").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/order/get-total-revenue","api/v1/order/get-today-revenue",
+                        "api/v1/order/get-current-month-revenue", "api/v1/order/get-last-month-revenue",
+                        "api/v1/order/get-last-month-revenue", "api/v1/order/count-all-sold-product",
+                        "api/v1/order/count-today-sold-product", "api/v1/order/count-current-month-sold-product",
+                        "api/v1/order/count-last-month-sold-product").hasAnyAuthority("EMPLOYEE", "ADMIN")
 //=====================================================ProductController===========================
 //=====================================================ResponseFixProductController===========================
                 .requestMatchers("api/v1/response-fix-product/get-all-response-request-fix-product").hasAuthority("ADMIN")
