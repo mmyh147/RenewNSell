@@ -38,9 +38,9 @@ public class OrderController {
         return ResponseEntity.status(200).body(new ApiResponse("Buy successfully"));
     }
     @PutMapping("/update-order/{orderId}")
-    public ResponseEntity update(@AuthenticationPrincipal User company, @RequestBody @Valid OrderProduct orderProduct){
+    public ResponseEntity update( @PathVariable Integer orderId,@RequestBody @Valid OrderProduct orderProduct){
         logger.info("update-order/{orderId}");
-        orderService.updateOrder(company.getId(),orderProduct);
+        orderService.updateOrder(orderId,orderProduct);
         return ResponseEntity.status(200).body(new ApiResponse("updated successfully"));
     }
 
@@ -79,14 +79,14 @@ public class OrderController {
 
     @GetMapping("/track-order/{orderId}")
     public ResponseEntity track(@AuthenticationPrincipal User user,@PathVariable Integer orderId){
-        logger.info("truck-order/{orderId}");
+        logger.info("track-order/{orderId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.track(user.getId(),orderId));
     }
     //================================ 6-Fifth Endpoint in OrderProduct ==========================================
 //truckForEmployee
     @GetMapping("/track-order-for-employee/{orderId}")
     public ResponseEntity truckForEmployee(@PathVariable Integer orderId){
-        logger.info("truck-order/{orderId}");
+        logger.info("track-order/{orderId}");
         return ResponseEntity.status(HttpStatus.OK).body(orderService.track(orderId));
     }
 

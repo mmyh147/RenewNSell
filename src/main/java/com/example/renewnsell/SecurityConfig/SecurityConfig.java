@@ -58,6 +58,7 @@ public class SecurityConfig {
 //=====================================================FixProductController===========================
                 .requestMatchers("api/v1/fix-product/get-all-request-fix-product").hasAnyAuthority("ADMIN","EMPLOYEE")
                 .requestMatchers("api/v1/fix-product/delete-fix/{fixProductId}").hasAuthority("ADMIN")
+                .requestMatchers("api/v1/fix-product/update/{fixId}").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/fix-product/{fixProductId}").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/fix-product/request-fix-product").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/fix-product/accept-price-fix-product/{fixProductId}").hasAuthority("CUSTOMER")
@@ -66,7 +67,7 @@ public class SecurityConfig {
 //=====================================================OrderCompanyController===========================
                 .requestMatchers("api/v1/order-company/get-all").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order-company/get-all-order-by-company-id").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/order-company/update-order-company/{orderId}").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/order-company/update-order-company/{orderId}").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order-company/delete-order-company/{orderId}").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order-company/change-status-of-order-company/{orderId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get-all-total-price-orders-company").hasAnyAuthority("COMPANY","ADMIN")
@@ -76,6 +77,7 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/order-company/get-total-profit-of-one-product-with-out-fix/{productId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get-total-profit-of-one-product-with-fix/{productId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get-total-number-of-order-for-one-product/{productId}").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/order-company/get-average-profit").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get/average-profit").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/company-total-revenue","api/v1/order-company/company-today-revenue",
                         "api/v1/order-company/company-current-month-revenue", "api/v1/order-company/company-all-sold-product",
