@@ -38,9 +38,9 @@ public class OrderController {
         return ResponseEntity.status(200).body(new ApiResponse("Buy successfully"));
     }
     @PutMapping("/update-order/{orderId}")
-    public ResponseEntity update(@AuthenticationPrincipal User company, @RequestBody @Valid OrderProduct orderProduct){
+    public ResponseEntity update( @PathVariable Integer orderId,@RequestBody @Valid OrderProduct orderProduct){
         logger.info("update-order/{orderId}");
-        orderService.updateOrder(company.getId(),orderProduct);
+        orderService.updateOrder(orderId,orderProduct);
         return ResponseEntity.status(200).body(new ApiResponse("updated successfully"));
     }
 

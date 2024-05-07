@@ -57,7 +57,7 @@ public class SecurityConfig {
 //=====================================================OrderCompanyController===========================
                 .requestMatchers("api/v1/order-company/get-all").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order-company/get-all-order-by-company-id").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/order-company/update-order-company/{orderId}").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/order-company/update-order-company/{orderId}").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order-company/delete-order-company/{orderId}").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order-company/change-status-of-order-company/{orderId}").hasAuthority("COMPANY")
                 .requestMatchers("api/v1/order-company/get-all-total-price-orders-company").hasAnyAuthority("COMPANY","ADMIN")
