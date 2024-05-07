@@ -218,21 +218,22 @@ public class OrderCompanyService {
     }
 
     public double getAverageProfitByCompanyName(Integer companyId) {
+            Company company = companyRepository.findCompanyById(companyId);
+            if (company.getOrders().isEmpty())
+                throw new ApiException("no product bought yet so list is empty");
 
-        Company company = companyRepository.findCompanyById(companyId);
-        if (company.getOrders().isEmpty())
-            throw new ApiException("no product bought yet so list is empty");
+            double total = 0.0;
+            Set<OrderCompany> orders = company.getOrders();
+            if (orders.isEmpty())
+                throw new ApiException("there are no orders for the company");
 
-        double total=0.0;
-        Set<OrderCompany> orders = company.getOrders();
-        if (orders.isEmpty())
-            throw new ApiException("there are no orders for the company");
-        Set<OrderCompany> list=company.getOrders();
-        for (OrderCompany orderCompany:list){
-            total+=orderCompany.getTotalPrice();
+            Set<OrderCompany> list = company.getOrders();
+            for (OrderCompany orderCompany : list) {
+                if(orderCompany.getStatus().equalsIgnoreCase("DELIVERED"))
+                    total += orderCompany.getTotalPrice();
+
+            }
+
+            return total / company.getOrders().size();
         }
-
-        return total/company.getOrders().size();
-    }
-
 }

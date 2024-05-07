@@ -199,7 +199,7 @@ public class OrderService {
                 break;
             case "ORDER_CONFIRMED":
                 for (OrderCompany orderCompany : order.getOrderCompanySet()) {
-                    if (!orderCompany.getStatus().equalsIgnoreCase("PREPARING")) {
+                    if (!orderCompany.getStatus().equalsIgnoreCase("ORDER_CONFIRMED")) {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
                             order.setStatus("PREPARING");
                             orderRepository.save(order);
