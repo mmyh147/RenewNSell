@@ -110,5 +110,61 @@ public class OrderController {
     //================================ Total Endpoints in OrderProduct is 8 ==========================================
 
 
+    //================================= By Mohammed Alhajri ===================================
+    @GetMapping("/get-total-revenue")
+    public ResponseEntity totalRevenue(){
+        logger.info("Request total revenue");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getAllRevenueForWebsite());
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/get-today-revenue")
+    public ResponseEntity todayRevenue(){
+        logger.info("Request today revenue");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getTodayRevenueForWebsite());
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/get-current-month-revenue")
+    public ResponseEntity currentMonthRevenue(){
+        logger.info("Request current month revenue");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getCurrentMonthRevenueForWebsite());
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/get-last-month-revenue")
+    public ResponseEntity lastMonthRevenue(){
+        logger.info("Request current month revenue");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.getLastMonthRevenueForWebsite());
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/count-all-sold-product")
+    public ResponseEntity countAllSoldProduct(){
+        logger.info("Request count of sold product");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.countAllProductSoldForWebsite());
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/count-today-sold-product")
+    public ResponseEntity countTodaySoldProduct(){
+        logger.info("Request count of today sold product");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.countTodayProductSoldForWebsite());
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/count-current-month-sold-product")
+    public ResponseEntity countCurrentMonthSoldProduct(){
+        logger.info("Request count of current month sold product");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.countCurrentMonthProductSoldForWebsite());
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/count-last-month-sold-product")
+    public ResponseEntity countLastMonthSoldProduct(){
+        logger.info("Request count of last month sold product");
+        return ResponseEntity.status(HttpStatus.OK).body(orderService.countLastMonthProductSoldForWebsite());
+    }
+
 }
 

@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -115,41 +117,6 @@ public class OrderCompanyService {
     //=======================================
 
 
-    public Double getTotalProfitForCompany(Integer companyId){
-//        Company company = companyRepository.findCompanyById(companyId);
-//        Double total=0.0;
-//        if (company.getOrders().isEmpty())
-//            throw new ApiException("no product bought yet so list is empty");
-//        for (OrderCompany orderCompany:company.getOrders()){
-//            total+=orderCompany.getTotalPrice();
-//        }
-//        return total;
-        Double total = 0.0;
-        total = orderCompanyRepository.findTotalProfitForCompany(companyId);
-        if (total == null) {
-            throw new ApiException("No profit recorded for the company.");
-        }
-        return total;
-    }
-
-
-    public Double getTodayProfitForCompany(Integer companyId) {
-        LocalDate today = LocalDate.now();
-        Double total = orderCompanyRepository.findTotalProfitForCompanyToday(companyId, today);
-        if (total == null) {
-            throw new ApiException("No profit recorded for today.");
-        }
-        return total;
-    }
-
-    public Double getCurrentMonthProfitForCompany(Integer companyId) {
-        LocalDate currentDate = LocalDate.now();
-        Double total = orderCompanyRepository.findTotalProfitForCompanyCurrentMonth(companyId, currentDate);
-        if (total == null) {
-            throw new ApiException("No profit recorded for the current month.");
-        }
-        return total;
-    }
     //================================= [getOrderProductByPercentOfDefective  ] METHOD DONE BY GHALIAH  ==============================
 
     //getOrderProductByPercentOfDefective
@@ -235,6 +202,53 @@ public class OrderCompanyService {
         }
 
 
+
+    //================================= [getTotalNumberOfOrdersCompany  ] METHOD DONE BY HAYA  ==============================
+    public Integer getTotalNumberOfOrdersCompany(Integer companyId) {
+        Company company = companyRepository.findCompanyById(companyId);
+        if (company.getOrders().isEmpty())
+            throw new ApiException("no product bought yet so list is empty");
+        return company.getOrders().size();
+    }
+
+
+
+    public Double getTotalProfitForCompany(Integer companyId){
+//        Company company = companyRepository.findCompanyById(companyId);
+//        Double total=0.0;
+//        if (company.getOrders().isEmpty())
+//            throw new ApiException("no product bought yet so list is empty");
+//        for (OrderCompany orderCompany:company.getOrders()){
+//            total+=orderCompany.getTotalPrice();
+//        }
+//        return total;
+        Double total = 0.0;
+        total = orderCompanyRepository.findTotalProfitForCompany(companyId);
+        if (total == null) {
+            throw new ApiException("No profit recorded for the company.");
+        }
+        return total;
+    }
+
+
+    public Double getTodayProfitForCompany(Integer companyId) {
+        LocalDate today = LocalDate.now();
+        Double total = orderCompanyRepository.findTotalProfitForCompanyToday(companyId, today);
+        if (total == null) {
+            throw new ApiException("No profit recorded for today.");
+        }
+        return total;
+    }
+
+    public Double getCurrentMonthProfitForCompany(Integer companyId) {
+        LocalDate currentDate = LocalDate.now();
+        Double total = orderCompanyRepository.findTotalProfitForCompanyCurrentMonth(companyId, currentDate);
+        if (total == null) {
+            throw new ApiException("No profit recorded for the current month.");
+        }
+        return total;
+    }
+
     public Double getLastMonthProfitForCompany(Integer companyId) {
         LocalDate currentDate = LocalDate.now();
         YearMonth lastMonthYearMonth = YearMonth.from(currentDate).minusMonths(1);
@@ -247,35 +261,7 @@ public class OrderCompanyService {
         return total;
     }
 
-    public Double getTotalProfitForToday() {
-        LocalDate today = LocalDate.now();
-        Double result = orderCompanyRepository.findTotalProfitForToday(today);
-        if (result == null){
-            throw new ApiException("No record found for today");
-        }
-        return result;
-    }
 
-    public Double getTotalProfitForCurrentMonth() {
-        LocalDate currentDate = LocalDate.now();
-        Double result = orderCompanyRepository.findTotalProfitForCurrentMonth(currentDate);
-        if (result == null){
-            throw new ApiException("No record found for current month");
-        }
-        return result;
-    }
-
-    public Double getTotalProfitForLastMonth() {
-        LocalDate currentDate = LocalDate.now();
-        YearMonth lastMonthYearMonth = YearMonth.from(currentDate).minusMonths(1);
-        int lastMonthYear = lastMonthYearMonth.getYear();
-        int lastMonth = lastMonthYearMonth.getMonthValue();
-        Double result = orderCompanyRepository.findTotalProfitForLastMonth(lastMonthYear, lastMonth);
-        if (result == null){
-            throw new ApiException("No record found for last month");
-        }
-        return result;
-    }
 
 
     public Integer getTotalProductsSoldForCompany(Integer companyId) {
@@ -290,23 +276,20 @@ public class OrderCompanyService {
         return orderCompanyRepository.countProductsSoldCurrentMonthForCompany(companyId);
     }
 
-//    public Integer countProductsSoldLastMonthForCompany(Integer companyId) {
-//        return orderCompanyRepository.count(companyId);
-//    }
+    public Integer countProductsSoldLastMonthForCompany(Integer companyId) {
+        LocalDate currentDate = LocalDate.now();
+        YearMonth lastMonthYearMonth = YearMonth.from(currentDate).minusMonths(1);
+        int lastMonthYear = lastMonthYearMonth.getYear();
+        int lastMonth = lastMonthYearMonth.getMonthValue();
+        Integer result = orderCompanyRepository.countProductsSoldForCompanyLastMonth(companyId,lastMonthYear, lastMonth);
+        if (result == null){
+            throw new ApiException("No record found for last month");
+        }
+        return result;
 
-
-//        }
-//        return product.getOrderProduct().size();
-//
-//    }
-
-    //================================= [getTotalNumberOfOrdersCompany  ] METHOD DONE BY HAYA  ==============================
-    public Integer getTotalNumberOfOrdersCompany(Integer companyId) {
-        Company company = companyRepository.findCompanyById(companyId);
-        if (company.getOrders().isEmpty())
-            throw new ApiException("no product bought yet so list is empty");
-        return company.getOrders().size();
     }
+
+
 
 
 }

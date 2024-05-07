@@ -63,7 +63,26 @@ public class CustomerService {
         user.setName(updatedCustomer.getName());
         user.setEmail(updatedCustomer.getEmail());
         user.setUsername(updatedCustomer.getUsername());
-        user.setPassword(updatedCustomer.getPassword());
+        user.setPassword(new BCryptPasswordEncoder().encode(updatedCustomer.getPassword()));
+        user.getCustomer().setGender(updatedCustomer.getGender());
+
+
+        userRepository.save(user);
+        customerRepository.save(user.getCustomer());
+
+    }
+
+    public void updateMyUser(User user, CustomerDTO updatedCustomer){
+
+
+//        User user = userRepository.findUserById(customerId);
+//        if (user.getCustomer() == null){
+//            throw new ApiException("customer not found");
+//        }
+        user.setName(updatedCustomer.getName());
+        user.setEmail(updatedCustomer.getEmail());
+        user.setUsername(updatedCustomer.getUsername());
+        user.setPassword(new BCryptPasswordEncoder().encode(updatedCustomer.getPassword()));
         user.getCustomer().setGender(updatedCustomer.getGender());
 
 

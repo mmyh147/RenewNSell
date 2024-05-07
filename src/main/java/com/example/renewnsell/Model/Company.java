@@ -21,14 +21,14 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    //@NotEmpty(message = "commercial License must not be empty")
-    //@Column(columnDefinition = "varchar(20) not null")
+    @NotEmpty(message = "commercial License must not be empty")
+    @Column(columnDefinition = "varchar(20) unique not null")
     private String commercialLicense;
-   // @NotEmpty(message = "commercial License must not be empty")
-   // @Column(columnDefinition = "varchar(20) not null")
+    @NotEmpty(message = "industry License must not be empty")
+    @Column(columnDefinition = "varchar(20) not null")
     private String industry;
-   // @NotEmpty(message = "commercial License must not be empty")
-   // @Column(columnDefinition = "varchar(20) not null")
+    @NotEmpty(message = "logoPath License must not be empty")
+    @Column(columnDefinition = "varchar(20) not null")
     private String logoPath;
 
 

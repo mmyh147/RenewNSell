@@ -28,6 +28,11 @@ public class UserService {
 
     }
 
+    public User getMyInfo(Integer userId){
+
+        User findUser = userRepository.findUserById(userId);
+        return findUser;
+    }
 
     public User getUserByUsername(String username){
         User user = userRepository.findUserByUsername(username);

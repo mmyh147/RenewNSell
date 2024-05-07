@@ -61,17 +61,7 @@ private final OrderCompanyService orderCompanyService;
     //getTodayProfitForCompany
     //================================ 2-Second Endpoint in OrderCompany ==========================================
 
-    @GetMapping("/company-total-profit")
-    public ResponseEntity getTotalProfitForCompany(@AuthenticationPrincipal User user){
-        logger.info("Request total profit for the company by : " + user);
-        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTotalProfitForCompany(user.getId()));
-    }
 
-    @GetMapping("/company-today-profit")
-    public ResponseEntity getTodayProfitForCompany(@AuthenticationPrincipal User user){
-        logger.info("get today profit for the company by : " + user);
-        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTodayProfitForCompany(user.getId()));
-    }
 
     //getOrderProductByPercentOfDefective
     //================================ 3-Third Endpoint in OrderCompany ==========================================
@@ -120,68 +110,65 @@ private final OrderCompanyService orderCompanyService;
 
     //================================ Total Endpoints in OrderCompany is 8 ==========================================
 
+    //================================= By Mohammed Alhajri ===================================
 
-    @GetMapping("/company-current-month-profit")
-    public ResponseEntity getCurrentMonthProfitForCompany(@AuthenticationPrincipal User user){
-        logger.info("get current month profit by : " + user);
+    @GetMapping("/company-total-revenue")
+    public ResponseEntity getTotalProfitForCompany(@AuthenticationPrincipal User user){
+        logger.info("Request total profit for the company by : " + user);
+        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTotalProfitForCompany(user.getId()));
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/company-today-revenue")
+    public ResponseEntity getTodayRevenueForCompany(@AuthenticationPrincipal User user){
+        logger.info("get today revenue for the company by : " + user);
+        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTodayProfitForCompany(user.getId()));
+    }
+    //================================= By Mohammed Alhajri ===================================
+
+    @GetMapping("/company-current-month-revenue")
+    public ResponseEntity getCurrentMonthRevenueForCompany(@AuthenticationPrincipal User user){
+        logger.info("get current month revenue by : " + user);
         return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getCurrentMonthProfitForCompany(user.getId()));
     }
+    //================================= By Mohammed Alhajri ===================================
 
     @GetMapping("/company-all-sold-product")
     public ResponseEntity getAllSoldProductForCompany(@AuthenticationPrincipal User user){
         logger.info("retrieve all sold product by : " + user);
         return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTotalProductsSoldForCompany(user.getId()));
     }
+    //================================= By Mohammed Alhajri ===================================
 
     @GetMapping("/company-today-sold-product")
     public ResponseEntity getTodaySoldProductForCompany(@AuthenticationPrincipal User user){
         logger.info("retrieve today sold product by : " + user);
         return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.countProductsSoldTodayForCompany(user.getId()));
     }
+    //================================= By Mohammed Alhajri ===================================
 
     @GetMapping("/company-current-month-sold-product")
     public ResponseEntity getCurrentMonthSoldProductForCompany(@AuthenticationPrincipal User user){
         logger.info("retrieve current month sold product by : " + user);
         return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.countProductsSoldCurrentMonthForCompany(user.getId()));
     }
+    //================================= By Mohammed Alhajri ===================================
 
-//    @GetMapping("/company-last-month-sold-product")
-//    public ResponseEntity getLastMonthSoldProductForCompany(@AuthenticationPrincipal User user){
-//        logger.info("retrieve current month sold product by : " + user);
-//        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.countProductsSoldLastMonthForCompany(user.getId()));
-//    }
+    @GetMapping("/company-last-month-sold-product")
+    public ResponseEntity getLastMonthSoldProductForCompany(@AuthenticationPrincipal User user){
+        logger.info("retrieve current month sold product by : " + user);
+        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.countProductsSoldLastMonthForCompany(user.getId()));
+    }
+    //================================= By Mohammed Alhajri ===================================
 
-
-    @GetMapping("/company-last-month-profit")
-    public ResponseEntity getLastMonthProfitForCompany(@AuthenticationPrincipal User user){
+    @GetMapping("/company-last-month-revenue")
+    public ResponseEntity getLastMonthRevenueForCompany(@AuthenticationPrincipal User user){
         logger.info("get last month profit by : " + user);
         return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getLastMonthProfitForCompany(user.getId()));
     }
 
 
-    @GetMapping("/all-total-profit")
-    public ResponseEntity getTotalProfitForAll(@AuthenticationPrincipal User user){
-        logger.info("Request total profit for all by : " + user);
-        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTotalProfitForToday());
-    }
 
-    @GetMapping("/all-today-profit")
-    public ResponseEntity getTodayProfitForAll(@AuthenticationPrincipal User user){
-        logger.info("get today profit by : " + user);
-        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTotalProfitForToday());
-    }
-
-    @GetMapping("/all-current-month-profit")
-    public ResponseEntity getCurrentMonthProfitForAll(@AuthenticationPrincipal User user){
-        logger.info("get current month profit by : " + user);
-        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTotalProfitForCurrentMonth());
-    }
-
-    @GetMapping("/all-last-month-profit")
-    public ResponseEntity getLastMonthProfitForAll(@AuthenticationPrincipal User user){
-        logger.info("get last month profit by : " + user);
-        return ResponseEntity.status(HttpStatus.OK).body(orderCompanyService.getTotalProfitForLastMonth());
-    }
 
 
 
