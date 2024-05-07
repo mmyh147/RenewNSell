@@ -25,6 +25,9 @@ import static org.mockito.Mockito.*;
 public class ProductServiceTests {
 
 
+    // HAYA
+
+
     @InjectMocks
     ProductService productService;
 

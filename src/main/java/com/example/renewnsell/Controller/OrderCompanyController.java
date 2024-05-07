@@ -185,6 +185,17 @@ private final OrderCompanyService orderCompanyService;
 
 
 
+    //Haya
+    @GetMapping("/get/average-profit")
+    public double getAverageProfitForCompany(@AuthenticationPrincipal User user ) {
+        logger.info("getAverageProfitForCompany");
+        return orderCompanyService.AverageProfitCompany(user.getId());
+    }
+
+
+
+
+
 }
 
 

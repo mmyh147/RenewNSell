@@ -26,6 +26,10 @@ public class ProductService {
     private final UserRepository userRepository;
     private final OrderCompanyRepository orderCompanyRepository;
 
+
+    //HAYA
+
+
     public List<Product> getAll(){
         return productRepository.findAll();
     }
@@ -51,12 +55,19 @@ public class ProductService {
     }
 
 
+
+
+
     //1
     public Set<Product> getAllProductByCompanyId(Integer userId) {
         User user = userRepository.findUserById(userId);
 
         return user.getCompany().getProducts();
     }
+
+
+
+
 
     public Boolean checkAvailabilityProduct(Integer productId) {
         Product product = productRepository.findProductById(productId);
@@ -76,6 +87,11 @@ public class ProductService {
             throw new ApiException("this product unauthorized for you");
         return true;
     }
+
+
+
+
+
 
    //2
     public Product getProductById(Integer productId, Integer userId) {

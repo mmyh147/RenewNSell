@@ -20,6 +20,9 @@ public class ReviewService {
 
 
 
+    //HAYA
+
+
 
     private final ReviewRepository reviewRepository;
 
@@ -74,7 +77,7 @@ public class ReviewService {
 
 
 
-    //1 للكاستمر
+    //1
     public Review getReviewById(Integer reviewId, Integer userId) {
         Review review = reviewRepository.findReviewById(reviewId);
         if(review==null)throw new ApiException("not found");
@@ -87,7 +90,7 @@ public class ReviewService {
     }
 
 
-    //2 للشركه تشوف تقييماتهم
+    //2
     public List<Review> getAllReviewsByCompanyId(Integer userId) {
         Company company = companyRepository.findCompanyById(userId);
         if (company == null)
@@ -99,7 +102,7 @@ public class ReviewService {
 
 
 
-    // للكاستمر يشوف تقييماته3
+    // 3
     public List<Review> getAllReviewsByCustomerId(Integer userId) {
         Customer customer = customerRepository.findCustomersById(userId);
         if (customer == null)
@@ -138,6 +141,7 @@ public class ReviewService {
         return average.isPresent() ? average.getAsDouble() : 0.0;
     }
 
+
     //6
 
     public int getNumberOfReviewsByCompanyName(String name) {
@@ -155,6 +159,7 @@ public class ReviewService {
         List<Review> reviews=reviewRepository.searchTopByEvaluation();
         return reviews;
     }
+
 
 
 }

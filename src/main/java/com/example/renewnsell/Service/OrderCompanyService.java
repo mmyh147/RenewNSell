@@ -309,4 +309,27 @@ public class OrderCompanyService {
     }
 
 
+    //HAYA
+
+    public double AverageProfitCompany( Integer id) {
+        Company company = companyRepository.findCompanyById(id);
+        if (company.getOrders().isEmpty())
+            throw new ApiException("no product bought yet so list is empty");
+
+        double total = 0.0;
+        Set<OrderCompany> orders = company.getOrders();
+        if (orders.isEmpty())
+            throw new ApiException("there are no orders for the company");
+
+        Set<OrderCompany> list = company.getOrders();
+        for (OrderCompany orderCompany : list) {
+            if(orderCompany.getStatus().equalsIgnoreCase("DELIVERED"))
+                total += orderCompany.getTotalPrice();
+
+        }
+
+        return total / company.getOrders().size();
+    }
+
+
 }

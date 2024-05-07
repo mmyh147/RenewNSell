@@ -75,18 +75,6 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/request-fix-product/accept-price-fix-product/{fixProductId}").hasAuthority("CUSTOMER")
 
 
-                .requestMatchers("api/v1/product/add").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/delete/{productId}").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/update/{productId}","api/v1/review/get-all-c").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/get-all").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/get-product/{productId}").hasAuthority("COMPANY")
-                .requestMatchers("api/v1/product/get-product-name/{name}/","api/v1/product/get-product-defective/{percentOfDefective}","api/v1/product/get-product-category/{category}","api/v1/product/get","api/v1/review/get-all-c/{name}","api/v1/review/average-rating/{name}","api/v1/review/number-of-reviews/{name}").permitAll()
-                .requestMatchers("api/v1/review/add").hasAuthority("CUSTOMER")
-                .requestMatchers("api/v1/review/get/{reviewId}","api/v1/review/get-all-cu","api/v1/review/update/{reviewId}").hasAuthority("CUSTOMER")
-                .requestMatchers("api/v1/review/delete/{reviewId}").hasAnyAuthority("ADMIN","CUSTOMER")
-
-                .requestMatchers("api/v1/company/add").permitAll()
-                .requestMatchers("api/v1/customer/add").permitAll()
                 .requestMatchers("api/v1/order/buy-order").hasAuthority("CUSTOMER")
                 .requestMatchers("api/v1/order/update-order/{orderId}").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/order/delete-order/{orderId}").hasAuthority("ADMIN")
@@ -98,12 +86,25 @@ public class SecurityConfig {
                 .requestMatchers("api/v1/order/get-all-order-by-product-id/{productId}").hasAnyAuthority("ADMIN","EMPLOYEE")
                 .requestMatchers("api/v1/order/get-total-orders").hasAuthority("ADMIN")
 //=====================================================ProductController===========================
+                .requestMatchers("api/v1/product/get-product-name/{name}/","api/v1/product/get-product-defective/{percentOfDefective}","api/v1/product/get-product-category/{category}","api/v1/product/get","api/v1/review/get-all-c/{name}","api/v1/review/average-rating/{name}","api/v1/review/number-of-reviews/{name}").permitAll()
+                .requestMatchers("api/v1/product/add").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/product/delete/{productId}").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/product/update/{productId}","api/v1/review/get-all-c").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/product/get-all").hasAuthority("COMPANY")
+                .requestMatchers("api/v1/product/get-product/{productId}").hasAuthority("COMPANY")
 //=====================================================ResponseFixProductController===========================
                 .requestMatchers("api/v1/response-fix-product/get-all-response-request-fix-product").hasAuthority("ADMIN")
                 .requestMatchers("api/v1/response-fix-product/response-request-fix-product/{fixProductId}").hasAuthority("EMPLOYEE")
                 .requestMatchers("api/v1/response-fix-product/update-response-request-fix-product/{fixproductId}").hasAuthority("EMPLOYEE")
                 .requestMatchers("api/v1/response-fix-product/delete-request-fix-product/{fixProductId}").hasAuthority("ADMIN")
 //=====================================================ReviewController===========================
+
+                .requestMatchers("api/v1/review/add/{companyId}").hasAuthority("CUSTOMER")
+                .requestMatchers("api/v1/review/get/{reviewId}","api/v1/review/get-all-cu","api/v1/review/update/{reviewId}").hasAuthority("CUSTOMER")
+                .requestMatchers("api/v1/review/delete/{reviewId}").hasAnyAuthority("ADMIN","CUSTOMER")
+                .requestMatchers("api/v1/review/get-all-c/{name}","api/v1/review/average-rating/{name}","api/v1/review/number-of-reviews/{name}","api/v1/review/best").permitAll()
+                .requestMatchers("api/v1/review/get-all-c").hasAuthority("COMPANY")
+
 //=====================================================UserController===========================
 //=====================================================WarrantyController===========================
                 .anyRequest().authenticated()
