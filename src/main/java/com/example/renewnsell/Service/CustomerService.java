@@ -92,12 +92,12 @@ public class CustomerService {
     }
 
 
-    public Customer getCustomerByID(Integer id){
+    public User getCustomerByID(Integer id){
 
-        Customer customer = customerRepository.findCustomersById(id);
-        if (customer == null){
+        User user = userRepository.findUserById(id);
+        if (user.getCustomer() == null){
             throw new ApiException("Customer not found with ID : " + id);
         }
-        return customer;
+        return user;
     }
 }

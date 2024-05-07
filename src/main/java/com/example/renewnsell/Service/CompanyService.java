@@ -106,13 +106,13 @@ public class CompanyService {
 
     }
 
-    public Company getCompanyById(Integer id){
+    public User getCompanyById(Integer id){
 
-        Company company = companyRepository.findCompanyById(id);
-        if (company == null){
+        User user = userRepository.findUserById(id);
+        if (user.getCompany() == null){
             throw new ApiException("company not found with ID : " + id);
         }
-        return company;
+        return user;
     }
 
 }
