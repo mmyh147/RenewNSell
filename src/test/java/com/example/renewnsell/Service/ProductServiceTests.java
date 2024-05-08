@@ -128,6 +128,19 @@ public class ProductServiceTests {
     }
 
 
+    @Test
+    public void getProductByCategory(){
+        when(productRepository.findProductByCategory(product1.getCategory())).thenReturn(productList);
+
+        List<Product> result = productService.getProductByCategory(product1.getCategory());
+
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals(products, result.get(0));
+
+        verify(productRepository, times(1)).findProductByCategory(product1.getCategory());
+    }
+
+
 
 
 }
