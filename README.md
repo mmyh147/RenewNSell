@@ -8,6 +8,9 @@ RenewNSell simplifies the sale of brand-new defective products by connecting bra
 You can view the class diagram [here](https://drive.google.com/file/d/1adlykwsfluoi3I7ytIo0cnQk8RGOMHAK/view?usp=drivesdk).
 
 ## Use Case
+![UseCaseFinalProject (3) drawio](https://github.com/mmyh147/RenewNSell/assets/61750916/93d66367-1333-47c2-a7d7-d2108c2750f5)
+
+
 
 You can view the use case diagram [here](link_to_use_case).
 
