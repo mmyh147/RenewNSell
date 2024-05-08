@@ -58,6 +58,10 @@ responseFixProductRepository.delete(responseFixProduct);
     //=================================RESPONSE REQUEST FIX PRODUCT FROM EMPLOYEE DONE BY GHALIAH  ==============================
 public void response(Integer fixProductId,DTOResponseFixProduct responseFixProductPostMan) {
     OrderProduct orderProduct = orderRepository.findOrderProductById(fixProductId);
+    if (orderProduct==null){
+        throw new ApiException("FixProduct not found");
+
+    }
     if (orderProduct.getFixProduct()==null) {
         throw new ApiException("FixProduct not found");
     }
