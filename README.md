@@ -11,6 +11,9 @@ RenewNSell simplifies the sale of brand-new defective products by connecting bra
 
 
 
+## Postman Documentation
+
+You can view the Postman Documentation [here](https://documenter.getpostman.com/view/33389392/2sA3JKc2NL).
 
 ## Figma Link
 
