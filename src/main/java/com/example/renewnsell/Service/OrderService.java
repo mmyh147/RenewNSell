@@ -61,18 +61,15 @@ public class OrderService {
     //================================= [BUY] METHOD DONE BY GHALIAH  ==============================
     public void buy(Integer userId, List<DTO_BUY> productIds) {
         /*we have 3 relation with OrderProduct
-        * First relation is ManyToMany between Order product and Product
-        * Second relation is OneToMany between OrderProduct and OrderCompany // this relation I use to divide
-        * each product to its company as order , so The benefit is [ distribution ]
-        * Third relations is OneToMany between OrderProduct and Customer
-        * */
+         * First relation is ManyToMany between Order product and Product
+         * Second relation is OneToMany between OrderProduct and OrderCompany // this relation I use to divide
+         * each product to its company as order , so The benefit is [ distribution ]
+         * Third relations is OneToMany between OrderProduct and Customer
+         * */
 
         Customer customer = customerRepository.findCustomersById(userId);
         OrderProduct orderProduct = new OrderProduct();
-        OrderCompany orderCompany = new OrderCompany();
-        orderCompany.setOrderProduct(orderProduct);
-        orderCompany.setStatus("PENDING");
-        orderCompany.setDate(LocalDate.now());
+
         orderProduct.setCustomer(customer);
         Double totalPrices = 0.0;
         /////////////////////////////////////////////
@@ -86,13 +83,18 @@ public class OrderService {
         //=====
 
         orderRepository.save(orderProduct);//update //save order first then save updated product
-        orderCompany.setProducts(orderCompanySet);
-        orderCompanyRepository.save(orderCompany);
 
         ///
         for (DTO_BUY productId : productIds) {
             if (productRepository.findProductById(productId.getProductId()) == null)
                 throw new ApiException("One of product Not found");
+            OrderCompany orderCompany = new OrderCompany();
+            orderCompany.setProducts(orderCompanySet);
+            orderCompanyRepository.save(orderCompany);
+
+            orderCompany.setOrderProduct(orderProduct);
+            orderCompany.setStatus("PENDING");
+            orderCompany.setDate(LocalDate.now());
             Product product = productRepository.findProductById(productId.getProductId());
             orderCompany.setBuyWithFix(productId.isFix());//if customer wants fix product
             if (product.getQuantity() == 0) {
@@ -194,6 +196,7 @@ public class OrderService {
                     if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
                         order.setStatus("ORDER_CONFIRMED");
                         orderRepository.save(order);
+                        break;
                     } else throw new ApiException("some of product of some company not  still PENDING");
                 }
                 break;
@@ -203,6 +206,8 @@ public class OrderService {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
                             order.setStatus("PREPARING");
                             orderRepository.save(order);
+                            break;
+
                         } else {
                             throw new ApiException("some of product of some company not  still PENDING");
                         }
@@ -215,6 +220,8 @@ public class OrderService {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
                             order.setStatus("SHIPPED");
                             orderRepository.save(order);
+                            break;
+
                         } else {
                             throw new ApiException("some of product of some company not  still PENDING");
                         }
@@ -227,6 +234,8 @@ public class OrderService {
                         if (!orderCompany.getStatus().equalsIgnoreCase("PENDING")) {
                             order.setStatus("OUT_FOR_DELIVERY");
                             orderRepository.save(order);
+                            break;
+
                         } else {
                             throw new ApiException("some of product of some company not  still PENDING");
                         }
@@ -238,6 +247,8 @@ public class OrderService {
                     if (orderCompany.getStatus().equalsIgnoreCase("DELIVERED")) {
                         order.setStatus("DELIVERED");
                         orderRepository.save(order);
+                        break;
+
                     } else throw new ApiException("some of product of some company not  still DELIVERED");
                 }
                 break;
